@@ -1,0 +1,129 @@
+.upload-content {
+    height: 100%;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    max-width: 100%;
+}
+
+.inner-header{
+  margin-top: 40px;
+}
+
+.inner-header img{
+  width: 100%;
+}
+
+::-webkit-progress-value {
+  background-color: #f1f1f1;
+}
+
+.progress-info progress{
+  width: 100%;
+  max-width: 300px;
+  height: 20px;
+  border-radius: 0px;
+  margin: 10px 0px 10px 0px;
+  background: #f1f1f1;
+  display: none;
+}
+.text-input{
+  margin-top: 15px;
+  display: flex;
+  border-radius: 10px;
+}
+
+.text-input input{
+  color: #fa0200;
+  outline: none;
+  background: #fff;
+  text-align: left;
+  border: none;
+  padding-left: 5px;
+  border-radius: 0px 10px 10px 0px;
+}
+
+[type="file"] {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute !important;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.icon-div{
+  background: #fa0200;
+  padding: 10px 12px 10px 10px;
+  border-radius: 10px 0px 0px 10px;
+}
+.upload-content form{
+  display: flex;
+  flex-direction: column;
+  max-width: 210px;
+}
+
+#upload-btn label{
+  display: flex;
+  justify-content: center;
+}
+
+#upload-btn{
+  border-radius: 10px;
+  background: #fa0200;
+}
+
+#upload-submit{
+  padding: 10px;
+  margin-top: 15px;
+  border-radius: 10px;
+  border: none;
+}
+
+#upload-submit:enabled{
+  background: #fa0200;
+  color: #f1f1f1
+}
+
+#upload-label p{
+  padding: 10px;
+}
+
+#home{
+  padding: 10%;
+  height: 100vh;
+  min-height: 500px;
+  background-image: url(../images/backgrounds/bg1.jpg);
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+#home .inner-width{
+  background: rgba(12,12,12,0.6);
+  color: #f1f1f1;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  flex-direction: column;
+  max-width: 800px;
+  margin: auto;
+}
+
+#upload-icon{
+  padding-top: 10px;
+}
+
+section{
+  padding: 100px 0;
+  background-color: #f1f1f1;
+}
+
+.section-title{
+  text-align: center;
+  position: relative;
+  font-size: 26px;
+  padding: 20px 0px 20px 0px;
+}

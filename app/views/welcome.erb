@@ -1,0 +1,83 @@
+<section id="home">
+  <% if @error %>
+    <p class="error"><%= @error %></p>
+  <% end %>
+  <div class="inner-width">
+    <div class="inner-header">
+      <h1 class="section-title">Upload Your File!</h1>
+    </div>
+    <div class="upload-content">
+      <form action="/upload" name="upload-form" method="post" onsubmit="return validateForm()" enctype="multipart/form-data">
+          <div class="textbox" id="upload-btn">
+            <label for="file-to-upload" id="upload-label"><i class="fa-solid fa-upload" id="upload-icon"></i><p>Select File</p></label>
+            <input type="file" name="file" id="file-to-upload" class="fileInput">
+          </div>
+          <div class="text-input">
+            <div class="icon-div">
+              <i class="fa-solid fa-key"></i>
+            </div>
+            <input type="text" name="totp_key" placeholder="Enter Key">
+          </div>
+          <div class="progress-info">
+            <progress id="progressBar" value="0" max="100">100%</progress>
+            <h3 id="status"></h3>
+            <p id="loaded_n_total"></p>
+            <h3 id="title"></h3>
+          </div>
+          <input type="submit" value="Upload File" id="upload-submit" name="submit" disabled>
+        </form>
+    </div>
+  </div>
+</section>
+
+<script>
+  function _(el){
+	   return document.getElementById(el);
+  }
+
+  document.getElementById("file-to-upload").onchange = function () {
+    var file = _("file-to-upload").files[0];
+    var formdata = new FormData();
+    formdata.append("file", file);
+    var ajax = new XMLHttpRequest();
+    ajax.upload.addEventListener("progress", progressHandler, false);
+    ajax.addEventListener("load", completeHandler, false);
+    ajax.open("POST", "/upload-file"); // http://www.developphp.com/video/JavaScript/File-Upload-Progress-Bar-Meter-Tutorial-Ajax-PHP
+    ajax.send(formdata);
+
+    function progressHandler(event){
+      _("progressBar").style.display = "inline";
+    	_("loaded_n_total").innerHTML = "Uploaded "+event.loaded+" bytes of "+event.total;
+    	var percent = (event.loaded / event.total) * 100;
+    	_("progressBar").value = Math.round(percent);
+      _("progressBar").style.content = Math.round(percent);
+    	_("status").innerHTML = Math.round(percent)+"% uploaded... please wait";
+    }
+
+    function completeHandler(event){
+    	_("status").innerHTML = event.target.responseText;
+      _("loaded_n_total").innerHTML = "";
+      _("progressBar").style.display = "none";
+    }
+
+    if(this.value.split(/(\\|\/)/g).pop()=='') {
+      _("upload-label").innerHTML = '<p>Select Files</p>';
+      _("upload-submit").disabled = true;
+    }
+    else {
+      _("title").innerHTML = this.value.split(/(\\|\/)/g).pop();
+      _("upload-submit").disabled = false;
+    }
+  };
+</script>
+<script>
+  function validateForm() {
+    var x = document.forms["upload-form"]["file"].value;
+    var y = document.forms["upload-form"]["totp_key"].value;
+    if (x == "" || x == null || y == "" || y == null) {
+      alert("Complete all fields of the form.");
+      return false;
+    }
+    return true;
+  }
+</script>

@@ -1,0 +1,38 @@
+*{
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  font-family: "Ubuntu",sans-serif;
+  box-sizing: border-box;
+}
+
+html{
+  scroll-behavior: smooth;
+}
+
+.error {
+    text-align: center;
+    color: red;
+    background: rgba(12,12,12,0.8);
+    padding-top: 10px;
+    font-weight: bold;
+    font-size: x-large;
+}
+
+::placeholder {
+  color: #676767;
+  opacity: 1;
+}
+
+.textbox{
+  overflow: hidden;
+}
+
+footer{
+  position: absolute;
+  bottom: 0px;
+  width: 100vw;
+  color: #fff;
+  padding: 40px 0;
+  text-align: center;
+}
