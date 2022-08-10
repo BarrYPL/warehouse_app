@@ -26,7 +26,6 @@ users = DB[:users]
   User = Struct.new(:username, :name, :password_hash, :isAdmin, :isMod, :is2FA, :twofaKey)
   USERSS = [
     User.new('bob', 'bob', hash_password('the builder'), 1, 1, 0),
-    User.new('barry', 'BarrY', hash_password('kastor11'), 1, 1, 0),
     User.new('test', 'test', hash_password('test'), 0, 0, 0),
   ]
 
