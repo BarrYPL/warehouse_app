@@ -8,20 +8,16 @@ def formati_si(size)
   scale = 1000;
   ndx = 1
 
-  conv = [ '', 'K', 'M', 'G']
-
-  if( size < scale**ndx ) then
-    return "#{size}"
-  end
+  conv = [ '', 'K', 'M', 'G', 'T']
 
   size=size.to_f
-  [2,3].each do |ndx|
-    if( size < (scale**ndx)  ) then
-      return "#{'%.3f' % (size/(scale**(ndx-1)))} #{conv[ndx-1]}"
+  [1,2,3,4].each do |ndx|
+    if( size < (scale**ndx)) then
+      return "#{'%.1f' % (size/(scale**(ndx-1)))} #{conv[ndx-1]}"
     end
   end
-  ndx=4
-  return "#{'%.3f' % (size/(scale**(ndx-1)))} #{conv[ndx-1]}"
+  ndx=5
+  return "#{'%.1f' % (size/(scale**(ndx-1)))} #{conv[ndx-1]}"
 end
 
 class Float
@@ -38,7 +34,7 @@ def formatf_si(size)
 
   size=size.to_f
   [1,2,3,4].each do |ndx|
-    if( size >= (scale**-ndx)  ) then
+    if( size >= (scale**-ndx)) then
       return "#{'%.3f' % (size*(scale**(ndx-1)))} #{conv[ndx-1]}"
     end
   end
