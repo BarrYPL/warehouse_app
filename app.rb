@@ -14,7 +14,6 @@ class MyServer < Sinatra::Base
   enable :inline_templates
 
   $usersDB = DB[:users]
-  $filesDB = DB[:files]
 
   configure do
     set :run            , 'true'

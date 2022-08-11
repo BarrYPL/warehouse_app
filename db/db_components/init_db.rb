@@ -1,7 +1,6 @@
 require 'sequel'
 require 'bcrypt'
 require 'rqrcode'
-require 'rotp'
 
 DB = Sequel.sqlite "databaset.db"
 
