@@ -13,8 +13,6 @@ class MyServer < Sinatra::Base
   enable :sessions
   enable :inline_templates
 
-  $usersDB = DB[:users]
-
   configure do
     set :run            , 'true'
     set :public_folder  , 'public'
@@ -26,8 +24,10 @@ class MyServer < Sinatra::Base
       @css = ["welcome-styles"]
       erb :welcome
     else
-      @css = ["login-styles"]
-      erb :login
+      @css = ["welcome-styles"]
+      erb :welcome
+      #@css = ["login-styles"]
+      #erb :login
     end
   end
 
@@ -63,6 +63,20 @@ class MyServer < Sinatra::Base
   get '/logout' do
     session.clear
     redirect '/login'
+  end
+
+  post '/find' do
+    if params[:phrase] != "undefined" && params[:phrase] != nil
+      if params[:phrase] != ""
+        @phrase = params[:phrase].gsub(/ /, '%')
+        @arr = []
+        $capacitorsDB.where(Sequel.ilike(:name, "%#{@phrase}%")).all.each do |k|
+          k[:value] = k[:value].to_human_redable
+          @arr << k
+        end
+        p @arr.to_json
+      end
+    end
   end
 
   helpers do

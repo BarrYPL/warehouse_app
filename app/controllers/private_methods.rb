@@ -1,3 +1,13 @@
+DB = Sequel.sqlite 'db\database.db'
+
+$usersDB = DB[:users]
+$capacitorsDB = DB[:capacitors]
+$inductorsDB = DB[:inductors]
+$resistorsDB = DB[:resistors]
+$laboratoryeqDB = DB[:laboratoryeq]
+$mechanicalsDB = DB[:mechanicals]
+$othersDB = DB[:others]
+
 class Integer
   def to_human_redable
     return formati_si(self)

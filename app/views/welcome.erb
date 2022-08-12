@@ -3,44 +3,63 @@
     <p class="error"><%= @error %></p>
   <% end %>
   <div class="inner-width">
-    <div class="upload-content">
-      <form action="/find" name="upload-form" method="post" onchange="return sendForm()" enctype="multipart/form-data">
+    <div class="find-content">
+      <form action="/find" name="find-form" method="post" enctype="multipart/form-data">
           <div class="text-input">
             <div class="icon-div">
               <i class="fa-solid fa-magnifying-glass"></i>
             </div>
-            <input type="text" name="serch_val" placeholder="Enter Key">
+            <input type="text" id="search-input" name="search-input" placeholder="Enter Key">
           </div>
-          <input type="submit" value="Find" id="find-submit" name="submit" disabled>
+          <input type="submit" value="Find" id="find-submit" name="submit">
         </form>
+        <div id="result-div" class="result-div">
+
+        </div>
     </div>
   </div>
 </section>
 
 <script>
-  function _(el){
-   return document.getElementById(el);
+"use strict";
+window.onload = function () {
+  const input = _('search-input');
+  input.addEventListener('input', updateValue);
+  function updateValue(e) {
+    let p = document.createElement("p");
+    let post_data = e.target.value
+    let div = _('result-div');
+    while(div.firstChild) {
+      div.removeChild(div.firstChild);
+    }
+    const xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState == XMLHttpRequest.DONE) {
+        const obj = JSON.parse(xhr.responseText);
+        let num = Object.keys(obj).length;
+        console.log(num);
+        var tagh1 = document.createElement("h1");
+        tagh1.append(`Znaleziono ${num} wyników!`);
+        div.appendChild(tagh1);
+        obj.forEach(obj => {Object.entries(obj).forEach(([key, value]) => {
+        var tag = document.createElement("p");
+        var text = `${key} ${value}`;
+        tag.append(text);
+        div.appendChild(tag);
+        });
+        div.append('-------------------'); });
+      }
+    }
+    xhr.addEventListener('error', (event) => {
+      alert('Oops! Something went wrong.');
+    });
+    xhr.open("POST", "/find", true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send("phrase="+post_data);
+  }
 }
 
-  function sendForm(){
-    var x = document.forms["upload-form"]["serch_val"].value;
-    if (x == "" || x == null) {
-      alert("Complete all fields of the form.");
-      return false;
-    }
-    _("find-submit").disabled = false;
-    return true;
-  }
-
-/*
-  document.getElementById("file-to-upload").onchange = function () {
-    var file = _("file-to-upload").files[0];
-    var formdata = new FormData();
-    formdata.append("file", file);
-    var ajax = new XMLHttpRequest();
-    ajax.upload.addEventListener("progress", progressHandler, false);
-    ajax.addEventListener("load", completeHandler, false);
-    ajax.open("POST", "/upload-file"); // http://www.developphp.com/video/JavaScript/File-Upload-Progress-Bar-Meter-Tutorial-Ajax-PHP
-    ajax.send(formdata);
-    */
+function _(el){
+ return document.getElementById(el);
+}
 </script>

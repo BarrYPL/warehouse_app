@@ -1,4 +1,4 @@
-.upload-content {
+.find-content {
     height: 100%;
     width: 100%;
     display: flex;
@@ -41,7 +41,7 @@
   border-radius: 10px 0px 0px 10px;
 }
 
-.upload-content form{
+.find-content form{
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -52,6 +52,7 @@
   margin-top: 15px;
   border-radius: 10px;
   border: none;
+  width: 80px;
 }
 
 #find-submit:enabled{
@@ -59,7 +60,7 @@
   color: #f1f1f1
 }
 
-#upload-label p{
+#find-label p{
   padding: 10px;
 }
 
