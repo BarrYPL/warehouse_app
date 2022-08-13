@@ -4,58 +4,64 @@
   <% end %>
   <div class="inner-width">
     <div class="find-content">
-      <form action="/find" name="find-form" method="post" enctype="multipart/form-data">
+      <form action="/find" name="find-form" method="post" autocomplete="off">
           <div class="text-input">
             <div class="icon-div">
               <i class="fa-solid fa-magnifying-glass"></i>
             </div>
-            <input type="text" id="search-input" name="search-input" placeholder="Enter Key">
+            <div class="searching-bar">
+              <input type="text" id="search-input" name="search-input" placeholder="Enter Key">
+              <div id="result-div" class="result-div"></div>
+            </div>
           </div>
-          <input type="submit" value="Find" id="find-submit" name="submit">
+          <input type="submit" value="Szukaj" id="find-submit" name="submit">
         </form>
-        <div id="result-div" class="result-div">
-
-        </div>
     </div>
   </div>
 </section>
 
 <script>
 "use strict";
+function isEmpty(obj) {
+    return Object.keys(obj).length === 0;
+}
+
 window.onload = function () {
   const input = _('search-input');
   input.addEventListener('input', updateValue);
+	let res = _('result-div');
   function updateValue(e) {
-    let p = document.createElement("p");
-    let post_data = e.target.value
-    let div = _('result-div');
-    while(div.firstChild) {
-      div.removeChild(div.firstChild);
-    }
+    let post_data = e.target.value;
     const xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
       if (xhr.readyState == XMLHttpRequest.DONE) {
         const obj = JSON.parse(xhr.responseText);
-        let num = Object.keys(obj).length;
-        console.log(num);
-        var tagh1 = document.createElement("h1");
-        tagh1.append(`Znaleziono ${num} wyników!`);
-        div.appendChild(tagh1);
-        obj.forEach(obj => {Object.entries(obj).forEach(([key, value]) => {
-        var tag = document.createElement("p");
-        var text = `${key} ${value}`;
-        tag.append(text);
-        div.appendChild(tag);
-        });
-        div.append('-------------------'); });
+        res.innerHTML = '';
+        let list = '';
+        let terms = [];
+        obj.forEach(obj => {
+            Object.entries(obj).forEach(([key, value]) => {
+              terms.push(value);
+            });
+          });
+        for (var i=0; i<terms.length; i++) {
+          list += '<li>' + terms[i] + '</li>';
+        }
+        res.innerHTML = '<ul>' + list + '</ul>';
+        res.style.display = 'block';
       }
     }
     xhr.addEventListener('error', (event) => {
       alert('Oops! Something went wrong.');
     });
-    xhr.open("POST", "/find", true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.send("phrase="+post_data);
+    if(!isEmpty(post_data)){
+      xhr.open("POST", "/find", true);
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      xhr.send("phrase="+post_data);
+    } else {
+      res.innerHTML = '';
+      res.style.display = 'none';
+    }
   }
 }
 

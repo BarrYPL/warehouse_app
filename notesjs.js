@@ -35,6 +35,28 @@
           });
           div.append('-------------------');
         });
+		
+		let num = Object.keys(obj).length;
+        console.log(num);
+        var tagh1 = document.createElement("h1");
+        tagh1.append(`Znaleziono ${num} wyników!`);
+		
+		obj.forEach(obj => {Object.entries(obj).forEach(([key, value]) => {
+        var tag = document.createElement("p");
+        var text = `${value}`;
+        tag.append(text);
+        div.appendChild(tag);
+        });});
+		
+		
+		///////////////////////////////////////////////////
+		//Update value beginning
+		let p = document.createElement("p");
+		let post_data = e.target.value
+		let div = _('result-div');
+		while(div.firstChild) {
+			div.removeChild(div.firstChild);
+		}
 </script>
 
 localid name value quantity location

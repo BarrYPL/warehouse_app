@@ -70,11 +70,10 @@ class MyServer < Sinatra::Base
       if params[:phrase] != ""
         @phrase = params[:phrase].gsub(/ /, '%')
         @arr = []
-        $capacitorsDB.where(Sequel.ilike(:name, "%#{@phrase}%")).all.each do |k|
-          k[:value] = k[:value].to_human_redable
-          @arr << k
+        $capacitorsDB.where(Sequel.ilike(:name, "%#{@phrase}%")).order(:name).all.each do |k|
+          @arr << {name: k[:name]}
         end
-        p @arr.to_json
+        p @arr.uniq.to_json
       end
     end
   end
