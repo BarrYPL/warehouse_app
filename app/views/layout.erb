@@ -12,6 +12,11 @@
         <%= "<link rel=\"stylesheet\" href=\"css/#{style}.css\">" %>
       <% end %>
     <% end %>
+    <% if @js %>
+      <% @js.each do |jscript| %>
+        <%= "<script src=\"js/#{jscript}.js\"></script>" %>
+      <% end %>
+    <% end %>
   </head>
   <body>
     <div class="wrapper">

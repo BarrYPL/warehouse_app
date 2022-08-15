@@ -21,9 +21,11 @@ class MyServer < Sinatra::Base
 
   get '/' do
     if current_user
+      @js = ["welcome-js"]
       @css = ["welcome-styles"]
       erb :welcome
     else
+      @js = ["welcome-js"]
       @css = ["welcome-styles"]
       erb :welcome
       #@css = ["login-styles"]
