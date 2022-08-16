@@ -5,21 +5,13 @@
     flex-direction: column;
 }
 
-.inner-header{
-  margin-top: 40px;
-}
-
-.inner-header img{
-  width: 100%;
-}
-
 ::-webkit-progress-value {
   background-color: #f1f1f1;
 }
 
 .text-input{
   width: 80%;
-  margin-top: 15px;
+  margin: 15px 0px 0px 15px;
   display: flex;
   border-radius: 10px;
 }
@@ -51,7 +43,6 @@
 .find-content form{
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
 }
 
 section{
@@ -62,8 +53,8 @@ section{
 .section-title{
   text-align: center;
   position: relative;
-  font-size: 26px;
-  padding: 20px 0px 20px 0px;
+  font-size: 1em;
+  padding: 10px 0px 10px 0px;
 }
 
 .result-div {
@@ -71,23 +62,25 @@ section{
   padding: 3px;
   display: none;
 }
+
 .result-div ul {
   list-style-type: none;
   padding: 0;
   margin: 0;
 }
+
 .result-div ul li {
   padding: 5px 0;
 }
+
 .result-div ul li:hover {
   background: #eee;
   color: #202020;
 }
 
-
 #find-submit{
   padding: 10px;
-  margin-top: 15px;
+  margin: 15px 0px 0px 15px;
   border-radius: 10px;
   border: none;
   width: 80px;
@@ -120,4 +113,9 @@ section{
   flex-direction: column;
   max-width: 800px;
   margin: auto;
+}
+
+#easter-egg{
+  max-width:100%;
+  max-height:100%;
 }

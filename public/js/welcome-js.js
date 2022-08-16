@@ -39,6 +39,7 @@ function updateValue(e) {
     if (xhr.readyState == XMLHttpRequest.DONE) {
       const obj = JSON.parse(xhr.responseText);
       let terms = [];
+      console.log(obj);
       obj.forEach(obj => {
           Object.entries(obj).forEach(([key, value]) => {
             terms.push(value);
@@ -51,7 +52,7 @@ function updateValue(e) {
     alert('Oops! Something went wrong.');
   });
   if(!isEmpty(post_data)){
-    xhr.open("POST", "/find", true);
+    xhr.open("POST", "/quick-find", true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.send("phrase="+post_data);
   } else {

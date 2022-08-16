@@ -67,15 +67,22 @@ class MyServer < Sinatra::Base
     redirect '/login'
   end
 
-  post '/find' do
+  post '/quick-find' do
     if params[:phrase] != "undefined" && params[:phrase] != nil
       if params[:phrase] != ""
-        @phrase = params[:phrase].gsub(/ /, '%')
-        @arr = []
-        $capacitorsDB.where(Sequel.ilike(:name, "%#{@phrase}%")).order(:name).all.each do |k|
-          @arr << {name: k[:name]}
+        if params[:phrase].downcase == "rafe"
+          p '[{"":"<image src=\"images/easters/rafe.png\" alt=\"error\" id=\"easter-egg\"></image>"}]'
+        else
+          @phrase = params[:phrase]#.gsub(/ /, '%')
+          @arr = []
+          @dbTablesArray = [$capacitorsDB, $inductorsDB, $resistorsDB]
+          @dbTablesArray.each do |table|
+            table.where(Sequel.like(:name, "#{@phrase}%", case_insensitive: true)).limit(9).all.each do |k|
+              @arr << ({name: k[:name]})
+            end
+          end
+          p @arr.uniq.sort_by { |element| element.values.first }[0..9].to_json
         end
-        p @arr.uniq.to_json
       end
     end
   end
