@@ -1,0 +1,53 @@
+#home{
+  padding: 5%;
+}
+
+#home .inner-width{
+  max-width: 960px;
+}
+
+.solid-results-div{
+  width: 100%;
+  padding: 10px 25px 10px 25px;
+  overflow: auto;
+}
+
+.result-tab{
+  margin-top: 10px;
+  width: 100%;
+  text-align: center;
+}
+
+table, th, td {
+  border-bottom: 1px solid red;
+  border-collapse: collapse;
+}
+
+th{
+  background: #fa0200;
+  padding: 10px 0px 10px 0px;
+  position: sticky;
+  top: -10px;
+}
+
+td{
+  padding: 15px 0px 15px 0px;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #fa0200;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #b30000;
+}

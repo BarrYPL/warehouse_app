@@ -22,9 +22,9 @@ function updateSearchingSuggestions(tab){
     list += '<li class="searching-suggestion">' + tab[i] + '</li>';
   }
   res.innerHTML = '<ul>' + list + '</ul>';
-  res.style.display = 'block';
+  suggestionsDivAppear(true);
   if(isEmpty(tab)){
-    res.style.display = 'none';
+    suggestionsDivAppear(false);
   }
   //Adding class event listener
   document.querySelectorAll('.searching-suggestion').forEach(item => {
@@ -60,7 +60,24 @@ function updateValue(e) {
   }
 }
 
+function suggestionsDivAppear(x){
+  let res = _('result-div');
+  let inp = _('search-input');
+  if (x === true){
+    res.style.display = 'block';
+    inp.style.borderRadius = "0px 10px 0px 0px";
+  } else {
+    res.style.display = 'none';
+    inp.style.borderRadius = "0px 10px 10px 0px";
+  }
+}
+
 window.onload = function () {
   const input = _('search-input');
   input.addEventListener('input', updateValue);
+  document.onclick = function(e){
+    if (e.target.id != 'search-input'){
+      suggestionsDivAppear(false);
+    }
+  }
 }

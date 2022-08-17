@@ -8,9 +8,16 @@ $laboratoryeqDB = DB[:laboratoryeq]
 $mechanicalsDB = DB[:mechanicals]
 $othersDB = DB[:others]
 
-class Integer
+class Numeric
   def to_human_redable
-    return formati_si(self)
+    if self == 0
+      return 0
+    end
+    if self >= 1
+      return formati_si(self)
+    else
+      return formatf_si(self)
+    end
   end
 end
 
@@ -28,12 +35,6 @@ def formati_si(size)
   end
   ndx=5
   return "#{'%.1f' % (size/(scale**(ndx-1)))} #{conv[ndx-1]}"
-end
-
-class Float
-  def to_human_redable
-    return formatf_si(self)
-  end
 end
 
 def formatf_si(size)

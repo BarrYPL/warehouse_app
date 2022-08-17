@@ -1,8 +1,8 @@
 .find-content {
-    height: 100%;
     width: 100%;
     display: flex;
     flex-direction: column;
+    margin-bottom: 20px;
 }
 
 ::-webkit-progress-value {
@@ -11,7 +11,6 @@
 
 .text-input{
   width: 80%;
-  margin: 15px 0px 0px 15px;
   display: flex;
   border-radius: 10px;
 }
@@ -43,6 +42,7 @@
 .find-content form{
   display: flex;
   flex-direction: row;
+  justify-content: space-evenly;
 }
 
 section{
@@ -53,14 +53,18 @@ section{
 .section-title{
   text-align: center;
   position: relative;
-  font-size: 1em;
   padding: 10px 0px 10px 0px;
 }
 
 .result-div {
+  position: relative;
+  z-index: 2;
   border: 1px solid #f1f1f1;
   padding: 3px;
   display: none;
+  color: #fa0200;
+  background: #fff;
+  border-radius: 0px 0px 10px 0px;
 }
 
 .result-div ul {
@@ -74,13 +78,12 @@ section{
 }
 
 .result-div ul li:hover {
-  background: #eee;
-  color: #202020;
+  background: #fa0200;
+  color: #fff;
 }
 
 #find-submit{
   padding: 10px;
-  margin: 15px 0px 0px 15px;
   border-radius: 10px;
   border: none;
   width: 80px;
