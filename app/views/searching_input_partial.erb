@@ -9,7 +9,10 @@
           <i class="fa-solid fa-magnifying-glass"></i>
         </div>
         <div class="searching-bar">
-          <input type="text" id="search-input" name="search-input" placeholder="Enter Key">
+          <input type="text" id="search-input" name="search-input"
+          <% if @inputVal.nil? %>placeholder="Wyszukaj"
+          <% else %>value="<%= @inputVal %>"
+          <% end %>>
           <div id="result-div" class="result-div"></div>
         </div>
       </div>

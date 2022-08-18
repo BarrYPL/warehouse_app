@@ -34,9 +34,11 @@ class MyServer < Sinatra::Base
   end
 
   post '/find' do
-    @js = ["searching-js"]
+    @js = ["searching-js", "filter-js"]
     @css = ["welcome-styles", "search-styles"]
-    results = detailedSearch(params[:"search-input"])
+    @inputVal = params[:"search-input"]||params[:"input-value"]
+    @filters = params[:element]||""
+    results = detailedSearch(@inputVal, filterTab: @filters)
     erb :search, locals: { results: results }
   end
 
@@ -75,23 +77,24 @@ class MyServer < Sinatra::Base
   end
 
   post '/quick-find' do
-    if params[:phrase] != "undefined" && params[:phrase] != nil
-      if params[:phrase] != ""
-        if params[:phrase].downcase == "rafe"
-          p '[{"":"<image src=\"images/easters/rafe.png\" alt=\"error\" id=\"easter-egg\"></image>"}]'
-        else
-          @suggestionsArr = findQuerys(params[:phrase])
-          @suggestionsArr.uniq!
-          if !@suggestionsArr.empty?
-            @suggestionsArr.sort_by!(&:values)
-          end
-          if @suggestionsArr.length < 9
-            @suggestionsArr = findQuerys(params[:phrase], false)
-            sortByFirstChar(@suggestionsArr, params[:phrase])
-          end
-          p @suggestionsArr.uniq[0..9].to_json
-        end
+    if params[:phrase] == nil || params[:phrase] == ""
+      @phrase = "%"
+    else
+      @phrase = params[:phrase]
+    end
+    if params[:phrase].downcase == "rafe"
+      p '[{"":"<image src=\"images/easters/rafe.png\" alt=\"error\" id=\"easter-egg\"></image>"}]'
+    else
+      @suggestionsArr = findQuerys(@phrase)
+      @suggestionsArr.uniq!
+      if !@suggestionsArr.empty?
+        @suggestionsArr.sort_by!(&:values)
       end
+      if @suggestionsArr.length < 9
+        @suggestionsArr = findQuerys(@phrase, false)
+        sortByFirstChar(@suggestionsArr, @phrase)
+      end
+      p @suggestionsArr.uniq[0..9].to_json
     end
   end
 
@@ -128,24 +131,39 @@ class MyServer < Sinatra::Base
     return @arr
   end
 
-  def detailedSearch(phrase)
-    phrase.gsub(/ /, '%')
+  def detailedSearch(phrase, filterTab: "")
+    @phrase = phrase.strip.gsub(/ /, '%')
     @arr = []
-    @dbTablesArray = [$capacitorsDB, $inductorsDB, $resistorsDB]
+    case filterTab
+    when "resistors"
+      @dbTablesArray = [$resistorsDB]
+    when "capacitors"
+      @dbTablesArray = [$capacitorsDB]
+    when "inductors"
+      @dbTablesArray = [$inductorsDB]
+    when "others"
+      @dbTablesArray = [$othersDB]
+    else
+      @dbTablesArray = [$capacitorsDB, $inductorsDB, $resistorsDB]
+    end
     @dbTablesArray.each do |table|
-      @arr << table.where(Sequel.like(:name, "%#{phrase}%", case_insensitive: true)).all
-      @arr << table.where(Sequel.like(:localid, "%#{phrase}%", case_insensitive: true)).all
+      @arr << table.where(Sequel.like(:name, "%#{@phrase}%", case_insensitive: true)).all
+      @arr << table.where(Sequel.like(:localid, "%#{@phrase}%", case_insensitive: true)).all
     end
     @arr.each do |el|
       el.sort_by!{ |w| w[:value] }
     end
-    return @arr.flatten
+    return @arr.flatten.uniq
   end
 
   def sortByFirstChar(arr, phrase)
     #arr.sort_by! { |el| el.values[0] }
-    regexp = Regexp.new("^" + phrase)
-    arr.sort_by! { |w| w.values[0].match?(regexp) ? 0 : 1 }
+    regexp = Regexp.new("^" + phrase.strip)
+    if arr.all? { |w| !w.values[0].match(regexp) }
+      arr.sort_by!(&:values)
+    else
+      arr.sort_by! { |w| w.values[0].match?(regexp) ? 0 : 1 }
+    end
     return arr
   end
 
