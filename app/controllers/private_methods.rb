@@ -46,11 +46,11 @@ def formatf_si(size)
   size=size.to_f
   [1,2,3,4].each do |ndx|
     if( size >= (scale**-ndx)) then
-      return "#{'%.3f' % (size*(scale**(ndx-1)))} #{conv[ndx-1]}"
+      return "#{'%.1f' % (size*(scale**ndx))} #{conv[ndx-1]}"
     end
   end
   ndx=5
-  return "#{'%.3f' % (size*(scale**(ndx-1)))} #{conv[ndx-1]}"
+  return "#{'%.1f' % (size*(scale**ndx))} #{conv[ndx-1]}"
 end
 
 class Numeric

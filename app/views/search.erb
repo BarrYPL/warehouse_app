@@ -28,7 +28,11 @@
               <td><%= idx + 1 %>.</td>
               <td><%= result[:localid] %></td>
               <td><%= result[:name] %></td>
-              <td><%= result[:value].to_human_redable %></td>
+              <td><%= result[:value].to_human_redable %>
+              <% if result[:name][-1] == "F" %>F
+              <% elsif result[:name][-1] == "m" %>&#8486;
+              <% else %>H
+              <% end %></td>
               <td><%= result[:quantity] %></td>
               <td> &nbsp;</td>
             </tr>
