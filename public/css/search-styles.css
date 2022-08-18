@@ -75,16 +75,36 @@ td {
 fieldset{
   border: solid 1px #fa0200;
   padding: 5px;
-  margin-right: 10px; 
+  margin-right: 10px;
 }
 
 .value-sort{
   display: flex;
   flex-direction: column;
+  justify-content: space-around;
 }
 
 .filter-sets {
   display: flex;
   flex-direction: row;
   padding: 10px;
+}
+
+.filterInput {
+  outline: none;
+  border: none;
+  color: #fa0200;
+  border-radius: 5px;
+  opacity: 0.8;
+  text-indent: 10px;
+  height: 20px;
+}
+
+.filterInput:focus {
+  outline: solid #fa0200 1px;
+}
+
+.filterInput::placeholder,
+.filterInput::-ms-input-placeholder{
+  color: #fa0200;
 }

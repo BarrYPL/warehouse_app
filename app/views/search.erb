@@ -41,8 +41,8 @@
             </fieldset>
             <fieldset class="value-sort">
               <legend><input type="checkbox" onclick="unlockValueFilters()" id="value-checkbox" name="value-filter" value="value-filter">Wartość</legend>
-              <input type="text" id="valueMinInput" name="valuemin" placeholder="Od" disabled>
-              <input type="text" id="valueMaxInput" name="valuemax" placeholder="Do" disabled>
+              <input type="text" class="filterInput" id="valueMinInput" name="valuemin" placeholder="Od" disabled>
+              <input type="text" class="filterInput" id="valueMaxInput" name="valuemax" placeholder="Do" disabled>
             </fieldset>
           </div>
           <input type="hidden" name="input-value" value="<%= @inputVal %>">

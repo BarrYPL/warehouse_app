@@ -30,27 +30,51 @@ def formati_si(size)
   size=size.to_f
   [1,2,3,4].each do |ndx|
     if( size < (scale**ndx)) then
-      return "#{'%.1f' % (size/(scale**(ndx-1)))} #{conv[ndx-1]}"
+      if isNatural(size/(scale**(ndx-1)))
+        return "#{(size/(scale**(ndx-1))).to_i} #{conv[ndx-1]}"
+      else
+        return "#{'%.1f' % (size/(scale**(ndx-1)))} #{conv[ndx-1]}"
+      end
     end
   end
   ndx=5
-  return "#{'%.1f' % (size/(scale**(ndx-1)))} #{conv[ndx-1]}"
+  if isNatural(size/(scale**(ndx-1)))
+    return "#{(size/(scale**(ndx-1))).to_i} #{conv[ndx-1]}"
+  else
+    return "#{'%.1f' % (size/(scale**(ndx-1)))} #{conv[ndx-1]}"
+  end
+end
+
+def isNatural(floatNum)
+  if floatNum.rationalize.denominator == 1
+    return true
+  else
+    return false
+  end
 end
 
 def formatf_si(size)
   scale = 1000
   ndx = 1
 
-  conv = [ 'm', 'u', 'n', 'p', 'f']
+  conv = [ 'm', 'μ', 'n', 'p', 'f']
 
   size=size.to_f
   [1,2,3,4].each do |ndx|
     if( size >= (scale**-ndx)) then
-      return "#{'%.1f' % (size*(scale**ndx))} #{conv[ndx-1]}"
+      if isNatural(size*(scale**ndx))
+        return "#{(size*(scale**ndx)).to_i} #{conv[ndx-1]}"
+      else
+        return "#{'%.1f' % (size*(scale**ndx))} #{conv[ndx-1]}"
+      end
     end
   end
   ndx=5
-  return "#{'%.1f' % (size*(scale**ndx))} #{conv[ndx-1]}"
+  if isNatural(size*(scale**ndx))
+    return "#{(size*(scale**ndx)).to_i} #{conv[ndx-1]}"
+  else
+    return "#{'%.1f' % (size*(scale**ndx))} #{conv[ndx-1]}"
+  end
 end
 
 class Numeric
