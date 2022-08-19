@@ -8,7 +8,7 @@
 
 html, body {
   scroll-behavior: smooth;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 body {
@@ -103,4 +103,38 @@ footer {
 
 .advanced-search a {
   width: fit-content;
+}
+
+.pedoEasterEgg {
+  position: absolute;
+  right: -310px;
+  z-index: -1;
+  transition: all 1s ease-in-out;
+  transform-origin: top left;
+}
+
+.micheEasterEgg {
+    position: absolute;
+    transition: all 1s ease-in-out;
+    transform-origin: top left;
+    max-height: 100vh;
+    z-index: -1;
+    right: -645px;
+}
+
+.second-easteregg {
+  position: absolute;
+  left: 0px;
+  cursor: pointer;
+  display: none;
+  transition: all 1s ease-in-out;
+}
+
+#miche {
+  max-height: inherit;
+  max-width: 625px;
+}
+
+#second-easteregg {
+  padding: 10px;
 }

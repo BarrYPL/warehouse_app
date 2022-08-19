@@ -27,8 +27,17 @@
           <p class="error"><%= @error %></p>
         <% end %>
         <div class="menu" id="menu-div">
+          <div class="pedoEasterEgg" id="pedoEasterEgg">
+            <img src="/images/easters/pedobear.png" alt="error">
+          </div>
+          <div class="micheEasterEgg" id="micheEasterEgg">
+            <img src="/images/easters/miche.png" alt="error" id="miche">
+          </div>
           <i class="fa-solid fa-bars" id="menu-icon" onclick="showMenu()"></i>
           <div class="menu-block">
+            <div class="second-easteregg" id="second-egg" onclick="showMiche()">
+              <h1 id="second-easteregg"><i class="fa-solid fa-binoculars"></i></h1>
+            </div>
             <% if current_user %>
               <a href="/logout"><h1>LOGOUT <i class="fa-solid fa-right-from-bracket"></i></h1>
             <% else %>
