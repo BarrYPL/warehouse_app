@@ -36,26 +36,39 @@ class MyServer < Sinatra::Base
     erb :login
   end
 
+  get '/find' do
+    @js = ["searching-js", "filter-js"]
+    @css = ["welcome-styles", "search-styles"]
+    results = detailedSearch("")
+    erb :search, locals: { results: results }
+  end
+
   post '/find' do
     @js = ["searching-js", "filter-js"]
     @css = ["welcome-styles", "search-styles"]
     @inputVal = params[:"search-input"]||params[:"input-value"]
     @filters = params[:element]||""
-    results = detailedSearch(@inputVal, filterTab: @filters)
+    if !params[:valuemin].nil? && params[:valuemin] != ""
+      @valueMin = params[:valuemin]
+    else
+      @valueMin = 0
+    end
+    if !params[:valuemax].nil? && params[:valuemax] != ""
+      @valueMax = params[:valuemax]
+    else
+      @valueMax = 10**12
+    end
+    results = detailedSearch(@inputVal, filterTab: @filters, valueMin: @valueMin, valueMax: @valueMax)
     erb :search, locals: { results: results }
   end
 
   post '/login' do
     user_key = $usersDB.where(:username => params[:username]).all
-    if !user_key.empty?
-      user_key = user_key[0][:twofaKey]
-      totp = ROTP::TOTP.new(user_key, issuer: "Barrys Site")
-    end
     if !params[:username].empty? && !params[:password].empty?
       $usersDB.map do |user|
         if params[:username] == user[:username]
           pass_t = user[:password_hash]
-          if test_password(params[:password], pass_t) || !totp.verify(params[:password]).nil?
+          if test_password(params[:password], pass_t)
             session.clear
             session[:user_id] = user[:id]
             redirect '/'
@@ -134,7 +147,7 @@ class MyServer < Sinatra::Base
     return @arr
   end
 
-  def detailedSearch(phrase, filterTab: "")
+  def detailedSearch(phrase, filterTab: "", valueMin: 0, valueMax: 10**12)
     @phrase = phrase.strip.gsub(/ /, '%')
     @arr = []
     case filterTab
@@ -150,8 +163,8 @@ class MyServer < Sinatra::Base
       @dbTablesArray = [$capacitorsDB, $inductorsDB, $resistorsDB]
     end
     @dbTablesArray.each do |table|
-      @arr << table.where(Sequel.like(:name, "%#{@phrase}%", case_insensitive: true)).all
-      @arr << table.where(Sequel.like(:localid, "%#{@phrase}%", case_insensitive: true)).all
+      @arr << table.where(Sequel.like(:name, "%#{@phrase}%", case_insensitive: true)).where(Sequel.lit('value > ?', valueMin)).where(Sequel.lit('value < ?', valueMax)).all
+      @arr << table.where(Sequel.like(:localid, "%#{@phrase}%", case_insensitive: true)).where(Sequel.lit('value > ?', valueMin)).where(Sequel.lit('value < ?', valueMax)).all
     end
     @arr.each do |el|
       el.sort_by!{ |w| w[:value] }

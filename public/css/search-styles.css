@@ -1,5 +1,6 @@
 #home {
   padding: 5%;
+  padding-bottom: 7%;
 }
 
 #home .inner-width {
@@ -78,6 +79,10 @@ fieldset{
   margin-right: 10px;
 }
 
+fieldset input[type=text] {
+  margin: 5px 0px;
+}
+
 .value-sort{
   display: flex;
   flex-direction: column;
@@ -107,4 +112,11 @@ fieldset{
 .filterInput::placeholder,
 .filterInput::-ms-input-placeholder{
   color: #fa0200;
+}
+
+@media screen and (max-width: 960px){
+    .solid-results-div {
+      margin-bottom: 25px;
+      font-size: 0.7em;
+    }
 }

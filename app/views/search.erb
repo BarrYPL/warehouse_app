@@ -20,15 +20,15 @@
           <fieldset>
             <legend>Filtruj Elementy:</legend>
             <div class="radio-input">
-              <input type="radio" id="resistors" name="element" value="resistors">
+              <input type="radio" id="resistors" name="element" value="resistors" <% if params[:element] == "resistors" %> checked <% end %>>
               <label for="resistors">Rezystory</label>
             </div>
             <div class="radio-input">
-              <input type="radio" id="capacitors" name="element" value="capacitors">
+              <input type="radio" id="capacitors" name="element" value="capacitors" <% if params[:element] == "capacitors" %> checked <% end %>>
               <label for="capacitors">Kondensatory</label>
             </div>
             <div class="radio-input">
-              <input type="radio" id="inductors" name="element" value="inductors">
+              <input type="radio" id="inductors" name="element" value="inductors" <% if params[:element] == "inductors" %> checked <% end %>>
               <label for="inductors">Cewki</label>
             </div>
             <div class="radio-input">
@@ -37,13 +37,14 @@
             </div>
           </fieldset>
           <fieldset class="value-sort">
-            <legend><input type="checkbox" onclick="unlockValueFilters()" id="value-checkbox" name="value-filter" value="value-filter">Wartość</legend>
-            <input type="text" class="filterInput" id="valueMinInput" name="valuemin" placeholder="Od" disabled>
-            <input type="text" class="filterInput" id="valueMaxInput" name="valuemax" placeholder="Do" disabled>
+            <legend><input type="checkbox" onclick="unlockValueFilters()" id="value-checkbox" name="value-filter">Wartość</legend>
+            <p>Działają przedrostki SI <br> np. "10k"</p>
+            <input type="text" title="I accept SI preix :S" class="filterInput" id="valueMinInput" name="valuemin" <% unless params[:valuemin].nil? %> value="<%= params[:valuemin] %>" <% else %> placeholder="Od" disabled <% end %>>
+            <input type="text" title="I accept SI prefix :S" class="filterInput" id="valueMaxInput" name="valuemax" <% unless params[:valuemax].nil? %> value="<%= params[:valuemax] %>" <% else %> placeholder="Do" disabled <% end %>>
           </fieldset>
         </div>
         <input type="hidden" name="input-value" value="<%= @inputVal %>">
-        <input type="submit" class="filter-button" name="zastosuj" id="find-submit" value="Zastosuj">
+        <input type="submit" class="filter-button" id="find-submit">
       </form>
     </div>
       <table class="result-tab">
@@ -69,14 +70,15 @@
             <td>
             <% if result.key?(:maxvoltage) %>
               <%if result[:maxvoltage] == 0 %>
-                -
+                <%= result[:description] %>
               <% else %>
-                <%= result[:maxvoltage] %>
+                <%= result[:maxvoltage] %>V <%= result[:description] %>
               <% end %>
               <% elsif result.key?(:powerdissipation) %>
                 <%= result[:powerdissipation] %>
-              <% else %>-
-            <% end %></td>
+              <% else %>
+                <%= result[:description] %>
+              <% end %></td>
             <td><%= result[:quantity] %></td>
             <td> &nbsp;</td>
           </tr>
@@ -85,3 +87,14 @@
     <% end %>
   </div>
 </div>
+
+<% unless params[:element].nil? %>
+  <script>
+    loadFilters();
+    <% unless params[:valuemin].nil? && params[:valuemax].nil? %>
+      const checkBox = _('value-checkbox');
+      checkBox.checked = true;
+      unlockValueFilters();
+    <% end %>
+  </script>
+<% end %>

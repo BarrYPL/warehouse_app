@@ -20,6 +20,10 @@ a {
   text-align: left;
 }
 
+a i{
+  padding-left: 5px;
+}
+
 .error {
     text-align: center;
     color: red;
@@ -43,7 +47,7 @@ footer {
   bottom: 0px;
   width: 100vw;
   color: #fff;
-  padding: 40px 0;
+  padding: 20px 0;
   text-align: center;
 }
 
@@ -87,4 +91,16 @@ footer {
 .log-text p {
   padding-left: 5px;
   font-family: "Brush Script MT";
+}
+
+.advanced-search {
+  display: flex;
+  margin: 10px 0px;
+  width: 100%;
+  padding-right: 20px;
+  flex-direction: row-reverse;
+}
+
+.advanced-search a {
+  width: fit-content;
 }

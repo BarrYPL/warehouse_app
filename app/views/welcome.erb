@@ -1,5 +1,8 @@
 <div class="inner-width">
   <%= erb :searching_input_partial %>
+  <div class="advanced-search">
+    <a href="/find">Zaawansowane<i class="fa-brands fa-searchengin"></i></a>
+  </div>
   <div class="login-window">
     <% if !current_user %>
       <%= erb :login_partial %>
