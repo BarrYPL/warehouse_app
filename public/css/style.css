@@ -1,4 +1,4 @@
-*{
+* {
   margin: 0;
   padding: 0;
   text-decoration: none;
@@ -6,8 +6,18 @@
   box-sizing: border-box;
 }
 
-html{
+html, body {
   scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  position: relative;
+}
+
+a {
+  color: #f1f1f1;
+  text-align: left;
 }
 
 .error {
@@ -24,15 +34,57 @@ html{
   opacity: 1;
 }
 
-.textbox{
+.textbox {
   overflow: hidden;
 }
 
-footer{
+footer {
   position: absolute;
   bottom: 0px;
   width: 100vw;
   color: #fff;
   padding: 40px 0;
   text-align: center;
+}
+
+.menu {
+  position: absolute;
+  z-index: 2;
+  top: 0px;
+  height: 100vh;
+  right: 20px;
+  color: #fa0200;
+  transition: all .3s ease-in-out;
+  transform-origin: bottom left;
+}
+
+.menu-block {
+  position: absolute;
+  z-index: 2;
+  top: 0px;
+  height: 100vh;
+  right: -420px;
+  background: #fa0200;
+  color: #f1f1f1;
+  width: 400px;
+}
+
+#menu-icon {
+  padding-top: 20px;
+  cursor: pointer;
+}
+
+.menu-block h1 {
+  padding: 20px 0px 0px 20px;
+}
+
+.log-text {
+  display: flex;
+  justify-content: flex-start;
+  margin-left: 20px;
+}
+
+.log-text p {
+  padding-left: 5px;
+  font-family: "Brush Script MT";
 }

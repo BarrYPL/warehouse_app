@@ -1,8 +1,8 @@
-<section id="home">
-  <% if @error %>
-    <p class="error"><%= @error %></p>
-  <% end %>
-  <div class="inner-width">
-    <%= erb :searching_input_partial %>
+<div class="inner-width">
+  <%= erb :searching_input_partial %>
+  <div class="login-window">
+    <% if !current_user %>
+      <%= erb :login_partial %>
+    <% end %>
   </div>
-</section>
+</div>

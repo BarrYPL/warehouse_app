@@ -26,11 +26,14 @@ class MyServer < Sinatra::Base
       erb :welcome
     else
       @js = ["searching-js"]
-      @css = ["welcome-styles"]
+      @css = ["welcome-styles", "login-partial"]
       erb :welcome
-      #@css = ["login-styles"]
-      #erb :login
     end
+  end
+
+  get '/login' do
+    @css = ["login-styles"]
+    erb :login
   end
 
   post '/find' do
@@ -73,7 +76,7 @@ class MyServer < Sinatra::Base
 
   get '/logout' do
     session.clear
-    redirect '/login'
+    redirect '/'
   end
 
   post '/quick-find' do

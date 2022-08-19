@@ -1,91 +1,87 @@
-<section id="home">
-  <% if @error %>
-    <p class="error"><%= @error %></p>
-  <% end %>
-  <div class="inner-width">
-    <%= erb :searching_input_partial %>
-    <div class="solid-results-div">
-      <div class="results-header">
-        <h3 id="results-count">Znaleziono <%= results.length %>
-          <% if results.length == 0 || results.length > 4 %>
-          wyników !
-          <% elsif results.length == 1 %>
-          wynik !
-          <% else %>
-          wyniki !
-          <% end %></h3>
-          <% if !results.empty? %>
-          <input onclick="loadFilters()" type="submit" class="filter-button" value="Filtruj" id="find-submit" name="filtruj">
-      </div>
-      <div class="filters" id="filters-div">
-        <form class="filter-form" action="find" method="post">
-          <div class="filter-sets">
-            <fieldset>
-              <legend>Filtruj Elementy:</legend>
-              <div class="radio-input">
-                <input type="radio" id="resistors" name="element" value="resistors">
-                <label for="resistors">Rezystory</label>
-              </div>
-              <div class="radio-input">
-                <input type="radio" id="capacitors" name="element" value="capacitors">
-                <label for="capacitors">Kondensatory</label>
-              </div>
-              <div class="radio-input">
-                <input type="radio" id="inductors" name="element" value="inductors">
-                <label for="inductors">Cewki</label>
-              </div>
-              <div class="radio-input">
-                <input type="radio" id="others" name="element" value="others" disabled>
-                <label for="others">Inne</label>
-              </div>
-            </fieldset>
-            <fieldset class="value-sort">
-              <legend><input type="checkbox" onclick="unlockValueFilters()" id="value-checkbox" name="value-filter" value="value-filter">Wartość</legend>
-              <input type="text" class="filterInput" id="valueMinInput" name="valuemin" placeholder="Od" disabled>
-              <input type="text" class="filterInput" id="valueMaxInput" name="valuemax" placeholder="Do" disabled>
-            </fieldset>
-          </div>
-          <input type="hidden" name="input-value" value="<%= @inputVal %>">
-          <input type="submit" class="filter-button" name="zastosuj" id="find-submit" value="Zastosuj">
-        </form>
-      </div>
-        <table class="result-tab">
+
+<div class="inner-width">
+  <%= erb :searching_input_partial %>
+  <div class="solid-results-div">
+    <div class="results-header">
+      <h3 id="results-count">Znaleziono <%= results.length %>
+      <% if results.length == 0 || results.length > 4 %>
+        wyników !
+      <% elsif results.length == 1 %>
+        wynik !
+      <% else %>
+        wyniki !
+      <% end %></h3>
+      <% if !results.empty? %>
+      <input onclick="loadFilters()" type="submit" class="filter-button" value="Filtruj" id="find-submit" name="filtruj">
+    </div>
+    <div class="filters" id="filters-div">
+      <form class="filter-form" action="find" method="post">
+        <div class="filter-sets">
+          <fieldset>
+            <legend>Filtruj Elementy:</legend>
+            <div class="radio-input">
+              <input type="radio" id="resistors" name="element" value="resistors">
+              <label for="resistors">Rezystory</label>
+            </div>
+            <div class="radio-input">
+              <input type="radio" id="capacitors" name="element" value="capacitors">
+              <label for="capacitors">Kondensatory</label>
+            </div>
+            <div class="radio-input">
+              <input type="radio" id="inductors" name="element" value="inductors">
+              <label for="inductors">Cewki</label>
+            </div>
+            <div class="radio-input">
+              <input type="radio" id="others" name="element" value="others" disabled>
+              <label for="others">Inne</label>
+            </div>
+          </fieldset>
+          <fieldset class="value-sort">
+            <legend><input type="checkbox" onclick="unlockValueFilters()" id="value-checkbox" name="value-filter" value="value-filter">Wartość</legend>
+            <input type="text" class="filterInput" id="valueMinInput" name="valuemin" placeholder="Od" disabled>
+            <input type="text" class="filterInput" id="valueMaxInput" name="valuemax" placeholder="Do" disabled>
+          </fieldset>
+        </div>
+        <input type="hidden" name="input-value" value="<%= @inputVal %>">
+        <input type="submit" class="filter-button" name="zastosuj" id="find-submit" value="Zastosuj">
+      </form>
+    </div>
+      <table class="result-tab">
+        <tr>
+          <th>Lp.</th>
+          <th>ID</th>
+          <th>Nazwa</th>
+          <th>wartość</th>
+          <th>Opis</th>
+          <th>Ilość</th>
+          <th>Lokalizacja</th>
+        </tr>
+        <% results.each_with_index do |result, idx| %>
           <tr>
-            <th>Lp.</th>
-            <th>ID</th>
-            <th>Nazwa</th>
-            <th>wartość</th>
-            <th>Opis</th>
-            <th>Ilość</th>
-            <th>Lokalizacja</th>
-          </tr>
-          <% results.each_with_index do |result, idx| %>
-            <tr>
-              <td><%= idx + 1 %>.</td>
-              <td><%= result[:localid] %></td>
-              <td><%= result[:name] %></td>
-              <td><%= result[:value].to_human_redable %>
-              <% if result.key?(:maxvoltage) %>F
-              <% elsif result.key?(:powerdissipation) %>&#8486;
-              <% else %>H
-              <% end %></td>
-              <td>
-              <% if result.key?(:maxvoltage) %>
-                <%if result[:maxvoltage] == 0 %>
-                  -
-                <% else %>
-                  <%= result[:maxvoltage] %>
-                <% end %>
+            <td><%= idx + 1 %>.</td>
+            <td><%= result[:localid] %></td>
+            <td><%= result[:name] %></td>
+            <td><%= result[:value].to_human_redable %>
+            <% if result.key?(:maxvoltage) %>F
+            <% elsif result.key?(:powerdissipation) %>&#8486;
+            <% else %>H
+            <% end %></td>
+            <td>
+            <% if result.key?(:maxvoltage) %>
+              <%if result[:maxvoltage] == 0 %>
+                -
+              <% else %>
+                <%= result[:maxvoltage] %>
+              <% end %>
               <% elsif result.key?(:powerdissipation) %>
                 <%= result[:powerdissipation] %>
               <% else %>-
-              <% end %></td>
-              <td><%= result[:quantity] %></td>
-              <td> &nbsp;</td>
-            </tr>
-          <% end %>
-        </table>
-      <% end %>
-    </div>
+            <% end %></td>
+            <td><%= result[:quantity] %></td>
+            <td> &nbsp;</td>
+          </tr>
+        <% end %>
+      </table>
+    <% end %>
   </div>
-</section>
+</div>

@@ -13,6 +13,7 @@
       <% end %>
     <% end %>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="js/general-js.js"></script>
     <% if @js %>
       <% @js.each do |jscript| %>
         <%= "<script src=\"js/#{jscript}.js\"></script>" %>
@@ -21,7 +22,30 @@
   </head>
   <body>
     <div class="wrapper">
+      <section id="home">
+        <% if @error %>
+          <p class="error"><%= @error %></p>
+        <% end %>
+        <div class="menu" id="menu-div">
+          <i class="fa-solid fa-bars" id="menu-icon" onclick="showMenu()"></i>
+          <div class="menu-block">
+            <% if current_user %>
+              <a href="/logout"><h1>LOGOUT <i class="fa-solid fa-right-from-bracket"></i></h1>
+            <% else %>
+              <a href="/login"><h1>LOGIN <i class="fa-solid fa-fingerprint"></i></h1>
+            <% end %>
+            <div class="log-text">
+              <i class="fa-solid fa-hand-pointer"></i>
+              <% if current_user %>
+                <p>Here is Your logout.</p>
+              <% else %>
+                <p>Here is Your login</p>
+              <% end %>
+            </div></a>
+          </div>
+        </div>
         <%= yield %>
+      </section>
     </div>
   </body>
   <footer class="branding">

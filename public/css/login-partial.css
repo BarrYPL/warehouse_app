@@ -1,17 +1,3 @@
-body{
-  position: relative;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #f1f1f1;
-  text-align: center;
-  background-image: url(../images/backgrounds/bg1.jpg);
-  background-size: cover;
-  background-attachment: fixed;
-  flex-direction: column;
-}
-
 h1{
 	text-transform: uppercase;
 }
@@ -22,7 +8,6 @@ h1{
 }
 
 .login-window{
-  margin-top: 20px;
   width: 500px;
   height: 500px;
   padding: 30px 60px;
@@ -31,7 +16,6 @@ h1{
   color: #f1f1f1;
   display: flex;
   flex-direction: column;
-  background: rgba(12,12,12,0.6);
 }
 
 .login-window h1{

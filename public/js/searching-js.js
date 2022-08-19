@@ -3,10 +3,6 @@ function isEmpty(obj) {
     return Object.keys(obj).length === 0;
 }
 
-function _(el){
- return document.getElementById(el);
-}
-
 function updateInput(e){
   let input_data = e.target.innerHTML;
   let input = _('search-input');
