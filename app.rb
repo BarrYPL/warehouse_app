@@ -150,6 +150,7 @@ class MyServer < Sinatra::Base
   def detailedSearch(phrase, filterTab: "", valueMin: 0, valueMax: 10**12)
     @phrase = phrase.strip.gsub(/ /, '%')
     @arr = []
+    @partArr = []
     case filterTab
     when "resistors"
       @dbTablesArray = [$resistorsDB]
@@ -163,11 +164,23 @@ class MyServer < Sinatra::Base
       @dbTablesArray = [$capacitorsDB, $inductorsDB, $resistorsDB]
     end
     @dbTablesArray.each do |table|
-      @arr << table.where(Sequel.like(:name, "%#{@phrase}%", case_insensitive: true)).where(Sequel.lit('value > ?', valueMin)).where(Sequel.lit('value < ?', valueMax)).all
-      @arr << table.where(Sequel.like(:localid, "%#{@phrase}%", case_insensitive: true)).where(Sequel.lit('value > ?', valueMin)).where(Sequel.lit('value < ?', valueMax)).all
-    end
-    @arr.each do |el|
-      el.sort_by!{ |w| w[:value] }
+      #Find by phrase no filters
+      @partArr << table.where(Sequel.like(:name, "%#{@phrase}%", case_insensitive: true)).order(:value).all
+      @partArr << table.where(Sequel.like(:localid, "%#{@phrase}%", case_insensitive: true)).order(:value).all
+
+      #Value filters here
+      if valueMax != 10**12
+        valueMax = valueMax.strip!.to_i.to_database_num(valueMax[-1]).to_f
+        p valueMax
+        @partArr = @partArr.flatten & table.where{value < valueMax}.all
+      end
+      if valueMin != 0
+        valueMin = valueMin.strip!.to_i.to_database_num(valueMin[-1]).to_f
+        p valueMin
+        @partArr = @partArr.flatten & table.where{value > valueMin}.all
+      end
+      @partArr.flatten.sort_by!{ |w| w[:value] }
+      @arr = @partArr
     end
     return @arr.flatten.uniq
   end

@@ -17,7 +17,6 @@ body {
 
 a {
   color: #f1f1f1;
-  text-align: left;
 }
 
 a i{
@@ -137,4 +136,8 @@ footer {
 
 #second-easteregg {
   padding: 10px;
+}
+
+#menu-link{
+  text-align: left;
 }

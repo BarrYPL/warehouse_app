@@ -21,6 +21,12 @@ class Numeric
   end
 end
 
+class NilClass
+  def to_human_redable
+    return 0
+  end
+end
+
 def formati_si(size)
   scale = 1000;
   ndx = 1
