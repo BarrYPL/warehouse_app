@@ -14,18 +14,30 @@ function hideFilters(){
   filtersButton.attr('onclick', 'loadFilters()');
 }
 
-function unlockValueFilters() {
-  const checkBox = _('value-checkbox');
-  const filterMin = _('valueMinInput');
-  const filterMax = _('valueMaxInput');
-
-  if (checkBox.checked == true){
-    filterMin.disabled = false;
-    filterMax.disabled = false;
+function updateFilter(e){
+  let eventCause = document.querySelectorAll('.' + e.target.className + ' input');
+  if(e.target.checked){
+    eventCause.forEach(item => {
+      item.disabled = false;
+      if (item.value == "others"){
+        item.disabled = true;
+      }
+    })
   } else {
-    filterMin.value = '';
-    filterMax.value = '';
-    filterMin.disabled = true;
-    filterMax.disabled = true;
+    eventCause.forEach(item => {
+      item.disabled = true;
+      if (item.type == "text"){
+        item.value = '';
+      }
+      if (item.value == "others"){
+        item.disabled = true;
+      }
+    })
   }
+}
+
+window.onload = function () {
+  document.querySelectorAll('legend input').forEach(item => {
+    item.addEventListener('change', updateFilter);
+  })
 }

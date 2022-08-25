@@ -24,10 +24,6 @@ function hideMenu(){
   menuButton.attr('onclick', 'showMenu()');
 }
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 function callForPedobear(){
   _('pedoEasterEgg').style.transform = 'rotate(50deg)';
   _('second-egg').style.display = 'block';
