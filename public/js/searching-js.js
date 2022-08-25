@@ -3,6 +3,14 @@ function isEmpty(obj) {
     return Object.keys(obj).length === 0;
 }
 
+function _(el){
+ return document.getElementById(el);
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 function updateInput(e){
   let input_data = e.target.innerHTML;
   let input = _('search-input');
@@ -29,6 +37,7 @@ function updateSearchingSuggestions(tab){
 }
 
 function updateValue(e) {
+  console.log("Value has beed updated");
   let post_data = e.target.value;
   const xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function() {
@@ -68,7 +77,7 @@ function suggestionsDivAppear(x){
   }
 }
 
-window.onload = function () {
+window.addEventListener("load", function(evt) {
   const input = _('search-input');
   input.addEventListener('input', updateValue);
   document.onclick = function(e){
@@ -76,4 +85,4 @@ window.onload = function () {
       suggestionsDivAppear(false);
     }
   }
-}
+})

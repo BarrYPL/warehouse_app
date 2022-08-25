@@ -1,5 +1,9 @@
 "use strict";
 
+function _(el){
+ return document.getElementById(el);
+}
+
 function loadFilters(){
   let filtersDiv = _('filters-div');
   const filtersButton = $('.filter-button');
@@ -36,8 +40,8 @@ function updateFilter(e){
   }
 }
 
-window.onload = function () {
+window.addEventListener("load", function(evt) {
   document.querySelectorAll('legend input').forEach(item => {
     item.addEventListener('change', updateFilter);
   })
-}
+})

@@ -46,7 +46,10 @@
           </fieldset>
         </div>
         <input type="hidden" name="input-value" value="<%= @inputVal %>">
-        <input type="submit" class="filter-button" id="find-submit">
+        <div class="filter-buttons">
+          <input type="button" class="clear-filters" id="clear-filters" value="wyczyść filtry">
+          <input type="submit" class="filter-button" id="find-submit" value="zatwierdź">
+        </div>
       </form>
     </div>
       <table class="result-tab">

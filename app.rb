@@ -44,19 +44,22 @@ class MyServer < Sinatra::Base
   end
 
   post '/find' do
-    @js = ["searching-js", "filter-js"]
+    @js = ["filter-js", "searching-js"]
     @css = ["welcome-styles", "search-styles"]
     @inputVal = params[:"search-input"]||params[:"input-value"]
     @filters = params[:element]||""
     if !params[:valuemin].nil? && params[:valuemin] != ""
-      @valueMin = params[:valuemin]
+      @valueMin = params[:valuemin].to_i
     else
       @valueMin = 0
     end
     if !params[:valuemax].nil? && params[:valuemax] != ""
-      @valueMax = params[:valuemax]
+      @valueMax = params[:valuemax].to_i
     else
       @valueMax = 10**12
+    end
+    if @valueMin > @valueMax
+      @valueMin, @valueMax = @valueMax, @valueMin
     end
     results = detailedSearch(@inputVal, filterTab: @filters, valueMin: @valueMin, valueMax: @valueMax)
     erb :search, locals: { results: results }
@@ -149,7 +152,7 @@ class MyServer < Sinatra::Base
 
   def detailedSearch(phrase, filterTab: "", valueMin: 0, valueMax: 10**12)
     @phrase = phrase.strip.gsub(/ /, '*')
-    @arr = []
+    $detailedArr = []
     @partArr = []
     case filterTab
     when 'resistors'
@@ -171,20 +174,27 @@ class MyServer < Sinatra::Base
       #Value filters here
       if valueMax != 10**12
         if valueMax.is_a? String then valueMax.strip! end
-        if valueMax.is_a? String then unit = valueMax[-1] else unit = "" end
-        valueMax = valueMax.to_i.to_database_num(unit).to_f
+        if valueMax.is_a? String
+          unit = valueMax[-1]
+          valueMax = valueMax.to_i.to_database_num(unit).to_f
+        end
       end
       if valueMin != 0
         if valueMin.is_a? String then valueMin.strip! end
-        if valueMin.is_a? String then unit = valueMin[-1] else unit = "" end
-        valueMin = valueMin.to_i.to_database_num(unit).to_f
+        if valueMin.is_a? String
+          unit = valueMin[-1]
+          valueMin = valueMin.to_i.to_database_num(unit).to_f
+        end
       end
-      p "ValueMin: #{valueMin} ValueMax; #{valueMax}"
+      #p "ValueMin: #{valueMin} valueMax: #{valueMax}"
       @partArr = @partArr.flatten & table.where(value: valueMin..valueMax).all
       @partArr.flatten.sort_by!{ |w| w[:value] }
-      @arr << @partArr
+      if @partArr.count > 0
+        $detailedArr << @partArr
+      end
+      @partArr = []
     end
-    return @arr.flatten.uniq
+    return $detailedArr.flatten.uniq
   end
 
   def sortByFirstChar(arr, phrase)
