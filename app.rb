@@ -148,17 +148,17 @@ class MyServer < Sinatra::Base
   end
 
   def detailedSearch(phrase, filterTab: "", valueMin: 0, valueMax: 10**12)
-    @phrase = phrase.strip.gsub(/ /, '%')
+    @phrase = phrase.strip.gsub(/ /, '*')
     @arr = []
     @partArr = []
     case filterTab
-    when "resistors"
+    when 'resistors'
       @dbTablesArray = [$resistorsDB]
-    when "capacitors"
+    when 'capacitors'
       @dbTablesArray = [$capacitorsDB]
-    when "inductors"
+    when 'inductors'
       @dbTablesArray = [$inductorsDB]
-    when "others"
+    when 'others'
       @dbTablesArray = [$othersDB]
     else
       @dbTablesArray = [$capacitorsDB, $inductorsDB, $resistorsDB]
@@ -170,17 +170,19 @@ class MyServer < Sinatra::Base
 
       #Value filters here
       if valueMax != 10**12
-        valueMax = valueMax.strip!.to_i.to_database_num(valueMax[-1]).to_f
-        p valueMax
-        @partArr = @partArr.flatten & table.where{value < valueMax}.all
+        if valueMax.is_a? String then valueMax.strip! end
+        if valueMax.is_a? String then unit = valueMax[-1] else unit = "" end
+        valueMax = valueMax.to_i.to_database_num(unit).to_f
       end
       if valueMin != 0
-        valueMin = valueMin.strip!.to_i.to_database_num(valueMin[-1]).to_f
-        p valueMin
-        @partArr = @partArr.flatten & table.where{value > valueMin}.all
+        if valueMin.is_a? String then valueMin.strip! end
+        if valueMin.is_a? String then unit = valueMin[-1] else unit = "" end
+        valueMin = valueMin.to_i.to_database_num(unit).to_f
       end
+      p "ValueMin: #{valueMin} ValueMax; #{valueMax}"
+      @partArr = @partArr.flatten & table.where(value: valueMin..valueMax).all
       @partArr.flatten.sort_by!{ |w| w[:value] }
-      @arr = @partArr
+      @arr << @partArr
     end
     return @arr.flatten.uniq
   end

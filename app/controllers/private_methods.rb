@@ -91,7 +91,7 @@ end
 
 def format_num(size, prefix)
   case prefix
-  when 'K'
+  when 'K','k'
     return size*10**3
   when 'M'
     return size*10**6
@@ -106,6 +106,6 @@ def format_num(size, prefix)
   when 'p'
     return (size*10**-12)
   else
-    return "Error, wrong parameter."
+    return size
   end
 end

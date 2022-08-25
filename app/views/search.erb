@@ -37,7 +37,7 @@
             </div>
           </fieldset>
           <fieldset class="value-sort">
-            <legend><input type="checkbox" onclick="unlockValueFilters()" id="value-checkbox" name="value-filter">Wartość</legend>
+            <legend><input class="filter-checkbox" type="checkbox" onclick="unlockValueFilters()" id="value-checkbox" name="value-filter">Wartość</legend>
             <p>Działają przedrostki SI <br> np. "10k"</p>
             <input type="text" title="I accept SI preix :S" class="filterInput" id="valueMinInput" name="valuemin" <% unless params[:valuemin].nil? %> value="<%= params[:valuemin] %>" <% else %> placeholder="Od" disabled <% end %>>
             <input type="text" title="I accept SI prefix :S" class="filterInput" id="valueMaxInput" name="valuemax" <% unless params[:valuemax].nil? %> value="<%= params[:valuemax] %>" <% else %> placeholder="Do" disabled <% end %>>
