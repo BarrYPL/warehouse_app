@@ -51,6 +51,9 @@
                 <p>Here is Your login</p>
               <% end %>
             </div></a>
+            <% if current_user %>
+            <a href="/add-element"><h1>DODAJ <i class="fa-solid fa-circle-plus"></i></h1></a>
+            <% end %>
           </div>
         </div>
         <%= yield %>

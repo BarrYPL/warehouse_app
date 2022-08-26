@@ -44,8 +44,15 @@
               <input type="text" title="I accept SI prefix :S" class="filterInput" id="valueMaxInput" name="valuemax" <% unless params[:valuemax].nil? %> value="<%= params[:valuemax] %>" <% else %> placeholder="Do" disabled <% end %>>
             </div>
           </fieldset>
+          <fieldset>
+            <legend>Sortowanie</legend>
+            <select class="sort-dropdown" id="dropdown-sort" name="sort">
+              <option value="asc">Od najniższej</option>
+              <option value="desc" <% if params[:sort] == "desc" %> selected <% end %>>Od najwyższej</option>
+            </select>
+          </fieldset>
         </div>
-        <input type="hidden" name="input-value" value="<%= @inputVal %>">
+        <input type="hidden" name="input-value" value="<%= @inputVal %>" id="input-value-hidden">
         <div class="filter-buttons">
           <input type="button" class="clear-filters" id="clear-filters" value="wyczyść filtry">
           <input type="submit" class="filter-button" id="find-submit" value="zatwierdź">

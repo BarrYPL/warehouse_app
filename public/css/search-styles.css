@@ -129,6 +129,20 @@ div.limiting-filters{
   flex-direction: column;
 }
 
+.sort-dropdown {
+  outline: none;
+  color: #f1f1f1;
+  background: #fa0200;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+}
+
+.sort-dropdown * {
+  background: #fa0200;
+  color: #f1f1f1;
+}
+
 #clear-filters {
   margin-bottom: 10px;
 }
@@ -137,6 +151,10 @@ div.limiting-filters{
   background: #f1f1f1;
   color: #fa0200;
   transform: scale(1.1);
+}
+
+#sorting-icon{
+  -webkit-transform: translateY(25%);
 }
 
 @media screen and (max-width: 960px){

@@ -6,9 +6,6 @@ body{
   justify-content: center;
   color: #f1f1f1;
   text-align: center;
-  background-image: url(../images/backgrounds/bg1.jpg);
-  background-size: cover;
-  background-attachment: fixed;
   flex-direction: column;
 }
 

@@ -43,11 +43,18 @@ class MyServer < Sinatra::Base
     erb :search, locals: { results: results }
   end
 
+  get '/add-element' do
+    @js = ["add-element-js"]
+    @css = ["add-element-styles"]
+    erb :add_element
+  end
+
   post '/find' do
     @js = ["filter-js", "searching-js"]
     @css = ["welcome-styles", "search-styles"]
     @inputVal = params[:"search-input"]||params[:"input-value"]
     @filters = params[:element]||""
+    @sort_direction = params[:sort]||""
     if !params[:valuemin].nil? && params[:valuemin] != ""
       @valueMin = params[:valuemin].to_i
     else
@@ -61,7 +68,7 @@ class MyServer < Sinatra::Base
     if @valueMin > @valueMax
       @valueMin, @valueMax = @valueMax, @valueMin
     end
-    results = detailedSearch(@inputVal, filterTab: @filters, valueMin: @valueMin, valueMax: @valueMax)
+    results = detailedSearch(@inputVal, filterTab: @filters, valueMin: @valueMin, valueMax: @valueMax, sort_direction: @sort_direction)
     erb :search, locals: { results: results }
   end
 
@@ -150,10 +157,13 @@ class MyServer < Sinatra::Base
     return @arr
   end
 
-  def detailedSearch(phrase, filterTab: "", valueMin: 0, valueMax: 10**12)
-    @phrase = phrase.strip.gsub(/ /, '*')
+  def detailedSearch(phrase, filterTab: "", valueMin: 0, valueMax: 10**12, sort_key: "value", sort_direction: "asc")
+    @phrase = phrase.strip.gsub(/ /, '%')
     $detailedArr = []
     @partArr = []
+    if sort_direction == ""
+      sort_direction = "asc"
+    end
     case filterTab
     when 'resistors'
       @dbTablesArray = [$resistorsDB]
@@ -168,9 +178,7 @@ class MyServer < Sinatra::Base
     end
     @dbTablesArray.each do |table|
       #Find by phrase no filters
-      @partArr << table.where(Sequel.like(:name, "%#{@phrase}%", case_insensitive: true)).order(:value).all
-      @partArr << table.where(Sequel.like(:localid, "%#{@phrase}%", case_insensitive: true)).order(:value).all
-
+      @partArr << table.where(Sequel.like(:name, "%#{@phrase}%", case_insensitive: true)).or(Sequel.like(:localid, "%#{@phrase}%", case_insensitive: true)).order(:value).all
       #Value filters here
       if valueMax != 10**12
         if valueMax.is_a? String then valueMax.strip! end
@@ -188,7 +196,7 @@ class MyServer < Sinatra::Base
       end
       #p "ValueMin: #{valueMin} valueMax: #{valueMax}"
       @partArr = @partArr.flatten & table.where(value: valueMin..valueMax).all
-      @partArr.flatten.sort_by!{ |w| w[:value] }
+      @partArr = sortTable(@partArr, sort_direction)
       if @partArr.count > 0
         $detailedArr << @partArr
       end
@@ -197,6 +205,9 @@ class MyServer < Sinatra::Base
     return $detailedArr.flatten.uniq
   end
 
+  def sortTable(arr, direction)
+    return arr.sort_by{ |w| if direction == "asc" then w[:value] else w[:value]*-1 end }
+  end
   def sortByFirstChar(arr, phrase)
     #arr.sort_by! { |el| el.values[0] }
     regexp = Regexp.new("^" + phrase.strip)

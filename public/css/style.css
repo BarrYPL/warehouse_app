@@ -13,6 +13,9 @@ html, body {
 
 body {
   position: relative;
+  background-image: url(../images/backgrounds/bg1.jpg);
+  background-size: cover;
+  background-attachment: fixed;
 }
 
 a {
