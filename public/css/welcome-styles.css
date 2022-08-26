@@ -52,10 +52,6 @@ section{
   background-color: #f1f1f1;
 }
 
-.section-title{
-  padding: 10px 0px 10px 0px;
-}
-
 .result-div {
   position: relative;
   z-index: 2;
@@ -102,26 +98,6 @@ section{
 
 #find-label p{
   padding: 10px;
-}
-
-#home{
-  padding: 10%;
-  height: 100vh;
-  min-height: 500px;
-  background-image: url(../images/backgrounds/bg1.jpg);
-  background-size: cover;
-  background-attachment: fixed;
-}
-
-#home .inner-width{
-  background: rgba(12,12,12,0.6);
-  color: #f1f1f1;
-  display: flex;
-  align-items: center;
-  height: 100%;
-  flex-direction: column;
-  max-width: 800px;
-  margin: auto;
 }
 
 #easter-egg{

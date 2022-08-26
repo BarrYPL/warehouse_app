@@ -65,32 +65,19 @@
           <th>ID</th>
           <th>Nazwa</th>
           <th>wartość</th>
-          <th>Opis</th>
           <th>Ilość</th>
           <th>Lokalizacja</th>
         </tr>
         <% results.each_with_index do |result, idx| %>
           <tr>
             <td><%= idx + 1 %>.</td>
-            <td><%= result[:localid] %></td>
+            <td><a href="/show?item=<%= result[:localid] %>"><%= result[:localid] %></a></td>
             <td><%= result[:name] %></td>
             <td><%= result[:value].to_human_redable %>
             <% if result.key?(:maxvoltage) %>F
             <% elsif result.key?(:powerdissipation) %>&#8486;
             <% else %>H
             <% end %></td>
-            <td>
-            <% if result.key?(:maxvoltage) %>
-              <%if result[:maxvoltage] == 0 %>
-                <%= result[:description] %>
-              <% else %>
-                <%= result[:maxvoltage] %>V <%= result[:description] %>
-              <% end %>
-              <% elsif result.key?(:powerdissipation) %>
-                <%= result[:powerdissipation] %>
-              <% else %>
-                <%= result[:description] %>
-              <% end %></td>
             <td><%= result[:quantity] %></td>
             <td> &nbsp;</td>
           </tr>

@@ -1,0 +1,29 @@
+<div class="inner-width">
+  <div class="section-title">
+    <h1><%= item[:name] %></h1>
+  </div>
+  <div class="item-info-div">
+    <table class="result-tab">
+      <tr>
+        <th>Lp.</th>
+        <th>ID</th>
+        <th>Nazwa</th>
+        <th>wartość</th>
+        <th>Ilość</th>
+        <th>Lokalizacja</th>
+      </tr>
+      <tr>
+        <td>1.</td>
+        <td><%= item[:localid] %></td>
+        <td><%= item[:name] %></td>
+        <td><%= item[:value] %></td>
+        <td><%= item[:quantity] %></td>
+        <td><%= item[:location] %></td>
+      </tr>
+    </table>
+    <div class="item-description">
+      <h3>Opis</h3>
+      <p><%= item[:description] %></p>
+    </div>
+  </div>
+</div>
