@@ -18,9 +18,13 @@ function hideFilters(){
   filtersButton.attr('onclick', 'loadFilters()');
 }
 
-function updateFilter(e){
-  let eventCause = document.querySelectorAll('.' + e.target.className + ' input');
-  if(e.target.checked){
+function listenCheckbox(e){
+  updatefilters(e.target);
+}
+
+function updatefilters(e){
+  let eventCause = document.querySelectorAll('.' + e.className + ' input');
+  if(e.checked){
     eventCause.forEach(item => {
       item.disabled = false;
       if (item.value == "others"){
@@ -40,8 +44,16 @@ function updateFilter(e){
   }
 }
 
+function clearFilters(){
+  document.querySelectorAll('legend input[type="checkbox"]').forEach(item => {
+    item.checked = false;
+    updatefilters(item);
+  })
+}
+
 window.addEventListener("load", function(evt) {
   document.querySelectorAll('legend input').forEach(item => {
-    item.addEventListener('change', updateFilter);
+    item.addEventListener('change', listenCheckbox);
   })
+  document.querySelector('#clear-filters').addEventListener('click', clearFilters);
 })
