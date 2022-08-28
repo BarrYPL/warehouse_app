@@ -77,8 +77,32 @@ function suggestionsDivAppear(x){
   }
 }
 
+var inactivityTime = function () {
+  var time;
+  window.onload = resetTimer;
+  document.onmousemove = resetTimer;
+  document.onkeydown = resetTimer;
+
+  function showMiche(){
+    _('pedoEasterEgg').style.transform = 'rotate(0deg)';
+    _('micheEasterEgg').style.transform = 'rotate(80deg)';
+  }
+
+  function hideMiche(){
+    _('micheEasterEgg').style.transform = 'rotate(0deg)';
+    console.log("shall hide miche");
+  }
+
+  function resetTimer() {
+    clearTimeout(time);
+    hideMiche();
+    time = setTimeout(showMiche, 20000)
+  }
+};
+
 window.addEventListener("load", function(evt) {
   const input = _('search-input');
+  inactivityTime();
   input.addEventListener('input', updateValue);
   document.onclick = function(e){
     if (e.target.id != 'search-input'){
