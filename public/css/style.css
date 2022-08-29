@@ -136,6 +136,12 @@ footer {
   transition: all 1s ease-in-out;
 }
 
+.back-link{
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
 #miche {
   max-height: inherit;
   max-width: 625px;

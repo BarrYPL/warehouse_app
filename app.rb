@@ -20,6 +20,7 @@ class MyServer < Sinatra::Base
   end
 
   get '/' do
+    #p "#{DB[DB.tables[0]].all}"
     if current_user
       @js = ["searching-js"]
       @css = ["welcome-styles"]
@@ -50,7 +51,6 @@ class MyServer < Sinatra::Base
   end
 
   get '/show' do
-
     if request[:item].nil?
       @error = "Błędny argument!"
       @js = ["searching-js"]
