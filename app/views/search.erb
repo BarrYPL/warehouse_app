@@ -32,7 +32,11 @@
               <label for="inductors">Cewki</label>
             </div>
             <div class="radio-table-filter">
-              <input type="radio" id="others" name="element" value="others" disabled>
+              <input type="radio" id="mechanicals" name="element" value="mechanicals" <% if params[:element] == "mechanicals" %> checked <% end %> disabled>
+              <label for="others">Mechaniczne</label>
+            </div>
+            <div class="radio-table-filter">
+              <input type="radio" id="others" name="element" value="others" <% if params[:element] == "others" %> checked <% end %> disabled>
               <label for="others">Inne</label>
             </div>
           </fieldset>
@@ -68,17 +72,13 @@
           <th>Ilość</th>
           <th>Lokalizacja</th>
         </tr>
-        <% results.each_with_index do |result, idx| %>
+        <% results.each_with_index do |item, idx| %>
           <tr>
             <td><%= idx + 1 %>.</td>
-            <td><a href="/show?item=<%= result[:localid] %>"><%= result[:localid] %></a></td>
-            <td><%= result[:name] %></td>
-            <td><%= result[:value].to_human_redable %>
-            <% if result.key?(:maxvoltage) %>F
-            <% elsif result.key?(:powerdissipation) %>&#8486;
-            <% else %>H
-            <% end %></td>
-            <td><%= result[:quantity] %></td>
+            <td><a href="/show?item=<%= item[:localid] %>"><%= item[:localid] %></a></td>
+            <td><%= item[:name] %></td>
+            <td><%= item[:value].to_human_redable %><%= item[:unit] %></td>
+            <td><%= item[:quantity] %></td>
             <td> &nbsp;</td>
           </tr>
         <% end %>

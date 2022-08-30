@@ -140,6 +140,17 @@ footer {
   position: absolute;
   top: 10px;
   left: 10px;
+  color: #fa0200;
+  padding: 5px;
+  border: solid 2px #fa0200;
+  border-radius: 10px;
+  transition: all .1s ease-in-out;
+  background: transparent;
+}
+
+.back-link:hover{
+  color: #f1f1f1;
+  background: #fa0200;
 }
 
 #miche {
@@ -165,6 +176,7 @@ footer {
 }
 
 #home .inner-width{
+  position: relative;
   background: rgba(12,12,12,0.6);
   color: #f1f1f1;
   display: flex;

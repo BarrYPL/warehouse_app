@@ -3,7 +3,7 @@
       <p class="error"><%= @error %></p>
     <% end %>
     <div class="login-window">
-      <a href="/" class="back-link">Powrót</a>
+      <button type="button" class="back-link" onclick="history.back()">Powrót</button>
       <%= erb :login_partial %>
     </div>
   </div>

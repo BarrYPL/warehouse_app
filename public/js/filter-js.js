@@ -27,18 +27,12 @@ function updatefilters(e){
   if(e.checked){
     eventCause.forEach(item => {
       item.disabled = false;
-      if (item.value == "others"){
-        item.disabled = true;
-      }
     })
   } else {
     eventCause.forEach(item => {
       item.disabled = true;
       if (item.type == "text"){
         item.value = '';
-      }
-      if (item.value == "others"){
-        item.disabled = true;
       }
     })
   }

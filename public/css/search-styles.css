@@ -26,6 +26,8 @@ table, th, td {
 
 th {
   background: #fa0200;
+  max-width: 200px;
+  overflow: hidden;
   padding: 10px 0px 10px 0px;
   position: sticky;
   top: -10px;

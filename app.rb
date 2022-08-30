@@ -20,7 +20,6 @@ class MyServer < Sinatra::Base
   end
 
   get '/' do
-    #p "#{DB[DB.tables[0]].all}"
     if current_user
       @js = ["searching-js"]
       @css = ["welcome-styles"]
@@ -47,7 +46,8 @@ class MyServer < Sinatra::Base
   get '/add-element' do
     @js = ["add-element-js"]
     @css = ["add-element-styles"]
-    erb :add_element
+    @item = selectItem(request[:id])
+    erb :add_element, locals: { item: @item}
   end
 
   get '/show' do
@@ -162,10 +162,10 @@ class MyServer < Sinatra::Base
       phrase = "%" + phrase
     end
     @arr = []
-    @dbTablesArray = [$capacitorsDB, $inductorsDB, $resistorsDB]
+    @dbTablesArray = [$capacitorsDB, $inductorsDB, $resistorsDB, $mechanicalsDB, $othersDB]
     @dbTablesArray.each do |table|
       table.where(Sequel.like(:name, "#{phrase}%", case_insensitive: true))
-      .or(Sequel.like(:localid, "#{phrase}%", case_insensitive: true)).limit(9).all.each do |k|
+      .or(Sequel.like(:localid, "#{phrase}%", case_insensitive: true)).limit(5).all.each do |k|
         @arr << ({name: k[:name]})
       end
     end
@@ -189,8 +189,10 @@ class MyServer < Sinatra::Base
       @dbTablesArray = [$inductorsDB]
     when 'others'
       @dbTablesArray = [$othersDB]
+    when 'mechanicals'
+      @dbTablesArray = [$mechanicalsDB]
     else
-      @dbTablesArray = [$capacitorsDB, $inductorsDB, $resistorsDB]
+      @dbTablesArray = [$capacitorsDB, $inductorsDB, $resistorsDB, $mechanicalsDB, $othersDB]
     end
     @dbTablesArray.each do |table|
       #Find by phrase no filters
@@ -241,7 +243,7 @@ class MyServer < Sinatra::Base
   end
 
   def sortTable(arr, direction)
-    return arr.sort_by{ |w| if direction == "asc" then w[:value] else w[:value]*-1 end }
+    return arr.sort_by{ |w| if direction == "asc" then w[:name].length else w[:name].length*-1 end }
   end
 
   def sortByFirstChar(arr, phrase)

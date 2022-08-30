@@ -1,4 +1,5 @@
 <div class="inner-width">
+  <button type="button" class="back-link" onclick="history.back()">Powrót</button>
   <div class="section-title">
     <h1><%= item[:name] %></h1>
   </div>
@@ -16,14 +17,29 @@
         <td>1.</td>
         <td><%= item[:localid] %></td>
         <td><%= item[:name] %></td>
-        <td><%= item[:value] %></td>
+        <td><%= item[:value].to_human_redable %>
+        <% if item.key?(:maxvoltage) %>F
+        <% elsif item.key?(:powerdissipation) %>&#8486;
+        <% else %>H
+        <% end %></td>
         <td><%= item[:quantity] %></td>
         <td><%= item[:location] %></td>
       </tr>
     </table>
     <div class="item-description">
-      <h3>Opis</h3>
-      <p><%= item[:description] %></p>
+      <fieldset>
+        <legend>Opis</legend>
+        <p><%= item[:description] %> <%= item[:unit] %></p>
+      </fieldset>
+      <fieldset>
+        <legend>Nota katalogowa lub strona producenta</legend>
+        <% if !item[:datasheet].nil? %>
+          <p><a href="<%= item[:datasheet] %>" target="_blank"><i class="fa-solid fa-file-pdf"></i> Link</a></p>
+        <% end %>
+      </fieldset>
+      <% if current_user %>
+        <a href="/add-element?id=<%= item[:localid] %>" class="add-link">Dodaj element <i class="fa-solid fa-circle-plus"></i></a>
+      <% end %>
     </div>
   </div>
 </div>
