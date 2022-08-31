@@ -37,6 +37,8 @@ a i{
     padding-top: 10px;
     font-weight: bold;
     font-size: x-large;
+    width: 125%;
+    height: 50px;
 }
 
 ::placeholder {

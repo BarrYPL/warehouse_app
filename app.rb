@@ -95,6 +95,7 @@ class MyServer < Sinatra::Base
             session[:user_id] = user[:id]
             redirect '/'
           else
+            @css = ["login-styles"]
             @error = "Invalid password."
             erb :login
           end
@@ -102,10 +103,12 @@ class MyServer < Sinatra::Base
       end
       session.clear
       @error = 'Username or password was incorrect.'
-      redirect '/login'
+      @css = ["login-styles"]
+      erb :login
     else
+      @css = ["login-styles"]
       @error = "Complete all fields on the form."
-      redirect '/login'
+      erb :login
     end
   end
 
