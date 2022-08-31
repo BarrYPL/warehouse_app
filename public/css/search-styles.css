@@ -145,6 +145,28 @@ div.limiting-filters{
   color: #f1f1f1;
 }
 
+.arrow-up {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  padding: 5px;
+  color: #fa0200;
+  margin-right: 10px;
+  border: solid 2px;
+  border-radius: 50%;
+  width: 33px;
+  text-align: center;
+  transition: all .1s ease-in-out;
+  cursor: pointer;
+  display: none;
+}
+
+.arrow-up:hover {
+  background: #fa0200;
+  color: #f1f1f1;
+  border: solid 2px #fa0200;
+}
+
 #clear-filters {
   margin-bottom: 10px;
 }

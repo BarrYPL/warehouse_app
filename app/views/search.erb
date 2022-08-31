@@ -1,8 +1,8 @@
 
 <div class="inner-width">
   <%= erb :searching_input_partial %>
-  <div class="solid-results-div">
-    <div class="results-header">
+  <div class="solid-results-div" id="solid-results-div">
+    <div class="results-header" id="results-header">
       <h3 id="results-count">Znaleziono <%= results.length %>
       <% if results.length == 0 || results.length > 4 %>
         wyników !
@@ -83,6 +83,9 @@
           </tr>
         <% end %>
       </table>
+      <div class="arrow-up" id="arrow-up">
+        <i class="fa-solid fa-angles-up"></i>
+      </div>
     <% end %>
   </div>
 </div>
