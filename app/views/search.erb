@@ -50,10 +50,22 @@
           </fieldset>
           <fieldset>
             <legend>Sortowanie</legend>
-            <select class="sort-dropdown" id="dropdown-sort" name="sort">
-              <option value="asc">Od najniższej</option>
-              <option value="desc" <% if params[:sort] == "desc" %> selected <% end %>>Od najwyższej</option>
-            </select>
+            <div class="radio-sort">
+              <input type="radio" value="asc" name="sort" class="sort-radio" id="asc-sort" <% if params[:sort] != "desc" %> checked <% end %>>
+              <label for="others">Od najniższej</label>
+            </div>
+            <div class="radio-sort">
+              <input type="radio" value="desc" name="sort" class="sort-radio" id="desc-sort" <% if params[:sort] == "desc" %> checked <% end %>>
+              <label for="others">Od najwyższej</label>
+            </div>
+            <div class="radio-sort">
+              <input type="radio" value="alfa" name="sort" class="sort-radio" id="alfa-sort" <% if params[:sort] == "alfa" %> checked <% end %>>
+              <label for="others">Alfabetycznie A-Z</label>
+            </div>
+            <div class="radio-sort">
+              <input type="radio" value="dalfa" name="sort" class="sort-radio" id="dalfa-sort" <% if params[:sort] == "dalfa" %> checked <% end %>>
+              <label for="others">Alfabetycznie Z-A</label>
+            </div>
           </fieldset>
         </div>
         <input type="hidden" name="input-value" value="<%= @inputVal %>" id="input-value-hidden">

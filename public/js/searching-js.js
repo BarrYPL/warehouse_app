@@ -77,24 +77,8 @@ function suggestionsDivAppear(x){
   }
 }
 
-function scrollUp(){
-  document.getElementById('solid-results-div').scrollTo({top: 0, behavior: 'smooth'});
-}
-
-function scrollWe(){
-  if (_('solid-results-div').scrollTop > 100) {
-    _('arrow-up').style.display = "block";
-  } else {
-    _('arrow-up').style.display = "none";
-  }
-}
-
 window.addEventListener("load", function(evt) {
   const input = _('search-input');
-  const upButton = _('arrow-up');
-  const resultsHeader = _('solid-results-div');
-  resultsHeader.addEventListener('scroll', scrollWe);
-  upButton.addEventListener('click', scrollUp);
   input.addEventListener('input', updateValue);
   document.onclick = function(e){
     if (e.target.id != 'search-input'){

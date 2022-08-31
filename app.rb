@@ -71,17 +71,14 @@ class MyServer < Sinatra::Base
     @filters = params[:element]||""
     @sort_direction = params[:sort]||""
     if !params[:valuemin].nil? && params[:valuemin] != ""
-      @valueMin = params[:valuemin].to_i
+      @valueMin = params[:valuemin]
     else
       @valueMin = 0
     end
     if !params[:valuemax].nil? && params[:valuemax] != ""
-      @valueMax = params[:valuemax].to_i
+      @valueMax = params[:valuemax]
     else
       @valueMax = 10**12
-    end
-    if @valueMin > @valueMax
-      @valueMin, @valueMax = @valueMax, @valueMin
     end
     results = detailedSearch(@inputVal, filterTab: @filters, valueMin: @valueMin, valueMax: @valueMax, sort_direction: @sort_direction)
     erb :search, locals: { results: results }
@@ -173,7 +170,10 @@ class MyServer < Sinatra::Base
   end
 
   def detailedSearch(phrase, filterTab: "", valueMin: 0, valueMax: 10**12, sort_key: "value", sort_direction: "asc")
-    @phrase = phrase.strip#.gsub(/ /, '%')
+    @phrase = phrase.strip
+    if sort_direction == "alfa" || sort_direction == "dalfa"
+      @column = "name"
+    end
     if @phrase.empty? then @phrase = "%" end
     $detailedArr = []
     @partArr = []
@@ -222,7 +222,9 @@ class MyServer < Sinatra::Base
           valueMin = valueMin.to_i.to_database_num(unit).to_f
         end
       end
-      #p "ValueMin: #{valueMin} valueMax: #{valueMax}"
+      if valueMin > valueMax
+        valueMin, valueMax = valueMax, valueMin
+      end
       @partArr = @partArr.flatten & table.where(value: valueMin..valueMax).all
       #@partArr = sortTable(@partArr, sort_direction)
       if @partArr.count > 0
@@ -230,7 +232,7 @@ class MyServer < Sinatra::Base
       end
       @partArr = []
     end
-    $detailedArr = sortTable($detailedArr.flatten, sort_direction)
+    $detailedArr = sortTable($detailedArr.flatten, sort_direction, @column)
     return $detailedArr
   end
 
@@ -242,8 +244,15 @@ class MyServer < Sinatra::Base
     return resultTab.flatten[0]
   end
 
-  def sortTable(arr, direction)
-    return arr.sort_by{ |w| if direction == "asc" then w[:name].length else w[:name].length*-1 end }
+  def sortTable(arr, direction, column)
+    if column.nil?
+      column = "value"
+    end
+    if direction == "desc" || direction == "dalfa"
+      return arr.sort_by{ |w| w[:"#{column}"] }.reverse
+    else
+      return arr.sort_by{ |w| w[:"#{column}"] }
+    end
   end
 
   def sortByFirstChar(arr, phrase)

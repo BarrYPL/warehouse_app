@@ -43,11 +43,39 @@ function clearFilters(){
     item.checked = false;
     updatefilters(item);
   })
+  _('asc-sort').checked = true;
+}
+
+function updateSorting(e){
+  document.querySelectorAll('.sort-radio').forEach(item => {
+    if(item.className != e.target.className) {
+      item.checked = false;
+    }
+  })
+}
+
+function scrollUp(){
+  document.getElementById('solid-results-div').scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function scrollWe(){
+  if (_('solid-results-div').scrollTop > 100) {
+    _('arrow-up').style.display = "block";
+  } else {
+    _('arrow-up').style.display = "none";
+  }
 }
 
 window.addEventListener("load", function(evt) {
   document.querySelectorAll('legend input').forEach(item => {
     item.addEventListener('change', listenCheckbox);
   })
+  document.querySelectorAll('.sort-radio').forEach(item => {
+    item.addEventListener('change', updateSorting);
+  })
+  const upButton = _('arrow-up');
+  const resultsHeader = _('solid-results-div');
+  upButton.addEventListener('click', scrollUp);
+  resultsHeader.addEventListener('scroll', scrollWe);
   document.querySelector('#clear-filters').addEventListener('click', clearFilters);
 })
