@@ -67,6 +67,26 @@ class MyServer < Sinatra::Base
     end
   end
 
+  get '/logout' do
+    session.clear
+    redirect '/'
+  end
+
+  post '/add_element' do
+    @js = ["show-element-js"]
+    @css = ["show-element-styles"]
+    if (check_string(request[:added_quantity]) && request[:added_quantity].to_i > 0)
+      changeQuantity(request[:item_id], request[:added_quantity])
+    else
+      @error = "Wprowadzono niewłaściwą wartość!"
+    end
+    @item = selectItem(request[:item_id])
+    if @item.nil?
+      @error = "Błędne ID!"
+    end
+    erb :show_element, locals: { item: @item}
+  end
+
   post '/find' do
     @js = ["filter-js", "searching-js"]
     @css = ["welcome-styles", "search-styles"]
@@ -83,7 +103,7 @@ class MyServer < Sinatra::Base
     else
       @valueMax = 10**12
     end
-    results = detailedSearch(@inputVal, filterTab: @filters, valueMin: @valueMin, valueMax: @valueMax, sort_direction: @sort_direction)
+    results = detailedSearch(@inputVal, filterTab: @filters, value_min: @valueMin, value_max: @valueMax, sort_direction: @sort_direction)
     erb :search, locals: { results: results }
   end
 
@@ -113,11 +133,6 @@ class MyServer < Sinatra::Base
       @error = "Complete all fields on the form."
       erb :login
     end
-  end
-
-  get '/logout' do
-    session.clear
-    redirect '/'
   end
 
   post '/quick-find' do
@@ -165,8 +180,8 @@ class MyServer < Sinatra::Base
       phrase = "%" + phrase
     end
     @arr = []
-    @dbTablesArray = [$capacitorsDB, $inductorsDB, $resistorsDB, $mechanicalsDB, $othersDB]
-    @dbTablesArray.each do |table|
+    @db_tables_array = all_tables
+    @db_tables_array.each do |table|
       table.where(Sequel.like(:name, "#{phrase}%", case_insensitive: true))
       .or(Sequel.like(:localid, "#{phrase}%", case_insensitive: true)).limit(5).all.each do |k|
         @arr << ({name: k[:name]})
@@ -175,68 +190,68 @@ class MyServer < Sinatra::Base
     return @arr
   end
 
-  def detailedSearch(phrase, filterTab: "", valueMin: 0, valueMax: 10**12, sort_key: "value", sort_direction: "asc")
+  def detailedSearch(phrase, filterTab: "", value_min: 0, value_max: 10**12, sort_key: "value", sort_direction: "asc")
     @phrase = phrase.strip
     if sort_direction == "alfa" || sort_direction == "dalfa"
       @column = "name"
     end
     if @phrase.empty? then @phrase = "%" end
-    $detailedArr = []
-    @partArr = []
+    @detailed_arr = []
+    @part_att = []
     if sort_direction == ""
       sort_direction = "asc"
     end
     unless filterTab == ""
-      @dbTablesArray = [DB[:"#{filterTab}"]]
+      @db_tables_array = [DB[:"#{filterTab}"]]
     else
-      @dbTablesArray = all_tables
+      @db_tables_array = all_tables
     end
-    @dbTablesArray.each do |table|
+    @db_tables_array.each do |table|
       #Find by phrase no filters
       @phrase.split.each do |partPhrase|
-        @partArr << table.where(Sequel.like(:name, "%#{partPhrase}%", case_insensitive: true)).or(Sequel.like(:localid, "%#{partPhrase}%", case_insensitive: true)).order(:value).all
+        @part_att << table.where(Sequel.like(:name, "%#{partPhrase}%", case_insensitive: true)).or(Sequel.like(:localid, "%#{partPhrase}%", case_insensitive: true)).order(:value).all
       end
       #Common part of each subarrays
-      if @partArr.length > 1
-        @tempArr = @partArr[0] & @partArr.last
-        @resArr = []
-        (1..@partArr.length-1).each { |el| @resArr << @tempArr & @partArr[el] }
-        @resArr.uniq!
-        @partArr = @resArr[0]
+      if @part_att.length > 1
+        @tempArr = @part_att[0] & @part_att.last
+        @res_arr = []
+        (1..@part_att.length-1).each { |el| @res_arr << @tempArr & @part_att[el] }
+        @res_arr.uniq!
+        @part_att = @res_arr[0]
       end
       #Value filters here
-      if valueMax != 10**12
-        if valueMax.is_a? String then valueMax.strip! end
-        if valueMax.is_a? String
-          unit = valueMax[-1]
-          valueMax = valueMax.to_i.to_database_num(unit).to_f
+      if value_max != 10**12
+        if value_max.is_a? String then value_max.strip! end
+        if value_max.is_a? String
+          unit = value_max[-1]
+          value_max = value_max.to_i.to_database_num(unit).to_f
         end
       end
-      if valueMin != 0
-        if valueMin.is_a? String then valueMin.strip! end
-        if valueMin.is_a? String
-          unit = valueMin[-1]
-          valueMin = valueMin.to_i.to_database_num(unit).to_f
+      if value_min != 0
+        if value_min.is_a? String then value_min.strip! end
+        if value_min.is_a? String
+          unit = value_min[-1]
+          value_min = value_min.to_i.to_database_num(unit).to_f
         end
       end
-      if valueMin > valueMax
-        valueMin, valueMax = valueMax, valueMin
+      if value_min > value_max
+        value_min, value_max = value_max, value_min
       end
-      @partArr = @partArr.flatten & table.where(value: valueMin..valueMax).all
-      #@partArr = sortTable(@partArr, sort_direction)
-      if @partArr.count > 0
-        $detailedArr << @partArr
+      @part_att = @part_att.flatten & table.where(value: value_min..value_max).all
+      #@part_att = sortTable(@part_att, sort_direction)
+      if @part_att.count > 0
+        @detailed_arr << @part_att
       end
-      @partArr = []
+      @part_att = []
     end
-    $detailedArr = sortTable($detailedArr.flatten, sort_direction, @column)
-    return $detailedArr
+    @detailed_arr = sortTable(@detailed_arr.flatten, sort_direction, @column)
+    return @detailed_arr
   end
 
-  def selectItem(itemName)
+  def selectItem(item_name)
     resultTab = []
-    [$capacitorsDB, $inductorsDB, $resistorsDB, $mechanicalsDB, $othersDB].each do |table|
-      resultTab << table.where(:localid => itemName).all
+    all_tables.each do |table|
+      resultTab << table.where(:localid => item_name).all
     end
     return resultTab.flatten[0]
   end
@@ -261,6 +276,20 @@ class MyServer < Sinatra::Base
       arr.sort_by! { |w| w.values[0].match?(regexp) ? 0 : 1 }
     end
     return arr
+  end
+
+  def changeQuantity(item_id, added_quantity)
+    all_tables.each do |table|
+      unless table.where(:localid => item_id).all.empty?
+        @actualQuantity = table.where(:localid => item_id).all[0][:quantity]
+        @newQuantity = @actualQuantity + added_quantity.to_i
+        table.where(:localid => item_id).update(quantity: @newQuantity)
+      end
+    end
+  end
+
+  def check_string(str)
+    str !~ /\D/
   end
 
   run!

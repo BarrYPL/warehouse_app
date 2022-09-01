@@ -1,0 +1,22 @@
+<table class="result-tab">
+  <tr>
+    <th>Lp.</th>
+    <th>ID</th>
+    <th>Nazwa</th>
+    <th>wartość</th>
+    <th>Ilość</th>
+    <th>Lokalizacja</th>
+  </tr>
+  <tr>
+    <td>1.</td>
+    <td><%= item[:localid] %></td>
+    <td><%= item[:name] %></td>
+    <td><%= item[:value].to_human_redable %>
+    <% if item.key?(:maxvoltage) %>F
+    <% elsif item.key?(:powerdissipation) %>&#8486;
+    <% else %>H
+    <% end %></td>
+    <td><%= item[:quantity] %></td>
+    <td><%= item[:location] %></td>
+  </tr>
+</table>

@@ -10,32 +10,11 @@
   </div>
   <% unless item.nil? %>
   <div class="item-info-div">
-    <table class="result-tab">
-      <tr>
-        <th>Lp.</th>
-        <th>ID</th>
-        <th>Nazwa</th>
-        <th>wartość</th>
-        <th>Ilość</th>
-        <th>Lokalizacja</th>
-      </tr>
-      <tr>
-        <td>1.</td>
-        <td><%= item[:localid] %></td>
-        <td><%= item[:name] %></td>
-        <td><%= item[:value].to_human_redable %>
-        <% if item.key?(:maxvoltage) %>F
-        <% elsif item.key?(:powerdissipation) %>&#8486;
-        <% else %>H
-        <% end %></td>
-        <td><%= item[:quantity] %></td>
-        <td><%= item[:location] %></td>
-      </tr>
-    </table>
+    <%= erb :element_tab_partial, locals: {item: item} %>
     <div class="item-description">
       <fieldset>
         <legend>Opis</legend>
-        <p><%= item[:description] %> <%= item[:unit] %></p>
+        <p><%= item[:description] %></p>
       </fieldset>
       <fieldset>
         <legend>Nota katalogowa lub strona producenta</legend>
@@ -44,7 +23,17 @@
         <% end %>
       </fieldset>
       <% if current_user %>
-        <a href="/add-element?id=<%= item[:localid] %>" class="add-link">Dodaj element <i class="fa-solid fa-circle-plus"></i></a>
+        <button type="button" name="button" class="add-item-btn"><i class="fa-solid fa-circle-plus"></i> Dodaj element</button>
+        <div class="adding-item-form">
+          <form class="item-form" action="/add_element" method="post">
+            <div class="input-field">
+              <label for="added_quantity">Dodaj ilość:</label>
+              <input type="text" name="added_quantity" value="">
+            </div>
+            <input type="hidden" name="item_id" value="<%= item[:localid] %>">
+            <input type="submit" value="Dodaj">
+          </form>
+        </div>
       <% end %>
     </div>
   </div>

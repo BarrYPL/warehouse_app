@@ -1,6 +1,6 @@
 <div class="inner-width">
   <h1>Dodaj element</h1>
   <% unless item.nil? %>
-    <%= item %>
+    <%= erb :element_tab_partial, locals: {item: item} %>
   <% end %>
 </div>

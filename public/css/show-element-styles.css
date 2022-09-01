@@ -25,6 +25,31 @@ fieldset *{
   margin-bottom: 5px;
 }
 
-.add-link {
+.add-item-btn,
+.item-form input[type = "submit"] {
+    background: #fa0200;
+    color: #f1f1f1;
+    border: 2px solid #fa0200;
+    padding: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all .3s ease-in-out;
+}
+
+.add-item-btn:hover,
+.item-form input[type = "submit"]:hover {
   color: #fa0200;
+  background: #f1f1f1;
+  border: 2px solid #f1f1f1;
+}
+
+.item-form {
+    display: none;
+    justify-content: space-between;
+    margin: 10px 0px;
+    align-items: center;
+}
+
+.input-field input {
+  max-width: 50px;
 }

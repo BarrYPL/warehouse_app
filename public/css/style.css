@@ -116,7 +116,7 @@ footer {
   position: absolute;
   right: -310px;
   z-index: -1;
-  transition: all 1s ease-in-out;
+  transition: all 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
   transform-origin: top left;
 }
 
@@ -141,17 +141,18 @@ footer {
   position: absolute;
   top: 10px;
   left: 10px;
-  color: #fa0200;
+  color: #f1f1f1;
   padding: 5px;
   border: solid 2px #fa0200;
   border-radius: 10px;
-  transition: all .1s ease-in-out;
-  background: transparent;
+  background: #fa0200;
+  transition: all .3s ease-in-out;
 }
 
 .back-link:hover{
-  color: #f1f1f1;
-  background: #fa0200;
+  color: #fa0200;
+  background: #f1f1f1;
+  border: 2px solid #f1f1f1;
 }
 
 #miche {
