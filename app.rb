@@ -60,6 +60,9 @@ class MyServer < Sinatra::Base
       @js = ["show-element-js"]
       @css = ["show-element-styles"]
       @item = selectItem(request[:item])
+      if @item.nil?
+        @error = "Błędne ID!"
+      end
       erb :show_element, locals: { item: @item}
     end
   end
@@ -183,19 +186,10 @@ class MyServer < Sinatra::Base
     if sort_direction == ""
       sort_direction = "asc"
     end
-    case filterTab
-    when 'resistors'
-      @dbTablesArray = [$resistorsDB]
-    when 'capacitors'
-      @dbTablesArray = [$capacitorsDB]
-    when 'inductors'
-      @dbTablesArray = [$inductorsDB]
-    when 'others'
-      @dbTablesArray = [$othersDB]
-    when 'mechanicals'
-      @dbTablesArray = [$mechanicalsDB]
+    unless filterTab == ""
+      @dbTablesArray = [DB[:"#{filterTab}"]]
     else
-      @dbTablesArray = [$capacitorsDB, $inductorsDB, $resistorsDB, $mechanicalsDB, $othersDB]
+      @dbTablesArray = all_tables
     end
     @dbTablesArray.each do |table|
       #Find by phrase no filters

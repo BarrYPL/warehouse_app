@@ -1,8 +1,14 @@
 <div class="inner-width">
   <button type="button" class="back-link" onclick="history.back()">Powrót</button>
   <div class="section-title">
-    <h1><%= item[:name] %></h1>
+    <% unless item.nil? %>
+      <h1><%= item[:name] %></h1>
+    <% end %>
+    <% unless params[:id].nil? %>
+      <h1><%= params[:id] %></h1>
+    <% end%>
   </div>
+  <% unless item.nil? %>
   <div class="item-info-div">
     <table class="result-tab">
       <tr>
@@ -42,4 +48,5 @@
       <% end %>
     </div>
   </div>
+  <% end %>
 </div>

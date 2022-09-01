@@ -1,4 +1,3 @@
-
 <div class="inner-width">
   <%= erb :searching_input_partial %>
   <div class="solid-results-div" id="solid-results-div">
@@ -19,26 +18,9 @@
         <div class="filter-sets">
           <fieldset>
             <legend><input class="radio-table-filter" type="checkbox" id="table-filter-checkbox" name="table-filter">Filtruj Elementy</legend>
-            <div class="radio-table-filter">
-              <input type="radio" id="resistors" name="element" value="resistors" <% if params[:element] == "resistors" %> checked <% end %> disabled>
-              <label for="resistors">Rezystory</label>
-            </div>
-            <div class="radio-table-filter">
-              <input type="radio" id="capacitors" name="element" value="capacitors" <% if params[:element] == "capacitors" %> checked <% end %> disabled>
-              <label for="capacitors">Kondensatory</label>
-            </div>
-            <div class="radio-table-filter">
-              <input type="radio" id="inductors" name="element" value="inductors" <% if params[:element] == "inductors" %> checked <% end %> disabled>
-              <label for="inductors">Cewki</label>
-            </div>
-            <div class="radio-table-filter">
-              <input type="radio" id="mechanicals" name="element" value="mechanicals" <% if params[:element] == "mechanicals" %> checked <% end %> disabled>
-              <label for="others">Mechaniczne</label>
-            </div>
-            <div class="radio-table-filter">
-              <input type="radio" id="others" name="element" value="others" <% if params[:element] == "others" %> checked <% end %> disabled>
-              <label for="others">Inne</label>
-            </div>
+            <% all_tables.each do |table| %>
+              <%= erb :filter_partial, locals: { text: table.first_source_alias.to_human_text, table: table.first_source_alias.to_s } %>
+            <% end %>
           </fieldset>
           <fieldset>
             <legend><input class="limiting-filters" type="checkbox" id="limit-filter-checkbox" name="value-filter">Wartość</legend>
