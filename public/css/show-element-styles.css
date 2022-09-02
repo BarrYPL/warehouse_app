@@ -44,10 +44,14 @@ fieldset *{
 }
 
 .item-form {
-    display: none;
+    display: flex;
     justify-content: space-between;
     margin: 10px 0px;
     align-items: center;
+    position: relative;
+    z-index: -1;
+    top: -40px;
+    left: 0px;
 }
 
 .input-field input {

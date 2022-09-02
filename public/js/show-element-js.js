@@ -7,7 +7,8 @@ function _(el){
 function show_adding_div(){
   console.log("Im called");
   var div = document.querySelector('.item-form');
-  div.style.display = "flex";
+  div.style.zIndex = 0;
+  div.style.transform = "translateY(40px)";
 }
 
 window.addEventListener("load", function(evt){

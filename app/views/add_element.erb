@@ -1,6 +1,66 @@
 <div class="inner-width">
   <h1>Dodaj element</h1>
+  <button type="button" class="red-btn" onclick="history.back()">Powrót</button>
   <% unless item.nil? %>
     <%= erb :element_tab_partial, locals: {item: item} %>
+  <% else %>
+  <div class="new-item-form">
+    <form class="new_item_form" action="create-new-item" method="post">
+      <div class="field1">
+        <fieldset>
+          <legend>Dodaj do tabeli</legend>
+          <% all_tables.each do |table| %>
+          <%= erb :filter_partial, locals: { text: table.first_source_alias.to_human_text, table: table.first_source_alias.to_s } %>
+          <% end %>
+          <div class="radio-table-filter">
+            <input type="radio" id="new-table" value="create-table">
+            <label for="new-table">Nowa Tabela</label>
+          </div>
+          <input type="text" id="input-table-name" name="new_table_name" placeholder="Nazwij tabelę" disabled>
+        </fieldset>
+      </div>
+      <div class="field2">
+        <fieldset>
+          <legend>Nazwa <p class="red-flag">*</p></legend>
+          <input type="text" name="new_item_name" placeholder="Pole obowiązkowe">
+        </fieldset>
+      </div>
+      <div class="field3">
+        <fieldset>
+          <legend>Ilość <p class="red-flag">*</p></legend>
+          <input type="text" name="new_item_quantity" placeholder="Pole obowiązkowe">
+        </fieldset>
+      </div>
+      <div class="field4">
+        <fieldset>
+          <legend>ID</legend>
+          <input type="text" name="new_item_localid" id="localid-input" placeholder="Unikatowe ID" disabled>
+          <div class="one-line-checkbox">
+            <input type="checkbox" name="ID_select" id="localid-checkbox" value="checked" checked>
+            <label for="ID_select">AutoID</label>
+          </div>
+        </fieldset>
+      </div>
+      <div class="field5">
+        <fieldset>
+          <legend>Wartość</legend>
+          <input type="text" name="new_item_value" placeholder="Może być puste">
+        </fieldset>
+      </div>
+      <div class="field6">
+        <fieldset>
+          <legend>Opis</legend>
+          <input type="text" name="new_item_description" placeholder="Może być puste">
+        </fieldset>
+      </div>
+      <div class="field7">
+        <fieldset>
+          <legend>Nota Katalogowa</legend>
+          <input type="text" name="new_item_datasheet" placeholder="Może być puste">
+        </fieldset>
+      </div>
+      <input type="submit" id="new-item-submit" class="red-btn" value="Dodaj">
+    </form>
+  </div>
   <% end %>
 </div>

@@ -157,6 +157,14 @@ class MyServer < Sinatra::Base
     end
   end
 
+  post '/create-new-item' do
+    @js = ["add-element-js"]
+    @css = ["add-element-styles"]
+    @item = selectItem(request[:id])
+    p request.params
+    erb :add_element, locals: { item: @item }
+  end
+
   helpers do
     def current_user
       if session[:user_id]
