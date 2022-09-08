@@ -19,10 +19,17 @@ th{
 }
 
 fieldset input[type = "text"] {
-  max-width: 100px;
+  max-width: 120px;
+  outline: none;
+  border-radius: 5px;
+  background: #f1f1f1;
+  color: #fa0200;
+  border: none;
+  height: 20px;
+  text-align: center;
 }
 
-.new_item_form {
+.new-item-form {
   display: grid;
   margin-top: 15px;
   grid-template-columns: repeat(4, 25%);
@@ -52,6 +59,16 @@ legend p{
   margin: 5px;
 }
 
+input[type = "text"]:disabled {
+  opacity: 0.5;
+}
+
+#new-table-div {
+  background: #fa0200;
+  padding: 3px;
+  border-radius: 10px;
+}
+
 #new-item-submit {
   grid-area: 3 / 4 / 4 /5;
   position: inherit;
@@ -59,4 +76,9 @@ legend p{
 
 #input-table-name {
   margin-top: 5px;
+  cursor: not-allowed;
+}
+
+#localid-input {
+  cursor: not-allowed;
 }

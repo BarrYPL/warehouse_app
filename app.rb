@@ -162,6 +162,70 @@ class MyServer < Sinatra::Base
     @css = ["add-element-styles"]
     @item = selectItem(request[:id])
     p request.params
+    @newItemName = params[:"new-item-name"].strip
+    @newTableName = params[:"new-table-name"].strip
+    @newItemQuantity = params[:"new-item-quantity"]
+    unless params[:"new-item-checkbox"].nil?
+      if @newTableName.match(/\A[[:alpha:][:blank:]]+\z/).nil?
+        @error = "Nazwa tabeli może składać się tylko z małych znaków a-z i spacji!"
+      end
+      if @newTableName == ""
+        @error = "Nazwa tabeli nie może być pusta!"
+      else
+        all_tables.each do |tabName|
+          if tabName.first_source_alias.to_human_text == @newTableName.to_database_text
+            @error = "Nazwa tabeli musi być inna niż istniejące tabele!"
+          end
+        end
+        DB.create_table :"#{@newTableName.to_database_text}" do
+          primary_key :id
+          String :localid
+          String :name
+          String :description
+          float :value
+          int :quantity
+          String :location
+          String :datasheet
+          String :unit
+        end
+      end
+    end
+    if params[:element].nil? && params[:"new-item-checkbox"].nil?
+      @error = "Wybierz tablę!"
+    end
+    if @newItemName == "" ||
+      @newItemName.nil?
+      @error = "Nazwa elementu nie może być pusta!"
+    end
+    if @newItemName.length > 30 ||
+      @newTableName.length > 30
+      @error = "Nazwa nie może być dłuższa niż 30 znaków."
+    end
+    if @newItemQuantity == ""
+      @error = "Ilość nie może być pusta!"
+    end
+    if @newItemQuantity.to_s.match?(/[:alpha]/)
+      @error = "W polu ilość mogą znajdować się tylko cyfry."
+    end
+    if @newItemQuantity.to_i < 0
+      p @newQuantity
+      @error = "Ilość nie może być ujemna!"
+    end
+    if params[:IdSelect].nil?
+      unless params[:"new-item-localid"].nil? ||
+        params[:"new-item-localid"] == ""
+        @newLocalId = params[:"new-item-localid"]
+      else
+        @error = 'Zaznacz "AutoID", jeśli nie chcesz wpisywać!'
+      end
+    else
+      @newLocalId = @newItemName[0..8].gsub(' ','').downcase
+    end
+    @countingResults = []
+    all_tables.each { |tab| @countingResults << tab.where(:localid => @newLocalId).count }
+    unless @countingResults.all?(0)
+      @error = "Istnieje już element o podanym ID!"
+    end
     erb :add_element, locals: { item: @item }
   end
 

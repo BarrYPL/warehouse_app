@@ -25,11 +25,23 @@ class NilClass
   def to_human_redable
     return 0
   end
+  def length
+    return 0
+  end
+  def method_missing(m, *args, &block)
+    return nil
+  end
 end
 
 class Symbol
   def to_human_text
     return self.to_s.split('_').each{ |word| word.capitalize! }.join(' ')
+  end
+end
+
+class String
+  def to_database_text
+    return self.gsub(' ','_').downcase
   end
 end
 

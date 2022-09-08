@@ -10,19 +10,30 @@ function unlock_table_options(){
   })
 }
 
-function change_input_table_status(){
-  if (_('new-table').checked){
+function change_input_table_status(e){
+  document.querySelectorAll('.radio-table-filter input').forEach(elem => {
+    if (elem.value != e.target.value){
+      elem.checked = false;
+    }
+    if (e.target.value == 'create-table'){
       _('input-table-name').disabled = false;
-  } else {
-    _('input-table-name').disabled = true;
-  }
+      _('input-table-name').style.cursor = "auto";
+    } else {
+      _('input-table-name').disabled = true;
+      _('input-table-name').value = '';
+      _('input-table-name').style.cursor = "not-allowed";
+    }
+  })
 }
 
 function change_input_id_status(){
   if (_('localid-checkbox').checked){
       _('localid-input').disabled = true;
+      _('localid-input').style.cursor = "not-allowed";
   } else {
     _('localid-input').disabled = false;
+    _('localid-input').value = '';
+    _('localid-input').style.cursor = "auto";
   }
 }
 

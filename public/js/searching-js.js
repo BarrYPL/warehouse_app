@@ -7,10 +7,6 @@ function _(el){
  return document.getElementById(el);
 }
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 function updateInput(e){
   let input_data = e.target.innerHTML;
   let input = _('search-input');
