@@ -30,10 +30,21 @@ function change_input_id_status(){
   if (_('localid-checkbox').checked){
       _('localid-input').disabled = true;
       _('localid-input').style.cursor = "not-allowed";
+      _('localid-input').value = '';
   } else {
     _('localid-input').disabled = false;
-    _('localid-input').value = '';
     _('localid-input').style.cursor = "auto";
+  }
+}
+
+function change_input_unit_status(){
+  if (_('unit-checkbox').checked){
+      _('unit-input').disabled = true;
+      _('unit-input').style.cursor = "not-allowed";
+      _('unit-input').value = '';
+  } else {
+    _('unit-input').disabled = false;
+    _('unit-input').style.cursor = "auto";
   }
 }
 
@@ -43,4 +54,5 @@ window.addEventListener("load", function(evt){
     elem.addEventListener("change", change_input_table_status);
   })
   document.querySelector('#localid-checkbox').addEventListener("change", change_input_id_status);
+  document.querySelector('#unit-checkbox').addEventListener("change", change_input_unit_status);
 })

@@ -54,6 +54,8 @@ legend p{
 .field5 { grid-area: 2 / 3 / 3 / 4; }
 .field6 { grid-area: 1 / 4 / 2 / 5; }
 .field7 { grid-area: 2 / 4 / 3 / 5; }
+.field8 { grid-area: 3 / 1 / 3 / 2; }
+.field9 { grid-area: 3 / 2 / 3 / 3; }
 
 .field4 fieldset > *{
   margin: 5px;
@@ -70,7 +72,7 @@ input[type = "text"]:disabled {
 }
 
 #new-item-submit {
-  grid-area: 3 / 4 / 4 /5;
+  grid-area: 4 / 4 / 4 /5;
   position: inherit;
 }
 

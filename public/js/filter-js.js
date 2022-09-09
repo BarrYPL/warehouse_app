@@ -75,7 +75,12 @@ window.addEventListener("load", function(evt) {
   })
   const upButton = _('arrow-up');
   const resultsHeader = _('solid-results-div');
-  upButton.addEventListener('click', scrollUp);
+  const clearFilterBtn = document.querySelector('#clear-filters');
+  if (upButton){
+    upButton.addEventListener('click', scrollUp);
+  }
+  if (clearFilterBtn){
+    clearFilterBtn.addEventListener('click', clearFilters);
+  }
   resultsHeader.addEventListener('scroll', scrollWe);
-  document.querySelector('#clear-filters').addEventListener('click', clearFilters);
 })

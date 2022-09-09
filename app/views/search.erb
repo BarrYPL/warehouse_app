@@ -10,7 +10,9 @@
       <% else %>
         wyniki !
       <% end %></h3>
-      <% if !results.empty? %>
+      <% if results.empty? %>
+        <button type="button" name="button" class="filter-button" id="add-element-btn" onclick="location.href='/add-element'">Dodaj element</button>
+      <% else %>
       <input onclick="loadFilters()" type="submit" class="filter-button" value="Filtruj" id="find-submit" name="filtruj">
     </div>
     <div class="filters" id="filters-div">
@@ -18,7 +20,7 @@
         <div class="filter-sets">
           <fieldset>
             <legend><input class="radio-table-filter" type="checkbox" id="table-filter-checkbox" name="table-filter">Filtruj Elementy</legend>
-            <% all_tables.each do |table| %>
+            <% all_tables_array.each do |table| %>
               <%= erb :filter_partial, locals: { text: table.first_source_alias.to_human_text, table: table.first_source_alias.to_s } %>
             <% end %>
           </fieldset>

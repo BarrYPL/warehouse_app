@@ -19,6 +19,7 @@
       <fieldset>
         <legend>Nota katalogowa lub strona producenta</legend>
         <% if !item[:datasheet].nil? %>
+        <p><% item[:datasheet].class %></p>
           <p><a href="<%= item[:datasheet] %>" target="_blank"><i class="fa-solid fa-file-pdf"></i> Link</a></p>
         <% end %>
       </fieldset>

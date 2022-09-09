@@ -1,6 +1,6 @@
 <div class="inner-width">
   <h1>Dodaj element</h1>
-  <button type="button" class="red-btn" onclick="history.back()">Powrót</button>
+  <button type="button" class="red-btn" onclick="location.href='/'">Powrót</button>
   <% unless item.nil? %>
     <%= erb :element_tab_partial, locals: {item: item} %>
   <% else %>
@@ -9,7 +9,7 @@
       <div class="field1">
         <fieldset>
           <legend>Dodaj do tabeli <p class="red-flag">*</p></legend>
-          <% all_tables.each do |table| %>
+          <% all_tables_array.each do |table| %>
           <%= erb :filter_partial, locals: { text: table.first_source_alias.to_human_text, table: table.first_source_alias.to_s } %>
           <% end %>
           <div class="radio-table-filter" id="new-table-div">
@@ -57,6 +57,22 @@
         <fieldset>
           <legend>Nota Katalogowa</legend>
           <input type="text" name="new-item-datasheet" placeholder="Może być puste">
+        </fieldset>
+      </div>
+      <div class="field8">
+        <fieldset>
+          <legend>Lokalizacja</legend>
+          <input type="text" name="new-item-location" placeholder="Może być puste">
+        </fieldset>
+      </div>
+      <div class="field9">
+        <fieldset>
+          <legend>Jednostka</legend>
+          <input type="text" name="new-item-unit" id="unit-input" placeholder="Bez przedrostka SI" disabled>
+          <div class="one-line-checkbox">
+            <input type="checkbox" name="unit-select" id="unit-checkbox" value="checked" checked>
+            <label for="unit-select">AutoUnit</label>
+          </div>
         </fieldset>
       </div>
       <input type="submit" id="new-item-submit" class="red-btn" value="Dodaj">
