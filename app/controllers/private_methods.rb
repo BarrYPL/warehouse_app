@@ -351,6 +351,17 @@ def create_new_item(params={})
       end
     end
   end
+  @newItemValue.gsub!(',','.')
+  unless @newItemValue.match(/\A[[\d][.]]+\z/).nil?
+    @newItemValue = @newItemValue.to_f
+  else
+    unit = @newItemValue[-1]
+    @newItemValue = @newItemValue.to_i.to_database_num(unit).to_f
+  end
+  if @newItemValue < 0
+    @error = "Wartość nie może być mniejsza od 0!"
+    return
+  end
   if @needTable
     DB.create_table :"#{@newTableName.to_database_text}" do
       primary_key :id
@@ -380,15 +391,6 @@ def create_new_item(params={})
       @newItemUnit = nil
     end
   end
-  #Fix negative numbers
-  unless @newItemValue.match(/\A[[:alpha:][:blank:]]+\z/).nil?
-    @newItemValue = @newItemValue.to_f
-  else
-    unit = @newItemValue[-1]
-    @newItemValue.gsub!(',','.')
-    @newItemValue = @newItemValue.to_i.to_database_num(unit).to_f
-  end
-  p @newItemValue
   DB[:"#{@newTableName}"].insert(localid: @newLocalId,
     name: @newItemName,
     description: @newItemDescription,
