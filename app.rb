@@ -172,9 +172,7 @@ class MyServer < Sinatra::Base
   helpers do
     def current_user
       if session[:user_id]
-         $usersDB.each do |user|
-           session[:user_id] == user[:id]
-         end
+        $usersDB.where(:id => session[:user_id]).all[0]
       else
         nil
       end

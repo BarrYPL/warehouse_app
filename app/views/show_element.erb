@@ -1,5 +1,11 @@
 <div class="inner-width">
-  <button type="button" class="red-btn" onclick="history.back()">Powrót</button>
+  <div class="item-header">
+    <button type="button" class="red-btn" onclick="history.back()"><i class="fa-solid fa-people-pulling"></i> Powrót</button>
+    <div class="admin-options">
+      <button type="button" class="red-btn">Edytuj <i class="fa-solid fa-pencil"></i></button>
+      <button type="button" class="red-btn">Usuń <i class="fa-solid fa-person-falling-burst"></i></button>
+    </div>
+  </div>
   <div class="section-title">
     <% unless item.nil? %>
       <h1><%= item[:name] %></h1>
@@ -24,7 +30,7 @@
         <% end %>
       </fieldset>
       <% if current_user %>
-        <button type="button" name="button" class="add-item-btn"><i class="fa-solid fa-circle-plus"></i> Dodaj element</button>
+        <button type="button" name="button" class="add-item-btn"><i class="fa-solid fa-circle-plus"></i> Dodaj elementy</button>
         <div class="adding-item-form">
           <form class="item-form" action="/add_element" method="post">
             <div class="input-field">

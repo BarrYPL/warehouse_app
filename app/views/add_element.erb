@@ -1,6 +1,6 @@
 <div class="inner-width">
   <h1>Dodaj element</h1>
-  <button type="button" class="red-btn" onclick="location.href='/'">Powrót</button>
+  <button type="button" class="red-btn" id="return-btn" onclick="location.href='/'"><i class="fa-solid fa-people-pulling"></i> Powrót</button>
   <% unless item.nil? %>
     <%= erb :element_tab_partial, locals: {item: item} %>
   <% else %>
@@ -44,7 +44,7 @@
       <div class="field5">
         <fieldset>
           <legend>Wartość</legend>
-          <input type="text" name="new-item-value" placeholder="Może być puste">
+          <input type="text" name="new-item-value" placeholder="Np. 1k, 5uF">
         </fieldset>
       </div>
       <div class="field6">

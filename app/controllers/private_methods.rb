@@ -356,7 +356,7 @@ def create_new_item(params={})
     @newItemValue = @newItemValue.to_f
   else
     unit = @newItemValue[-1]
-    @newItemValue = @newItemValue.to_i.to_database_num(unit).to_f
+    @newItemValue = @newItemValue.to_f.to_database_num(unit)
   end
   if @newItemValue < 0
     @error = "Wartość nie może być mniejsza od 0!"

@@ -81,6 +81,11 @@ input[type = "text"]:disabled {
   cursor: not-allowed;
 }
 
+#unit-input {
+  cursor: not-allowed;
+  margin-bottom: 5px;
+}
+
 #localid-input {
   cursor: not-allowed;
 }

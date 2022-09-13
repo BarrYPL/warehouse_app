@@ -9,7 +9,7 @@
 
 .solid-results-div {
   width: 100%;
-  padding: 10px 25px 10px 25px;
+  padding: 10px 25px;
   overflow: auto;
 }
 
@@ -145,6 +145,7 @@ div.limiting-filters{
   color: #f1f1f1;
 }
 
+
 .arrow-up {
   position: absolute;
   bottom: 0px;
@@ -165,6 +166,13 @@ div.limiting-filters{
   background: #fa0200;
   color: #f1f1f1;
   border: solid 2px #fa0200;
+}
+
+.add-element-div {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  padding: 10px 25px;
 }
 
 #clear-filters {

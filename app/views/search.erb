@@ -10,11 +10,11 @@
       <% else %>
         wyniki !
       <% end %></h3>
-      <% if results.empty? %>
-        <button type="button" name="button" class="filter-button" id="add-element-btn" onclick="location.href='/add-element'">Dodaj element</button>
-      <% else %>
+      <% unless results.empty? %>
       <input onclick="loadFilters()" type="submit" class="filter-button" value="Filtruj" id="find-submit" name="filtruj">
+      <% end %>
     </div>
+      <% unless results.empty? %>
     <div class="filters" id="filters-div">
       <form class="filter-form" action="find" method="post">
         <div class="filter-sets">
@@ -84,6 +84,11 @@
       </div>
     <% end %>
   </div>
+  <% if results.empty? %>
+  <div class="add-element-div">
+    <button type="button" name="button" class="red-btn" id="add-element-btn" onclick="location.href='/add-element'"><i class="fa-solid fa-circle-plus"></i> Dodaj element</button>
+  </div>
+  <% end %>
 </div>
 
 <% unless params[:"value-filter"].nil? %>
