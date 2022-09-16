@@ -72,6 +72,23 @@ class MyServer < Sinatra::Base
     redirect '/'
   end
 
+  get '/edit' do
+    if params[:id].nil?
+      @error = "Błędny argument!"
+      @js = ["searching-js"]
+      @css = ["welcome-styles", "login-partial"]
+      erb :welcome
+    else
+      @js = ["show-element-js", "edit-element-js"]
+      @css = ["show-element-styles"]
+      @item = select_item(params[:id])
+      if @item.nil?
+        @error = "Błędne ID!"
+      end
+      erb :edit_element, locals: { item: @item}
+    end
+  end
+
   post '/add_element' do
     @js = ["show-element-js"]
     @css = ["show-element-styles"]

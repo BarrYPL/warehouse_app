@@ -230,10 +230,10 @@ def detailedSearch(phrase, filterTab: "", value_min: 0, value_max: 10**12, sort_
   return @detailed_arr
 end
 
-def select_item(item_name)
+def select_item(itemName)
   resultTab = []
   all_tables_array.each do |table|
-    resultTab << table.where(:localid => item_name).all
+    resultTab << table.where(Sequel.like(:localid, "#{itemName}", case_insensitive: true)).all
   end
   return resultTab.flatten[0]
 end

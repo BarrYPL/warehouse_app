@@ -2,7 +2,7 @@
   <div class="item-header">
     <button type="button" class="red-btn" onclick="history.back()"><i class="fa-solid fa-people-pulling"></i> Powrót</button>
     <div class="admin-options">
-      <button type="button" class="red-btn">Edytuj <i class="fa-solid fa-pencil"></i></button>
+      <button type="button" class="red-btn" onclick="location.href='edit?id=<%= item[:localid] %>'">Edytuj <i class="fa-solid fa-pencil"></i></button>
       <button type="button" class="red-btn">Usuń <i class="fa-solid fa-person-falling-burst"></i></button>
     </div>
   </div>
@@ -10,9 +10,6 @@
     <% unless item.nil? %>
       <h1><%= item[:name] %></h1>
     <% end %>
-    <% unless params[:id].nil? %>
-      <h1><%= params[:id] %></h1>
-    <% end%>
   </div>
   <% unless item.nil? %>
   <div class="item-info-div">
