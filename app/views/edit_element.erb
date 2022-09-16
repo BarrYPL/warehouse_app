@@ -11,21 +11,24 @@
     <% end %>
   </div>
   <% unless item.nil? %>
-  <div class="item-info-div">
-    <%= erb :element_tab_partial, locals: {item: item} %>
-    <div class="item-description">
-      <fieldset>
-        <legend>Opis <i class="fa-solid fa-pen-to-square" id="description"></i></legend>
-        <p class="description"><%= item[:description] %></p>
-      </fieldset>
-      <fieldset>
-        <legend>Nota katalogowa lub strona producenta <i class="fa-solid fa-pen-to-square" id="datasheet"></i></legend>
-        <% if !item[:datasheet].nil? %>
-          <p><a href="<%= item[:datasheet] %>" target="_blank" class="datasheet"><i class="fa-solid fa-file-pdf"></i> Link</a></p>
-        <% end %>
-      </fieldset>
-      <button type="button" name="button" class="add-item-btn">Zapisz <i class="fa-regular fa-floppy-disk"></i></button>
+  <form class="edit-form" action="edit" method="post">
+    <div class="item-info-div">
+      <%= erb :element_tab_partial, locals: {item: item} %>
+      <div class="item-description">
+        <fieldset>
+          <legend>Opis <i class="fa-solid fa-pen-to-square" id="description"></i></legend>
+          <p class="description"><%= item[:description] %></p>
+        </fieldset>
+        <fieldset>
+          <legend>Nota katalogowa lub strona producenta <i class="fa-solid fa-pen-to-square" id="datasheet"></i></legend>
+          <% if !item[:datasheet].nil? %>
+            <p id="anchor-holder"><a href="<%= item[:datasheet] %>" target="_blank" class="datasheet"><i class="fa-solid fa-file-pdf"></i> Link</a></p>
+          <% end %>
+        </fieldset>
+        <button type="submit" class="red-btn">Zapisz <i class="fa-regular fa-floppy-disk"></i></button>
+      </div>
+      <input type="hidden" name="id" value="<%= item[:localid] %>">
     </div>
-  </div>
+  </form>
   <% end %>
 </div>

@@ -80,7 +80,25 @@ class MyServer < Sinatra::Base
       erb :welcome
     else
       @js = ["show-element-js", "edit-element-js"]
-      @css = ["show-element-styles"]
+      @css = ["show-element-styles", "edit-styles"]
+      @item = select_item(params[:id])
+      if @item.nil?
+        @error = "Błędne ID!"
+      end
+      erb :edit_element, locals: { item: @item}
+    end
+  end
+
+  post '/edit' do
+    p params.inspect
+    if params[:id].nil?
+      @error = "Błędny argument!"
+      @js = ["searching-js"]
+      @css = ["welcome-styles", "login-partial"]
+      erb :welcome
+    else
+      @js = ["show-element-js", "edit-element-js"]
+      @css = ["show-element-styles", "edit-styles"]
       @item = select_item(params[:id])
       if @item.nil?
         @error = "Błędne ID!"
