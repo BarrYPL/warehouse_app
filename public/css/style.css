@@ -152,6 +152,7 @@ footer {
   color: #fa0200;
   background: #f1f1f1;
   border: 2px solid #f1f1f1;
+  cursor: pointer;
 }
 
 .icon-flip-inner {

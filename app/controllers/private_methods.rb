@@ -238,6 +238,12 @@ def select_item(itemName)
   return resultTab.flatten[0]
 end
 
+def delete_item(itemId)
+  all_tables_array.each do |table|
+    table.select(:localid).where(:localid => itemId).delete
+  end
+end
+
 def sortTable(arr, direction, column)
   if column.nil?
     column = "value"

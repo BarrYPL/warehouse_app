@@ -1,9 +1,12 @@
 <div class="inner-width">
   <div class="item-header">
-    <button type="button" class="red-btn" onclick="history.back()"><i class="fa-solid fa-people-pulling"></i> Powrót</button>
+    <div class="basic-options">
+      <button type="button" class="red-btn" onclick="history.back()"><i class="fa-solid fa-people-pulling"></i> Powrót</button>
+      <button type="button" class="red-btn" onclick="location.href='/'"><i class="fa-solid fa-house"></i> Home</button>
+    </div>
     <div class="admin-options">
       <button type="button" class="red-btn" onclick="location.href='edit?id=<%= item[:localid] %>'">Edytuj <i class="fa-solid fa-pencil"></i></button>
-      <button type="button" class="red-btn">Usuń <i class="fa-solid fa-person-falling-burst"></i></button>
+      <button type="button" class="red-btn" onclick="location.href='delete?id=<%= item[:localid] %>'">Usuń <i class="fa-solid fa-person-falling-burst"></i></button>
     </div>
   </div>
   <div class="section-title">

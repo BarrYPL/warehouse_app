@@ -89,6 +89,23 @@ class MyServer < Sinatra::Base
     end
   end
 
+  get '/delete' do
+    if params[:id].nil?
+      @error = "Błędny argument!"
+    else
+      @item = select_item(params[:id])
+      #This is required to find single record!
+      if @item.nil?
+        @error = "Błędne ID!"
+      else
+        delete_item(params[:id])
+      end
+      @js = ["searching-js"]
+      @css = ["welcome-styles", "login-partial"]
+      erb :welcome
+    end
+  end
+
   post '/edit' do
     p params.inspect
     if params[:id].nil?
