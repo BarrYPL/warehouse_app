@@ -7,6 +7,10 @@ function show_adding_div(){
 }
 
 window.addEventListener("load", function(evt){
-  var btn = document.querySelector('.add-item-btn')
+  var btn = document.querySelector('.add-item-btn');
   if (btn) { btn.addEventListener('click', show_adding_div); }
+  const editElements = ["nazwa","ilosc","lokalizacja"];
+  editElements.forEach(item => {
+    console.log(_(item));
+  });
 })

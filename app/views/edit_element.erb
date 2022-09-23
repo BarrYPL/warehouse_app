@@ -16,7 +16,24 @@
   <% unless item.nil? %>
   <form class="edit-form" action="edit" method="post">
     <div class="item-info-div">
-      <%= erb :element_tab_partial, locals: {item: item} %>
+      <table class="result-tab">
+        <tr>
+          <th>Lp.</th>
+          <th>ID</th>
+          <th>Nazwa <i class="fa-solid fa-pen-to-square" id="name"></i></th>
+          <th>wartość</th>
+          <th>Ilość <i class="fa-solid fa-pen-to-square" id="quantity"></i></th>
+          <th>Lokalizacja <i class="fa-solid fa-pen-to-square" id="location"></i></th>
+        </tr>
+        <tr>
+          <td>1.</td>
+          <td><%= item[:localid] %></td>
+          <td><p class="name"><%= item[:name] %></p></td>
+          <td><%= item[:value].to_human_redable %> <%= item[:unit] %></td>
+          <td><p class="quantity"><%= item[:quantity] %></p></td>
+          <td><p class="location"><%= item[:location] %></p></td>
+        </tr>
+      </table>
       <div class="item-description">
         <fieldset>
           <legend>Opis <i class="fa-solid fa-pen-to-square" id="description"></i></legend>
@@ -24,9 +41,11 @@
         </fieldset>
         <fieldset>
           <legend>Nota katalogowa lub strona producenta <i class="fa-solid fa-pen-to-square" id="datasheet"></i></legend>
+          <p id="anchor-holder">
           <% if !item[:datasheet].nil? %>
-            <p id="anchor-holder"><a href="<%= item[:datasheet] %>" target="_blank" class="datasheet"><i class="fa-solid fa-file-pdf"></i> Link</a></p>
+            <a href="<%= item[:datasheet] %>" target="_blank" class="datasheet"><i class="fa-solid fa-file-pdf"></i> Link</a>
           <% end %>
+          </p>
         </fieldset>
         <button type="submit" class="red-btn">Zapisz <i class="fa-regular fa-floppy-disk"></i></button>
       </div>

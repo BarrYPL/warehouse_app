@@ -107,7 +107,6 @@ class MyServer < Sinatra::Base
   end
 
   post '/edit' do
-    p params.inspect
     if params[:id].nil?
       @error = "Błędny argument!"
       @js = ["searching-js"]
@@ -119,7 +118,10 @@ class MyServer < Sinatra::Base
       @item = select_item(params[:id])
       if @item.nil?
         @error = "Błędne ID!"
+      else
+        edit_item(request.params)
       end
+      @item = select_item(params[:id])
       erb :edit_element, locals: { item: @item}
     end
   end
@@ -127,7 +129,7 @@ class MyServer < Sinatra::Base
   post '/add_element' do
     @js = ["show-element-js"]
     @css = ["show-element-styles"]
-    if (check_string(request[:added_quantity]) && request[:added_quantity].to_i > 0)
+    if (check_non_numeric(request[:added_quantity]) && request[:added_quantity].to_i > 0)
       changeQuantity(request[:item_id], request[:added_quantity])
     else
       @error = "Wprowadzono niewłaściwą wartość!"

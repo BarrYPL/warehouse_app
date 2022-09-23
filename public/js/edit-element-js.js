@@ -1,8 +1,15 @@
+"use-strict;"
+
 function start_edit(e){
   let textTarget = document.querySelector('.' + e.target.id);
-  let tagName = textTarget.tagName;
   let innerText;
   let inputName;
+  let bypass = false;
+  if(!textTarget){
+    textTarget = _('anchor-holder');
+    bypass = true;
+  }
+  let tagName = textTarget.tagName;
   switch(tagName) {
     case "A":
       innerText = textTarget.href;
@@ -14,7 +21,10 @@ function start_edit(e){
       inputName = textTarget.className + "-input";
       break;
     default:
-    console.log(tagName);
+  }
+  if(bypass){
+    innerText = "";
+    inputName = "datasheet-input";
   }
   const inputText = document.createElement('input');
   inputText.innerHTML = "";
@@ -27,5 +37,8 @@ function start_edit(e){
 window.addEventListener("load", function(evt) {
   document.querySelectorAll('legend i').forEach(item => {
     item.addEventListener('click', start_edit);
-  })
+  });
+  document.querySelectorAll('th i').forEach(item => {
+    item.addEventListener('click', start_edit);
+  });
 })

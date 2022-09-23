@@ -153,7 +153,7 @@ class String
   end
 end
 
-def check_string(str)
+def check_non_numeric(str)
   str !~ /\D/
 end
 
@@ -233,9 +233,12 @@ end
 def select_item(itemName)
   resultTab = []
   all_tables_array.each do |table|
-    resultTab << table.where(Sequel.like(:localid, "#{itemName}", case_insensitive: true)).all
+    unless table.where(Sequel.like(:localid, "#{itemName}", case_insensitive: true)).all.empty?
+      @record = table.where(Sequel.like(:localid, "#{itemName}", case_insensitive: true)).all[0]
+      @record[:table] = table.first_source_alias
+    end
   end
-  return resultTab.flatten[0]
+  return @record
 end
 
 def delete_item(itemId)
@@ -406,4 +409,26 @@ def create_new_item(params={})
     unit: @newItemUnit,
     location: @newItemLocation)
   return @newLocalId
+end
+
+def get_table_name(name)
+  names = {
+    "name-input" => "name",
+    "quantity-input" => "quantity",
+    "location-input" => "location",
+    "description-input" => "description",
+    "datasheet-input" => "datasheet",
+    "id" => "localid"
+  }
+  return names[name]
+end
+
+def edit_item(editHash)
+  p editHash
+  @item = select_item(editHash["id"])
+  @id = @item[:localid]
+  editHash.delete("id")
+  editHash.keys.each do |key|
+    DB[@item[:table]].where(:localid => @id).update(get_table_name(key) => editHash[key])
+  end
 end
