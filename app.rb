@@ -39,7 +39,7 @@ class MyServer < Sinatra::Base
   get '/find' do
     @js = ["searching-js", "filter-js"]
     @css = ["welcome-styles", "search-styles"]
-    results = detailedSearch("")
+    results = detailed_search("")
     erb :search, locals: { results: results }
   end
 
@@ -130,7 +130,7 @@ class MyServer < Sinatra::Base
     @js = ["show-element-js"]
     @css = ["show-element-styles"]
     if (check_non_numeric(request[:added_quantity]) && request[:added_quantity].to_i > 0)
-      changeQuantity(request[:item_id], request[:added_quantity])
+      change_quantity(request[:item_id], request[:added_quantity])
     else
       @error = "Wprowadzono niewłaściwą wartość!"
     end
@@ -146,7 +146,7 @@ class MyServer < Sinatra::Base
     @css = ["welcome-styles", "search-styles"]
     @inputVal = params[:"search-input"]||params[:"input-value"]
     @filters = params[:element]||""
-    @sort_direction = params[:sort]||""
+    @sortDirection = params[:sort]||""
     if !params[:valuemin].nil? && params[:valuemin] != ""
       @valueMin = params[:valuemin]
     else
@@ -157,7 +157,7 @@ class MyServer < Sinatra::Base
     else
       @valueMax = 10**12
     end
-    results = detailedSearch(@inputVal, filterTab: @filters, value_min: @valueMin, value_max: @valueMax, sort_direction: @sort_direction)
+    results = detailed_search(@inputVal, filterElem: @filters, valueMin: @valueMin, valueMax: @valueMax, sortDirection: @sortDirection)
     erb :search, locals: { results: results }
   end
 
@@ -198,14 +198,14 @@ class MyServer < Sinatra::Base
     if params[:phrase].downcase == "rafe"
       p '[{"":"<image src=\"images/easters/rafe.png\" alt=\"error\" id=\"easter-egg\"></image>"}]'
     else
-      @suggestionsArr = findQuerys(@phrase)
+      @suggestionsArr = find_querys(@phrase)
       @suggestionsArr.uniq!
       if !@suggestionsArr.empty?
         @suggestionsArr.sort_by!(&:values)
       end
       if @suggestionsArr.length < 9
-        @suggestionsArr = findQuerys(@phrase, false)
-        sortByFirstChar(@suggestionsArr, @phrase)
+        @suggestionsArr = find_querys(@phrase, false)
+        sort_by_first_char(@suggestionsArr, @phrase)
       end
       p @suggestionsArr.uniq[0..9].to_json
     end

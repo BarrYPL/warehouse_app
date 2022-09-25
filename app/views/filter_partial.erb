@@ -1,4 +1,6 @@
-<div class="radio-table-filter">
-  <input type="radio" id="<%= table %>" name="element" value="<%= table %>" <% if params[:element] == table %> checked <% end %> disabled>
-  <label for="resistors"><%= text %></label>
-</div>
+<% $elementsDB.select(:elementtype).uniq.each do |elem| %>
+  <div class="radio-type-filter">
+    <input type="radio" id="<%= elem[:elementtype] %>" name="element" value="<%= elem[:elementtype] %>" <% if params[:element] == elem[:elementtype] %> checked <% end %> disabled>
+    <label for="resistors"><%= elem[:elementtype].gsub("_"," ") %></label>
+  </div>
+<% end %>

@@ -9,14 +9,12 @@
       <div class="field1">
         <fieldset>
           <legend>Dodaj do tabeli <p class="red-flag">*</p></legend>
-          <% all_tables_array.each do |table| %>
-          <%= erb :filter_partial, locals: { text: table.first_source_alias.to_human_text, table: table.first_source_alias.to_s } %>
-          <% end %>
-          <div class="radio-table-filter" id="new-table-div">
-            <input type="radio" name="new-item-checkbox"  id="new-table" value="create-table">
-            <label for="new-table">Nowa Tabela</label>
+          <%= erb :filter_partial %>
+          <div class="radio-type-filter" id="new-type-div">
+            <input type="radio" name="new-item-checkbox" id="new-type" value="create-type">
+            <label for="new-type">Nowy typ</label>
           </div>
-          <input type="text" id="input-table-name" name="new-table-name" placeholder="Nazwij tabelę" disabled>
+          <input type="text" id="input-type-name" name="new-type-name" placeholder="Wpisz nazwę" disabled>
         </fieldset>
       </div>
       <div class="field2">

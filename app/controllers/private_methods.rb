@@ -1,12 +1,7 @@
 DB = Sequel.sqlite 'db\database.db'
 
 $usersDB = DB[:uzytkownicy]
-$capacitorsDB = DB[:kondensatory]
-$inductorsDB = DB[:elementy_indukcyjne]
-$resistorsDB = DB[:rezystory]
-$laboratoryeqDB = DB[:sprzet_laboratoryjny]
-$mechanicalsDB = DB[:elementy_mechaniczne]
-$othersDB = DB[:inne]
+$elementsDB = DB[:elementy]
 
 class Numeric
   def to_human_redable
@@ -43,19 +38,6 @@ class String
   def to_database_text
     return self.gsub(' ','_').downcase
   end
-end
-
-def all_tables_array
-  restricted_tables = [:uzytkownicy, :sprzet_laboratoryjny]
-  all_tables = DB.tables
-  return_table = []
-  restricted_tables.each do |item|
-    all_tables.delete(item)
-  end
-  all_tables.each do |table|
-    return_table << DB[table]
-  end
-  return return_table.sort_by!{ |item| item.first_source_alias.to_s }
 end
 
 def formati_si(size)
@@ -142,10 +124,9 @@ def format_num(size, prefix)
 end
 
 class String
-  def id_Exists?
-    @countingResults = []
-    all_tables_array.each { |tab| @countingResults << tab.where(:localid => self).count }
-    if @countingResults.all?(0)
+  def id_exists?
+    @countedResults = $elementsDB.where(:localid  => self).count
+    if @countedResults == 0
       return false
     else
       return true
@@ -157,97 +138,76 @@ def check_non_numeric(str)
   str !~ /\D/
 end
 
-def findQuerys(phrase, restricted=true)
-  if restricted == false
-    phrase.gsub(/ /, '%')
-    phrase = "%" + phrase
-  end
-  @arr = []
-  all_tables_array.each do |table|
-    table.where(Sequel.like(:name, "#{phrase}%", case_insensitive: true))
-    .or(Sequel.like(:localid, "#{phrase}%", case_insensitive: true)).limit(5).all.each do |k|
-      @arr << ({name: k[:name]})
-    end
-  end
-  return @arr
-end
-
-def detailedSearch(phrase, filterTab: "", value_min: 0, value_max: 10**12, sort_key: "value", sort_direction: "asc")
-  @phrase = phrase.strip
-  if sort_direction == "alfa" || sort_direction == "dalfa"
-    @column = "name"
-  end
-  if @phrase.empty? then @phrase = "%" end
-  @detailed_arr = []
-  @part_att = []
-  if sort_direction == ""
-    sort_direction = "asc"
-  end
-  unless filterTab == ""
-    @db_tables_array = [DB[:"#{filterTab}"]]
-  else
-    @db_tables_array = all_tables_array
-  end
-  @db_tables_array.each do |table|
-    #Find by phrase no filters
-    @phrase.split.each do |partPhrase|
-      @part_att << table.where(Sequel.like(:name, "%#{partPhrase}%", case_insensitive: true)).or(Sequel.like(:localid, "%#{partPhrase}%", case_insensitive: true)).order(:value).all
-    end
-    #Common part of each subarrays
-    if @part_att.length > 1
-      @tempArr = @part_att[0] & @part_att.last
-      @res_arr = []
-      (1..@part_att.length-1).each { |el| @res_arr << @tempArr & @part_att[el] }
-      @res_arr.uniq!
-      @part_att = @res_arr[0]
-    end
-    #Value filters here
-    if value_max != 10**12
-      if value_max.is_a? String then value_max.strip! end
-      if value_max.is_a? String
-        unit = value_max[-1]
-        value_max = value_max.to_i.to_database_num(unit).to_f
-      end
-    end
-    if value_min != 0
-      if value_min.is_a? String then value_min.strip! end
-      if value_min.is_a? String
-        unit = value_min[-1]
-        value_min = value_min.to_i.to_database_num(unit).to_f
-      end
-    end
-    if value_min > value_max
-      value_min, value_max = value_max, value_min
-    end
-    @part_att = @part_att.flatten & table.where(value: value_min..value_max).all
-    #@part_att = sortTable(@part_att, sort_direction)
-    if @part_att.count > 0
-      @detailed_arr << @part_att
-    end
-    @part_att = []
-  end
-  @detailed_arr = sortTable(@detailed_arr.flatten, sort_direction, @column)
-  return @detailed_arr
-end
-
 def select_item(itemName)
   resultTab = []
-  all_tables_array.each do |table|
-    unless table.where(Sequel.like(:localid, "#{itemName}", case_insensitive: true)).all.empty?
-      @record = table.where(Sequel.like(:localid, "#{itemName}", case_insensitive: true)).all[0]
-      @record[:table] = table.first_source_alias
-    end
+  unless $elementsDB.where(Sequel.like(:localid, "#{itemName}", case_insensitive: true)).all.empty?
+    @record = $elementsDB.where(Sequel.like(:localid, "#{itemName}", case_insensitive: true)).all[0]
   end
   return @record
 end
 
-def delete_item(itemId)
-  all_tables_array.each do |table|
-    table.select(:localid).where(:localid => itemId).delete
+def find_querys(phrase, restricted=true)
+  @arr = []
+  if restricted == false
+    phrase.gsub(/ /, '%')
+    phrase = "%" + phrase
   end
+  $elementsDB.order(:name).where(Sequel.like(:name, "#{phrase}%", case_insensitive: true))
+  .or(Sequel.like(:localid, "#{phrase}%", case_insensitive: true)).limit(20).all.each do |k|
+    @arr << ({name: k[:name]})
+  end
+  return @arr
 end
 
-def sortTable(arr, direction, column)
+def detailed_search(phrase, filterElem: "", valueMin: 0, valueMax: 10**12, sort_key: "value", sortDirection: "asc")
+  @phrase = phrase.strip
+  if sortDirection == "alfa" || sortDirection == "dalfa"
+    @column = "name"
+  end
+  if @phrase.empty? then @phrase = "%" end
+  @detailedArr = []
+  if sortDirection == ""
+    sortDirection = "asc"
+  end
+  if filterElem == ""
+    @dbFilter = nil
+  else
+    @dbFilter = filterElem
+  end
+  #Value filters here
+  if valueMax != 10**12
+    if valueMax.is_a? String then valueMax.strip! end
+    if valueMax.is_a? String
+      unit = valueMax[-1]
+      valueMax = valueMax.to_i.to_database_num(unit).to_f
+    end
+  end
+  if valueMin != 0
+    if valueMin.is_a? String then valueMin.strip! end
+    if valueMin.is_a? String
+      unit = valueMin[-1]
+      valueMin = valueMin.to_i.to_database_num(unit).to_f
+    end
+  end
+  if valueMin > valueMax
+    valueMin, valueMax = valueMax, valueMin
+  end
+  @phrase.split.each do |partPhrase|
+    if @dbFilter.nil?
+      @detailedArr << $elementsDB.where(Sequel.like(:name, "%#{partPhrase}%", case_insensitive: true)).or(Sequel.like(:localid, "%#{partPhrase}%", case_insensitive: true)).where(value: valueMin..valueMax).order(:value).all
+    else
+      @detailedArr << $elementsDB.where(Sequel.like(:name, "%#{partPhrase}%", case_insensitive: true)).or(Sequel.like(:localid, "%#{partPhrase}%", case_insensitive: true)).where(value: valueMin..valueMax).where(:elementtype => @dbFilter).order(:value).all
+    end
+  end
+  @detailedArr = sort_table(@detailedArr.flatten, sortDirection, @column)
+  return @detailedArr
+end
+
+def delete_item(itemId)
+  $elementsDB.select(:localid).where(:localid => itemId).delete
+end
+
+def sort_table(arr, direction, column)
   if column.nil?
     column = "value"
   end
@@ -258,7 +218,7 @@ def sortTable(arr, direction, column)
   end
 end
 
-def sortByFirstChar(arr, phrase)
+def sort_by_first_char(arr, phrase)
   #arr.sort_by! { |el| el.values[0] }
   regexp = Regexp.new("^" + phrase.strip)
   if arr.all? { |w| !w.values[0].match(regexp) }
@@ -269,21 +229,18 @@ def sortByFirstChar(arr, phrase)
   return arr
 end
 
-def changeQuantity(item_id, added_quantity)
-  all_tables_array.each do |table|
-    unless table.where(:localid => item_id).all.empty?
-      @actualQuantity = table.where(:localid => item_id).all[0][:quantity]
-      @newQuantity = @actualQuantity + added_quantity.to_i
-      table.where(:localid => item_id).update(quantity: @newQuantity)
-    end
+def change_quantity(item_id, added_quantity)
+  unless $elementsDB.where(:localid => item_id).all.empty?
+    @actualQuantity = $elementsDB.where(:localid => item_id).all[0][:quantity]
+    @newQuantity = @actualQuantity + added_quantity.to_i
+    $elementsDB.where(:localid => item_id).update(quantity: @newQuantity)
   end
 end
 
 def create_new_item(params={})
-  @needTable = false
   p params
   @newItemName = params[:"new-item-name"].strip
-  @newTableName = params[:"new-table-name"].strip
+  @newTypeName = params[:"new-type-name"].strip
   @newItemQuantity = params[:"new-item-quantity"].to_f.to_i
   @newItemValue = params[:"new-item-value"].strip
   @newItemDescription = params[:"new-item-description"].strip
@@ -291,29 +248,21 @@ def create_new_item(params={})
   @newItemLocation = params[:"new-item-location"].strip
   @newItemUnit = params[:"new-item-unit"].strip
   unless params[:"new-item-checkbox"].nil?
-    if @newTableName == ""
-      @error = "Nazwa tabeli nie może być pusta!"
+    if @newTypeName == ""
+      @error = "Nazwa typu nie może być pusta!"
       return
     end
-    if @newTableName.match(/\A[[:alpha:][:blank:]]+\z/).nil?
-      @error = "Nazwa tabeli może składać się tylko z małych znaków a-z i spacji!"
+    if @newTypeName.match(/\A[[:alpha:][:blank:]]+\z/).nil?
+      @error = "Nazwa typu może składać się tylko z małych znaków a-z i spacji!"
       return
-    else
-      all_tables_array.each do |tabName|
-        if tabName.first_source_alias.to_human_text.to_database_text.downcase == @newTableName.to_database_text.downcase
-          @error = "Nazwa tabeli musi być inna niż istniejące tabele!"
-          return
-        end
-      end
-      @needTable = true
     end
   end
   if params[:element].nil? && params[:"new-item-checkbox"].nil?
-    @error = "Wybierz tablę!"
+    @error = "Wybierz rodzaj!"
     return
   end
   unless params[:element].nil?
-    @newTableName = params[:element]
+    @newTypeName = params[:element].gsub!(" ","_")
   end
   if @newItemName == "" ||
     @newItemName.nil?
@@ -321,7 +270,7 @@ def create_new_item(params={})
     return
   end
   if @newItemName.length > 30 ||
-    @newTableName.length > 30
+    @newTypeName.length > 30
     @error = "Nazwa nie może być dłuższa niż 30 znaków."
     return
   end
@@ -330,11 +279,10 @@ def create_new_item(params={})
     return
   end
   if @newItemQuantity.to_s.match?(/[:alpha]/)
-    @error = "W polu ilość mogą znajdować się tylko cyfry."
+    @error = "W tym polu ilość mogą znajdować się tylko cyfry."
     return
   end
   if @newItemQuantity.to_i < 0
-    p @newQuantity
     @error = "Ilość nie może być ujemna!"
     return
   end
@@ -342,7 +290,7 @@ def create_new_item(params={})
     unless params[:"new-item-localid"].nil? ||
       params[:"new-item-localid"] == ""
       @newLocalId = params[:"new-item-localid"]
-      if @newLocalId.id_Exists?
+      if @newLocalId.id_exists?
         @error = "Istnieje już element o podanym ID!"
         return
       end
@@ -352,11 +300,11 @@ def create_new_item(params={})
     end
   else
     @newLocalId = @newItemName[0..8].gsub(' ','').downcase
-    if @newLocalId.id_Exists?
+    if @newLocalId.id_exists?
       loop do
         o = [('a'..'z'), ('A'..'Z'), ('0'..'9')].map(&:to_a).flatten
         @newLocalId = @newLocalId + (0...1).map { o[rand(o.length)] }.join
-        break if !@newLocalId.id_Exists?
+        break if !@newLocalId.id_exists?
       end
     end
   end
@@ -371,47 +319,38 @@ def create_new_item(params={})
     @error = "Wartość nie może być mniejsza od 0!"
     return
   end
-  if @needTable
-    DB.create_table :"#{@newTableName.to_database_text}" do
-      primary_key :id
-      String :localid, unique: true
-      String :name
-      Text :description
-      float :value
-      int :quantity
-      String :location
-      String :datasheet
-      String :unit
-    end
-  end
   if @newItemDescription.empty? then @newItemDescription = nil end
   if @newItemDatasheet.empty? then @newItemDatasheet = nil end
   if @newItemLocation.empty? then @newItemLocation = nil end
-  case @newTableName
-  when "rezystory"
-    @newItemUnit = "Ω"
-  when "kondensatory"
-    @newItemUnit = "F"
-  when "elementy_indukcyjne"
-    @newItemUnit = "H"
-  else
-    if @newItemUnit == "" ||
-      @newItemUnit.nil?
-      @newItemUnit = nil
-    end
+  @newItemUnit =  map_unit_name(@newTypeName)
+  if @newItemUnit == "" ||
+    @newItemUnit.nil?
+    @newItemUnit = nil
   end
-  DB[:"#{@newTableName}"].insert(localid: @newLocalId,
+  $elementsDB.insert(localid: @newLocalId,
     name: @newItemName,
     description: @newItemDescription,
     value: @newItemValue,
     quantity: @newItemQuantity,
+    powerdissipation: nil,
+    location: @newItemLocation,
     datasheet: @newItemDatasheet,
     unit: @newItemUnit,
-    location: @newItemLocation)
+    maxvoltage: nil,
+    elementtype: @newTypeName)
   return @newLocalId
 end
 
-def get_table_name(name)
+def map_unit_name(type)
+  units = {
+    "resistor" => "Ω",
+    "capacitor" => "F",
+    "inductor" => "H"
+  }
+  return units[type]
+end
+
+def map_column_name(name)
   names = {
     "name-input" => "name",
     "quantity-input" => "quantity",
@@ -425,10 +364,9 @@ end
 
 def edit_item(editHash)
   p editHash
-  @item = select_item(editHash["id"])
   @id = @item[:localid]
   editHash.delete("id")
   editHash.keys.each do |key|
-    DB[@item[:table]].where(:localid => @id).update(get_table_name(key) => editHash[key])
+    $elementsDB.where(:localid => @id).update(map_column_name(key) => editHash[key])
   end
 end

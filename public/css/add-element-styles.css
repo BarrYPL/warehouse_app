@@ -14,7 +14,7 @@ th{
   height: 100%;
 }
 
-.radio-table-filter input {
+.radio-type-filter input {
   cursor: pointer;
 }
 
@@ -61,11 +61,16 @@ legend p{
   margin: 5px;
 }
 
+.field1 fieldset {
+  max-height: 220px;
+  overflow: auto;
+}
+
 input[type = "text"]:disabled {
   opacity: 0.5;
 }
 
-#new-table-div {
+#new-type-div {
   background: #fa0200;
   padding: 3px;
   border-radius: 10px;
@@ -76,7 +81,7 @@ input[type = "text"]:disabled {
   position: inherit;
 }
 
-#input-table-name {
+#input-type-name {
   margin-top: 5px;
   cursor: not-allowed;
 }

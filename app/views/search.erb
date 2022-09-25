@@ -20,9 +20,7 @@
         <div class="filter-sets">
           <fieldset>
             <legend><input class="radio-table-filter" type="checkbox" id="table-filter-checkbox" name="table-filter">Filtruj Elementy</legend>
-            <% all_tables_array.each do |table| %>
-              <%= erb :filter_partial, locals: { text: table.first_source_alias.to_human_text, table: table.first_source_alias.to_s } %>
-            <% end %>
+            <%= erb :filter_partial %>
           </fieldset>
           <fieldset>
             <legend><input class="limiting-filters" type="checkbox" id="limit-filter-checkbox" name="value-filter">Wartość</legend>
