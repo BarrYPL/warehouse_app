@@ -35,10 +35,4 @@ function start_edit(e){
 }
 
 window.addEventListener("load", function(evt) {
-  document.querySelectorAll('legend i').forEach(item => {
-    item.addEventListener('click', start_edit);
-  });
-  document.querySelectorAll('th i').forEach(item => {
-    item.addEventListener('click', start_edit);
-  });
 })

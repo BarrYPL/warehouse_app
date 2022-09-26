@@ -5,7 +5,7 @@
       <button type="button" class="red-btn" onclick="location.href='/'"><i class="fa-solid fa-house"></i> Home</button>
     </div>
     <div class="admin-options">
-      <button type="button" class="red-btn" onclick="location.href='edit?id=<%= item[:localid] %>'">Edytuj <i class="fa-solid fa-pencil"></i></button>
+      <button type="button" class="red-btn" onclick="open_editor()">Edytuj <i class="fa-solid fa-pencil"></i></button>
       <button type="button" class="red-btn" onclick="location.href='delete?id=<%= item[:localid] %>'">Usuń <i class="fa-solid fa-person-falling-burst"></i></button>
     </div>
   </div>
@@ -16,33 +16,42 @@
   </div>
   <% unless item.nil? %>
   <div class="item-info-div">
-    <%= erb :element_tab_partial, locals: {item: item} %>
-    <div class="item-description">
-      <fieldset>
-        <legend>Opis</legend>
-        <p><%= item[:description] %></p>
-      </fieldset>
-      <fieldset>
-        <legend>Nota katalogowa lub strona producenta</legend>
-        <% if !item[:datasheet].nil? %>
-        <p><% item[:datasheet].class %></p>
-          <p><a href="<%= item[:datasheet] %>" target="_blank"><i class="fa-solid fa-file-pdf"></i> Link</a></p>
-        <% end %>
-      </fieldset>
-      <% if current_user %>
-        <button type="button" name="button" class="add-item-btn"><i class="fa-solid fa-circle-plus"></i> Dodaj elementy</button>
-        <div class="adding-item-form">
-          <form class="item-form" action="/add_element" method="post">
-            <div class="input-field">
-              <label for="added_quantity">Dodaj ilość:</label>
-              <input type="text" name="added_quantity" value="">
-            </div>
-            <input type="hidden" name="item_id" value="<%= item[:localid] %>">
-            <input type="submit" value="Dodaj">
-          </form>
+    <form class="edit-form" action="edit" method="post">
+      <%= erb :element_tab_partial, locals: {item: item} %>
+      <div class="item-description">
+        <fieldset>
+          <legend>Opis</legend>
+          <p id="opis"><%= item[:description] %></p>
+        </fieldset>
+        <fieldset>
+          <legend>Nota katalogowa lub strona producenta</legend>
+          <p id="link">
+          <% if !item[:datasheet].nil? %>
+            <a href="<%= item[:datasheet] %>" target="_blank" class="datasheet"><i class="fa-solid fa-file-pdf"></i> Link</a>
+          <% end %>
+          </p>
+        </fieldset>
+        <div class="bottom-buttons">
+          <% if current_user %>
+            <button type="button" name="button" class="add-item-btn"><i class="fa-solid fa-circle-plus"></i> Dodaj elementy</button>
+          <% end %>
+          <button type="submit" class="red-btn">Zapisz <i class="fa-regular fa-floppy-disk"></i></button>
         </div>
-      <% end %>
+      </div>
+      <input type="hidden" name="id" value="<%= item[:localid] %>">
+    </form>
+    <% if current_user %>
+      <div class="adding-item-form">
+        <form class="item-form" action="/add_element" method="post">
+          <div class="input-field">
+            <label for="added_quantity">Dodaj ilość:</label>
+            <input type="text" name="added_quantity" value="">
+          </div>
+          <input type="hidden" name="item_id" value="<%= item[:localid] %>">
+          <input type="submit" value="Dodaj">
+        </form>
+      </div>
+    <% end %>
     </div>
-  </div>
   <% end %>
 </div>

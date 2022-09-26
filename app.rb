@@ -72,23 +72,6 @@ class MyServer < Sinatra::Base
     redirect '/'
   end
 
-  get '/edit' do
-    if params[:id].nil?
-      @error = "Błędny argument!"
-      @js = ["searching-js"]
-      @css = ["welcome-styles", "login-partial"]
-      erb :welcome
-    else
-      @js = ["show-element-js", "edit-element-js"]
-      @css = ["show-element-styles", "edit-styles"]
-      @item = select_item(params[:id])
-      if @item.nil?
-        @error = "Błędne ID!"
-      end
-      erb :edit_element, locals: { item: @item}
-    end
-  end
-
   get '/delete' do
     if params[:id].nil?
       @error = "Błędny argument!"
@@ -122,7 +105,7 @@ class MyServer < Sinatra::Base
         edit_item(request.params)
       end
       @item = select_item(params[:id])
-      erb :edit_element, locals: { item: @item}
+      erb :show_element, locals: { item: @item}
     end
   end
 

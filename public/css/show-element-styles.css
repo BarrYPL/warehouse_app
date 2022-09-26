@@ -26,7 +26,7 @@ fieldset *{
 }
 
 .add-item-btn,
-.item-form input[type = "submit"] {
+.adding-item-form input[type = "submit"] {
     background: #fa0200;
     color: #f1f1f1;
     border: 2px solid #fa0200;
@@ -37,13 +37,13 @@ fieldset *{
 }
 
 .add-item-btn:hover,
-.item-form input[type = "submit"]:hover {
+.adding-item-form input[type = "submit"]:hover {
   color: #fa0200;
   background: #f1f1f1;
   border: 2px solid #f1f1f1;
 }
 
-.item-form {
+.adding-item-form {
     display: flex;
     justify-content: space-between;
     margin: 10px 0px;
@@ -65,4 +65,30 @@ fieldset *{
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
+}
+
+.item-form {
+  display: contents;
+}
+
+legend i {
+  cursor: pointer;
+}
+
+.created-input {
+  border: none;
+  outline: none;
+  margin-left: 10px;
+  color: red;
+  height: 25px;
+  padding-left: 5px;
+}
+
+.bottom-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+th i {
+  cursor: pointer;
 }

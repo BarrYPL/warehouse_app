@@ -9,10 +9,10 @@
   </tr>
   <tr>
     <td>1.</td>
-    <td><%= item[:localid] %></td>
-    <td><%= item[:name] %></td>
-    <td><%= item[:value].to_human_redable %> <%= item[:unit] %></td>
-    <td><%= item[:quantity] %></td>
-    <td><%= item[:location] %></td>
+    <td><p><%= item[:localid] %></p></td>
+    <td><p class="name"><%= item[:name] %></p></td>
+    <td><p><%= item[:value].to_human_redable %> <%= item[:unit] %></p></td>
+    <td><p class="quantity"><%= item[:quantity] %></p></td>
+    <td><p class="location"><%= item[:location] %></p></td>
   </tr>
 </table>
