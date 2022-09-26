@@ -20,14 +20,14 @@
       <%= erb :element_tab_partial, locals: {item: item} %>
       <div class="item-description">
         <fieldset>
-          <legend>Opis</legend>
-          <p id="opis"><%= item[:description] %></p>
+          <legend id="opis">Opis</legend>
+          <p class="description"><%= item[:description] %></p>
         </fieldset>
         <fieldset>
-          <legend>Nota katalogowa lub strona producenta</legend>
-          <p id="link">
+          <legend id="nota">Nota katalogowa lub strona producenta</legend>
+          <p class="datasheet" id="anchor-holder">
           <% if !item[:datasheet].nil? %>
-            <a href="<%= item[:datasheet] %>" target="_blank" class="datasheet"><i class="fa-solid fa-file-pdf"></i> Link</a>
+            <a href="<%= item[:datasheet] %>" target="_blank" id="old-link"><i class="fa-solid fa-file-pdf"></i> Link</a>
           <% end %>
           </p>
         </fieldset>

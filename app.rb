@@ -96,8 +96,8 @@ class MyServer < Sinatra::Base
       @css = ["welcome-styles", "login-partial"]
       erb :welcome
     else
-      @js = ["show-element-js", "edit-element-js"]
-      @css = ["show-element-styles", "edit-styles"]
+      @js = ["show-element-js"]
+      @css = ["show-element-styles"]
       @item = select_item(params[:id])
       if @item.nil?
         @error = "Błędne ID!"

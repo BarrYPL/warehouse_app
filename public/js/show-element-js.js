@@ -1,5 +1,7 @@
 "use strict;"
 
+var editIcon = true;
+
 function show_adding_div(){
   var div = document.querySelector('.adding-item-form');
   div.style.zIndex = 0;
@@ -10,27 +12,19 @@ function start_edit(e){
   let textTarget = document.querySelector('.' + e.target.id);
   let innerText;
   let inputName;
-  let bypass = false;
-  if(!textTarget){
-    textTarget = _('anchor-holder');
-    bypass = true;
-  }
-  let tagName = textTarget.tagName;
-  switch(tagName) {
-    case "A":
+  if (textTarget == _('anchor-holder'))
+  {
+    textTarget = _('old-link');
+    if (textTarget){
       innerText = textTarget.href;
-      inputName = textTarget.className + "-input";
+    } else {
+      innerText = "";
       textTarget = _('anchor-holder');
-      break;
-    case "P":
-      innerText = textTarget.innerHTML;
-      inputName = textTarget.className + "-input";
-      break;
-    default:
-  }
-  if(bypass){
-    innerText = "";
+    }
     inputName = "datasheet-input";
+  } else {
+    inputName = textTarget.className + "-input";
+    innerText = textTarget.innerHTML;
   }
   const inputText = document.createElement('input');
   inputText.innerHTML = "";
@@ -40,21 +34,42 @@ function start_edit(e){
   textTarget.parentNode.replaceChild(inputText, textTarget);
 }
 
+function get_id_name(element){
+  let retId;
+
+  const map = {
+    'nazwa' : 'name',
+    'ilosc' : 'quantity',
+    'lokalizacja' : 'location',
+    'opis' : 'description',
+    'nota' : 'datasheet'
+  };
+
+  retId = map[element] ?? 'error';
+  return retId;
+}
+
 function open_editor(){
-  console.log("im clicked");
-  document.querySelectorAll('legend i').forEach(item => {
-    item.addEventListener('click', start_edit);
-  });
-  document.querySelectorAll('th i').forEach(item => {
-    item.addEventListener('click', start_edit);
-  });
+  if (editIcon){
+    let innerText = "";
+    let domElem;
+    const editElements = ["nazwa","ilosc","lokalizacja","opis","nota"];
+    editElements.forEach(item => {
+      domElem = _(item);
+      innerText = domElem.innerHTML + " <i class=\"fa-solid fa-pen-to-square\" id=\""+get_id_name(item)+"\"></i>"
+      domElem.innerHTML = innerText;
+    });
+    document.querySelectorAll('legend i').forEach(item => {
+      item.addEventListener('click', start_edit);
+    });
+    document.querySelectorAll('th i').forEach(item => {
+      item.addEventListener('click', start_edit);
+    });
+  }
+  editIcon = false;
 }
 
 window.addEventListener("load", function(evt){
   var btn = document.querySelector('.add-item-btn');
   if (btn) { btn.addEventListener('click', show_adding_div); }
-  const editElements = ["nazwa","ilosc","lokalizacja","opis","link"];
-  editElements.forEach(item => {
-    console.log(_(item));
-  });
 })
