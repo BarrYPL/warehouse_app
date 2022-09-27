@@ -1,4 +1,4 @@
-require_relative('app\controllers\controller')
+require_relative('app/controllers/controller')
 
 def hash_password(password)
   BCrypt::Password.create(password).to_s

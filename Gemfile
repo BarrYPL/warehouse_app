@@ -2,4 +2,10 @@
 
 source "https://rubygems.org"
 
-# gem "rails"
+gem 'sinatra/base'
+gem 'sinatra'
+gem 'bcrypt'
+gem 'sequel'
+gem 'rotp'
+gem 'digest'
+gem 'json'
