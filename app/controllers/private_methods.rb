@@ -376,3 +376,7 @@ def edit_item(editHash)
     end
   end
 end
+
+def location_serch(location)
+  return $elementsDB.where(:location => location).all
+end

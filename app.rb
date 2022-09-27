@@ -17,6 +17,7 @@ class MyServer < Sinatra::Base
     set :run            , 'true'
     set :public_folder  , 'public'
     set :views          , 'app/views'
+    set :port           , '80'
   end
 
   get '/' do
@@ -37,9 +38,14 @@ class MyServer < Sinatra::Base
   end
 
   get '/find' do
+    if request[:loc].nil?
+      results = detailed_search("")
+    else
+      results = location_serch(request[:loc])
+    end
     @js = ["searching-js", "filter-js"]
     @css = ["welcome-styles", "search-styles"]
-    results = detailed_search("")
+    p results
     erb :search, locals: { results: results }
   end
 
