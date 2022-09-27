@@ -23,15 +23,19 @@ function start_edit(e){
     }
     inputName = "datasheet-input";
   } else {
+    if (textTarget) {
     inputName = textTarget.className + "-input";
     innerText = textTarget.innerHTML;
+    }
   }
-  const inputText = document.createElement('input');
-  inputText.innerHTML = "";
-  inputText.value = innerText;
-  inputText.setAttribute('class', "created-input");
-  inputText.setAttribute('name', inputName);
-  textTarget.parentNode.replaceChild(inputText, textTarget);
+  if (textTarget){
+    const inputText = document.createElement('input');
+    inputText.innerHTML = "";
+    inputText.value = innerText;
+    inputText.setAttribute('class', "created-input");
+    inputText.setAttribute('name', inputName);
+    textTarget.parentNode.replaceChild(inputText, textTarget);
+  }
 }
 
 function get_id_name(element){
@@ -65,11 +69,22 @@ function open_editor(){
     document.querySelectorAll('th i').forEach(item => {
       item.addEventListener('click', start_edit);
     });
+    document.querySelector('.additional-tab').style.display = 'block';
   }
   editIcon = false;
 }
 
+function block_deleting(e){
+  var delLink = document.getElementById('del-button');
+  e.preventDefault();
+  if (e.target.id === delLink.id) {
+    if(window.confirm("Na pewno chcesz usunąć element?")){
+      window.location = e.currentTarget.href;
+    }
+  }
+}
+
 window.addEventListener("load", function(evt){
-  var btn = document.querySelector('.add-item-btn');
-  if (btn) { btn.addEventListener('click', show_adding_div); }
+  var delLink = _('del-button');
+  if (delLink) { delLink.addEventListener('click', block_deleting); }
 })

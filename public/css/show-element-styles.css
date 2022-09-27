@@ -1,8 +1,11 @@
 table, th, td {
-  border-bottom: 1px solid red;
   border-collapse: collapse;
   padding: 10px;
   text-align: center;
+}
+
+th, td {
+    border-bottom: 1px solid red;
 }
 
 th{
@@ -10,7 +13,7 @@ th{
 }
 
 .item-description{
-  margin-top: 30px;
+  margin-top: 20px;
 }
 
 .item-description fieldset {
@@ -78,7 +81,7 @@ legend i {
 .created-input {
   border: none;
   outline: none;
-  margin-left: 10px;
+  max-width: 100px;
   color: red;
   height: 25px;
   padding-left: 5px;
@@ -87,6 +90,11 @@ legend i {
 .bottom-buttons {
   display: flex;
   justify-content: space-between;
+}
+
+.additional-tab {
+  display: none;
+  width: 100%;
 }
 
 th i {

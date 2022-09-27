@@ -134,10 +134,6 @@ class String
   end
 end
 
-def check_non_numeric(str)
-  str !~ /\D/
-end
-
 def select_item(itemName)
   resultTab = []
   unless $elementsDB.where(Sequel.like(:localid, "#{itemName}", case_insensitive: true)).all.empty?
@@ -199,7 +195,7 @@ def detailed_search(phrase, filterElem: "", valueMin: 0, valueMax: 10**12, sort_
       @detailedArr << $elementsDB.where(Sequel.like(:name, "%#{partPhrase}%", case_insensitive: true)).or(Sequel.like(:localid, "%#{partPhrase}%", case_insensitive: true)).where(value: valueMin..valueMax).where(:elementtype => @dbFilter).order(:value).all
     end
   end
-  @detailedArr = sort_table(@detailedArr.flatten, sortDirection, @column)
+  @detailedArr = sort_table(@detailedArr.flatten.uniq, sortDirection, @column)
   return @detailedArr
 end
 
@@ -233,12 +229,15 @@ def change_quantity(item_id, added_quantity)
   unless $elementsDB.where(:localid => item_id).all.empty?
     @actualQuantity = $elementsDB.where(:localid => item_id).all[0][:quantity]
     @newQuantity = @actualQuantity + added_quantity.to_i
-    $elementsDB.where(:localid => item_id).update(quantity: @newQuantity)
+    if @newQuantity < 0
+      @error = "O kolego, za dużo to i świnia nie przeżre!"
+    else
+      $elementsDB.where(:localid => item_id).update(quantity: @newQuantity)
+    end
   end
 end
 
 def create_new_item(params={})
-  p params
   @newItemName = params[:"new-item-name"].strip
   @newTypeName = params[:"new-type-name"].strip
   @newItemQuantity = params[:"new-item-quantity"].to_f.to_i
@@ -357,16 +356,23 @@ def map_column_name(name)
     "location-input" => "location",
     "description-input" => "description",
     "datasheet-input" => "datasheet",
-    "id" => "localid"
+    "id" => "localid",
+    "type-input" => "elementtype",
+    "voltage-input" => "maxvoltage",
+    "power-input" => "powerdissipation",
+    "unit-input" => "unit"
   }
   return names[name]
 end
 
 def edit_item(editHash)
-  p editHash
   @id = @item[:localid]
   editHash.delete("id")
   editHash.keys.each do |key|
-    $elementsDB.where(:localid => @id).update(map_column_name(key) => editHash[key])
+    if map_column_name(key) == "quantity" && editHash[key].to_i < 0
+      @error = "Ilość nie może być ujemna!"
+    else
+      $elementsDB.where(:localid => @id).update(map_column_name(key) => editHash[key])
+    end
   end
 end

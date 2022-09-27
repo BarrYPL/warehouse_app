@@ -19,7 +19,7 @@
       <form class="filter-form" action="find" method="post">
         <div class="filter-sets">
           <fieldset>
-            <legend><input class="radio-table-filter" type="checkbox" id="table-filter-checkbox" name="table-filter">Filtruj Elementy</legend>
+            <legend><input class="radio-type-filter" type="checkbox" id="table-filter-checkbox" name="table-filter">Filtruj Elementy</legend>
             <%= erb :filter_partial %>
           </fieldset>
           <fieldset>
@@ -82,7 +82,7 @@
       </div>
     <% end %>
   </div>
-  <% if results.empty? %>
+  <% if results.empty? && current_user %>
   <div class="add-element-div">
     <button type="button" name="button" class="red-btn" id="add-element-btn" onclick="location.href='/add-element'"><i class="fa-solid fa-circle-plus"></i> Dodaj element</button>
   </div>
@@ -104,7 +104,7 @@
     loadFilters();
     const tableBox = _('table-filter-checkbox');
     tableBox.checked = true;
-    document.querySelectorAll('.radio-table-filter input').forEach(item => {
+    document.querySelectorAll('.radio-type-filter input').forEach(item => {
       item.disabled = false;
     })
   </script>

@@ -81,12 +81,16 @@ class MyServer < Sinatra::Base
       if @item.nil?
         @error = "Błędne ID!"
       else
-        delete_item(params[:id])
+        if current_user
+          delete_item(params[:id])
+        else
+          @error = "Tylko dla zalogowanych użytkowników!"
+        end
       end
-      @js = ["searching-js"]
-      @css = ["welcome-styles", "login-partial"]
-      erb :welcome
     end
+    @js = ["searching-js"]
+    @css = ["welcome-styles", "login-partial"]
+    erb :welcome
   end
 
   post '/edit' do
@@ -112,7 +116,7 @@ class MyServer < Sinatra::Base
   post '/add_element' do
     @js = ["show-element-js"]
     @css = ["show-element-styles"]
-    if (check_non_numeric(request[:added_quantity]) && request[:added_quantity].to_i > 0)
+    if (request[:added_quantity].to_i != 0)
       change_quantity(request[:item_id], request[:added_quantity])
     else
       @error = "Wprowadzono niewłaściwą wartość!"
