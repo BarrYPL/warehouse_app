@@ -18,6 +18,7 @@ class MyServer < Sinatra::Base
     set :public_folder  , 'public'
     set :views          , 'app/views'
     set :port           , '80'
+    set :bind           , '0.0.0.0'
   end
 
   get '/' do

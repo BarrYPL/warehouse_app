@@ -1,7 +1,6 @@
 require 'sinatra/base'
 require 'sinatra'
 require 'bcrypt'
-require 'sinatra/reloader'
 require 'sequel'
 require 'rotp'
 require 'digest'
