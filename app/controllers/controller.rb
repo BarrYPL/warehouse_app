@@ -1,4 +1,3 @@
-require 'sinatra/base'
 require 'sinatra'
 require 'bcrypt'
 require 'sequel'
