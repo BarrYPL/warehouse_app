@@ -238,6 +238,7 @@ def change_quantity(item_id, added_quantity)
 end
 
 def create_new_item(params={})
+  p params
   @newItemName = params[:"new-item-name"].strip
   @newTypeName = params[:"new-type-name"].strip
   @newItemQuantity = params[:"new-item-quantity"].to_f.to_i
@@ -261,7 +262,7 @@ def create_new_item(params={})
     return
   end
   unless params[:element].nil?
-    @newTypeName = params[:element].gsub!(" ","_")
+    @newTypeName = params[:element]
   end
   if @newItemName == "" ||
     @newItemName.nil?
@@ -321,7 +322,11 @@ def create_new_item(params={})
   if @newItemDescription.empty? then @newItemDescription = nil end
   if @newItemDatasheet.empty? then @newItemDatasheet = nil end
   if @newItemLocation.empty? then @newItemLocation = nil end
-  @newItemUnit =  map_unit_name(@newTypeName)
+  if params[:"unit-select"] == "checked"
+    @newItemUnit =  map_unit_name(@newTypeName)
+  else
+    @newItemUnit = params[:"new-item-unit"]
+  end
   if @newItemUnit == "" ||
     @newItemUnit.nil?
     @newItemUnit = nil
@@ -336,7 +341,7 @@ def create_new_item(params={})
     datasheet: @newItemDatasheet,
     unit: @newItemUnit,
     maxvoltage: nil,
-    elementtype: @newTypeName)
+    elementtype: @newTypeName.gsub(" ","_"))
   return @newLocalId
 end
 
