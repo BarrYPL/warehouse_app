@@ -1,4 +1,4 @@
-DB = Sequel.sqlite 'db\database.db'
+DB = Sequel.sqlite 'db/database.db'
 
 $usersDB = DB[:uzytkownicy]
 $elementsDB = DB[:elementy]
