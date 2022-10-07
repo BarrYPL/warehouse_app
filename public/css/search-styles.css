@@ -186,4 +186,8 @@ div.limiting-filters{
       margin-bottom: 25px;
       font-size: 0.7em;
     }
+
+    .arrow-up {
+      bottom: 5%;
+    }
 }

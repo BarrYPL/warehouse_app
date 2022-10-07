@@ -22,11 +22,11 @@ a {
   color: #f1f1f1;
 }
 
-a i{
+a i {
   padding-left: 5px;
 }
 
-.section-title{
+.section-title {
   padding: 10px 0px 10px 0px;
 }
 
@@ -137,9 +137,7 @@ footer {
   width: fit-content;
 }
 
-.red-btn{
-  top: 10px;
-  left: 10px;
+.red-btn {
   color: #f1f1f1;
   padding: 5px;
   border: solid 2px #fa0200;
@@ -187,6 +185,7 @@ footer {
 
 ::-webkit-scrollbar {
   width: 5px;
+  height: 4px;
 }
 
 ::-webkit-scrollbar-track {
@@ -196,7 +195,7 @@ footer {
 
 ::-webkit-scrollbar-thumb {
   background: #fa0200;
-  border-radius: 10px;
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -212,15 +211,15 @@ footer {
   padding: 10px;
 }
 
-#menu-link{
+#menu-link {
   text-align: left;
 }
 
-#return-btn{
+#return-btn {
   position: absolute;
 }
 
-#home{
+#home {
   padding: 10%;
   height: 100vh;
   min-height: 500px;
@@ -233,7 +232,7 @@ footer {
   max-width: 20px;
 }
 
-#home .inner-width{
+#home .inner-width {
   position: relative;
   background: rgba(12,12,12,0.6);
   color: #f1f1f1;
@@ -243,4 +242,10 @@ footer {
   flex-direction: column;
   max-width: 800px;
   margin: auto;
+}
+
+@media screen and (max-width: 600px){
+  footer {
+    display: none;
+  }
 }

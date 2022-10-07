@@ -64,9 +64,11 @@ fieldset *{
 .item-header {
   position: absolute;
   padding: 10px;
+  top: 0px;
+  right: 0px;
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
+  flex-direction: row-reverse;
   width: 100%;
 }
 
@@ -99,4 +101,59 @@ legend i {
 
 th i {
   cursor: pointer;
+}
+
+.add-btn {
+  display: none;
+}
+
+@media screen and (max-width: 600px){
+  *{
+    font-size: 0.97em;
+  }
+
+  footer {
+    display: none;
+  }
+
+  .basic-options {
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    padding: 0px;
+    display: flex;
+    flex-direction: row-reverse;
+  }
+
+  #ret-btn,
+  #home-btn {
+    width: 50vw;
+    height: 50px;
+    border-radius: 0px;
+  }
+
+  .item-info-div {
+    max-width: 90%;
+    margin-top: 10px;
+  }
+
+  .add-btn {
+    display: block;
+    border: none;
+    border-radius: 50%;
+    position: absolute;
+    right: 50%;
+    transform: translate(50%,-50%);
+    padding: 15px;
+    background: #fa0200;
+    color: #f1f1f1;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  table,th,td {
+    padding: 5px;
+  }
 }
