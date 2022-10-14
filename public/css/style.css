@@ -90,7 +90,7 @@ footer {
 }
 
 .menu-block h1 {
-  padding: 20px 0px 0px 20px;
+  padding: 10px;
 }
 
 .log-text {
@@ -206,6 +206,11 @@ footer {
   background: #b30000;
 }
 
+.menu-block h1:hover {
+  color: #fa0200;
+  background: #f1f1f1;
+}
+
 #miche {
   max-height: inherit;
   max-width: 625px;
@@ -254,5 +259,9 @@ footer {
 @media screen and (max-width: 600px){
   footer {
     display: none;
+  }
+
+  #home {
+    padding: 10% 10px 10px 10px;
   }
 }
