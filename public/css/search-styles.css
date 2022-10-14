@@ -55,6 +55,7 @@ td {
 
 .filters {
   display: none;
+  overflow: auto;
 }
 
 fieldset {
@@ -185,6 +186,7 @@ div.limiting-filters{
     .solid-results-div {
       margin-bottom: 25px;
       font-size: 0.7em;
+      padding: 10px 0px;
     }
 
     .arrow-up {

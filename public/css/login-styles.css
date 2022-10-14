@@ -89,6 +89,10 @@ z-index: 1;
     border-radius: 10px 0px 0px 10px;
 }
 
+.menu-block a h1 {
+  text-align: left;
+}
+
 @media screen and (max-width: 600px){
   .LoginWindow{
     width: 90%;

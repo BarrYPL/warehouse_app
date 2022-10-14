@@ -70,6 +70,7 @@ fieldset *{
   justify-content: space-between;
   flex-direction: row-reverse;
   width: 100%;
+  margin-top: 15px;
 }
 
 .item-form {
@@ -134,7 +135,7 @@ th i {
 
   .item-info-div {
     max-width: 90%;
-    margin-top: 10px;
+    margin-top: 25px;
   }
 
   .add-btn {

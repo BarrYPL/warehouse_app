@@ -52,7 +52,7 @@ var inactivityTime = function () {
 window.addEventListener("load", function(evt){
   inactivityTime();
   document.onclick = function(e){
-    if ((e.target.id != 'menu-icon') && (e.target.className != 'menu-block')){
+    if (!((e.target.id == 'menu-icon') || (e.target.className == 'menu-block'))){
       hideMenu();
     }
   }

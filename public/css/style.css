@@ -18,6 +18,10 @@ body {
   background-attachment: fixed;
 }
 
+h1 {
+  text-transform: uppercase;
+}
+
 a {
   color: #f1f1f1;
 }
@@ -217,6 +221,9 @@ footer {
 
 #return-btn {
   position: absolute;
+  left: 0px;
+  margin: 10px 10px;
+  top: 0px;
 }
 
 #home {

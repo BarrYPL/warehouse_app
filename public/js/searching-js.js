@@ -33,14 +33,12 @@ function updateSearchingSuggestions(tab){
 }
 
 function updateValue(e) {
-  console.log("Value has beed updated");
   let post_data = e.target.value;
   const xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function() {
     if (xhr.readyState == XMLHttpRequest.DONE) {
       const obj = JSON.parse(xhr.responseText);
       let terms = [];
-      console.log(obj);
       obj.forEach(obj => {
           Object.entries(obj).forEach(([key, value]) => {
             terms.push(value);
@@ -73,12 +71,22 @@ function suggestionsDivAppear(x){
   }
 }
 
+function hideMenu(){
+  const menuButton = $('#menu-icon');
+  _('menu-div').style.transform = 'rotate(0deg)';
+  _('pedoEasterEgg').style.transform = 'rotate(0deg)';
+  menuButton.attr('onclick', 'showMenu()');
+}
+
 window.addEventListener("load", function(evt) {
   const input = _('search-input');
   input.addEventListener('input', updateValue);
   document.onclick = function(e){
     if (e.target.id != 'search-input'){
       suggestionsDivAppear(false);
+    }
+    if (!((e.target.id == 'menu-icon') || (e.target.className == 'menu-block'))){
+      hideMenu();
     }
   }
 })

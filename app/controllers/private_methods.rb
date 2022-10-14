@@ -302,7 +302,7 @@ def create_new_item(params={})
     @newLocalId = @newItemName[0..8].gsub(' ','').downcase
     if @newLocalId.id_exists?
       loop do
-        o = [('a'..'z'), ('A'..'Z'), ('0'..'9')].map(&:to_a).flatten
+        o = [('a'..'z'), ('0'..'9')].map(&:to_a).flatten
         @newLocalId = @newLocalId + (0...1).map { o[rand(o.length)] }.join
         break if !@newLocalId.id_exists?
       end

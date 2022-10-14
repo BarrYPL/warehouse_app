@@ -54,7 +54,11 @@ class MyServer < Sinatra::Base
     @js = ["add-element-js"]
     @css = ["add-element-styles"]
     @item = select_item(request[:id])
-    erb :add_element, locals: { item: @item}
+    if current_user
+      erb :add_element, locals: { item: @item}
+    else
+      redirect '/'
+    end
   end
 
   get '/show' do
