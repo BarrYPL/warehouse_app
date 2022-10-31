@@ -4,7 +4,7 @@ class AutomaticTest < Test::Unit::TestCase
 
 def setup
   @driver = Selenium::WebDriver.for :firefox
-  @url = "localhost:4567"
+  @url = "http://localhost"
   @driver.manage.timeouts.implicit_wait = 30;
  end
 

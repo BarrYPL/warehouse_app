@@ -40,6 +40,10 @@ class String
   end
 end
 
+class Item
+  attr_accessor :name, :type, :quantity, :value, :description, :datasheet, :location, :unit, :localid, :powerdissipation, :maxvoltage
+end
+
 def formati_si(size)
   scale = 1000;
   ndx = 1
@@ -139,6 +143,9 @@ def select_item(itemName)
   unless $elementsDB.where(Sequel.like(:localid, "#{itemName}", case_insensitive: true)).all.empty?
     @record = $elementsDB.where(Sequel.like(:localid, "#{itemName}", case_insensitive: true)).all[0]
   end
+  unless $elementsDB.where(Sequel.like(:id, "#{itemName}", case_insensitive: true)).all.empty?
+    @record = $elementsDB.where(Sequel.like(:id, "#{itemName}", case_insensitive: true)).all[0]
+  end
   return @record
 end
 
@@ -237,7 +244,7 @@ def change_quantity(item_id, added_quantity)
   end
 end
 
-def create_new_item(params={})
+def create_new_item_object(params={})
   p params
   @newItemName = params[:"new-item-name"].strip
   @newTypeName = params[:"new-type-name"].strip
@@ -286,19 +293,8 @@ def create_new_item(params={})
     @error = "Ilość nie może być ujemna!"
     return
   end
-  if params[:IdSelect].nil?
-    unless params[:"new-item-localid"].nil? ||
-      params[:"new-item-localid"] == ""
-      @newLocalId = params[:"new-item-localid"]
-      if @newLocalId.id_exists?
-        @error = "Istnieje już element o podanym ID!"
-        return
-      end
-    else
-      @error = 'Zaznacz "AutoID", jeśli nie chcesz wpisywać!'
-      return
-    end
-  else
+  if params[:"new-item-localid"].nil? ||
+    params[:"new-item-localid"] == ""
     @newLocalId = @newItemName[0..8].gsub(' ','').downcase
     if @newLocalId.id_exists?
       loop do
@@ -306,6 +302,12 @@ def create_new_item(params={})
         @newLocalId = @newLocalId + (0...1).map { o[rand(o.length)] }.join
         break if !@newLocalId.id_exists?
       end
+    end
+  else
+    @newLocalId = params[:"new-item-localid"]
+    if @newLocalId.id_exists?
+      @error = "Istnieje już element o podanym ID!"
+      return
     end
   end
   @newItemValue.gsub!(',','.')
@@ -322,7 +324,7 @@ def create_new_item(params={})
   if @newItemDescription.empty? then @newItemDescription = nil end
   if @newItemDatasheet.empty? then @newItemDatasheet = nil end
   if @newItemLocation.empty? then @newItemLocation = nil end
-  if params[:"unit-select"] == "checked"
+  unless params[:"new-item-unit"]
     @newItemUnit =  map_unit_name(@newTypeName)
   else
     @newItemUnit = params[:"new-item-unit"]
@@ -331,6 +333,20 @@ def create_new_item(params={})
     @newItemUnit.nil?
     @newItemUnit = nil
   end
+  newItemObj = Item.new()
+  newItemObj.name = @newItemName
+  newItemObj.localid = @newLocalId
+  newItemObj.description = @newItemDescription
+  newItemObj.value = @newItemValue
+  newItemObj.quantity = @newItemQuantity
+  newItemObj.powerdissipation = nil
+  newItemObj.location = @newItemLocation
+  newItemObj.datasheet = @newItemDatasheet
+  newItemObj.unit = @newItemUnit
+  newItemObj.maxvoltage = nil
+  newItemObj.type = @newTypeName.gsub(" ","_")
+  save_new_item(newItemObj)
+
   $elementsDB.insert(localid: @newLocalId,
     name: @newItemName,
     description: @newItemDescription,
@@ -342,7 +358,11 @@ def create_new_item(params={})
     unit: @newItemUnit,
     maxvoltage: nil,
     elementtype: @newTypeName.gsub(" ","_"))
-  return @newLocalId
+  return $elementsDB.where(localid: @newLocalId).all[0][:id]
+end
+
+def save_new_item(item)
+
 end
 
 def map_unit_name(type)

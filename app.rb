@@ -9,6 +9,7 @@ def test_password(password, hash)
 end
 
 class MyServer < Sinatra::Base
+  register Sinatra::Namespace
 
   enable :sessions
   enable :inline_templates
@@ -104,7 +105,8 @@ class MyServer < Sinatra::Base
     erb :welcome
   end
 
-  post '/edit' do
+  post '/edit' do\
+    p params
     if params[:id].nil?
       @error = "Błędny argument!"
       @js = ["searching-js"]
@@ -213,12 +215,76 @@ class MyServer < Sinatra::Base
     @js = ["add-element-js"]
     @css = ["add-element-styles"]
     @item = select_item(request[:id])
-    @linkId = create_new_item(params)
+    @linkId = create_new_item_object(params)
     if @error
       erb :add_element, locals: { item: @item }
     else
       redirect "show?item=#{@linkId}"
     end
+  end
+
+  namespace '/api/v1' do
+    before do
+      content_type 'application/json'
+    end
+
+    helpers do
+      def halt_if_not_found!
+        halt 403, {'Content-Type' => 'application/json'}, { message: 'Item Not Found' }.to_json unless item
+      end
+
+      def item
+        @item ||= select_item(params[:id])
+      end
+
+      def json_params
+        begin
+          JSON.parse(request.body.read)
+        rescue
+          halt 400, { message:'Invalid JSON' }.to_json
+        end
+      end
+    end
+
+    get '/items' do
+      @name = params[:name] ? params[:name] : ""
+      @items = detailed_search(@name)
+      return @items.uniq.to_json
+    end
+
+    get '/items/:id' do
+      halt_if_not_found!
+      return @item.to_json
+    end
+
+    post '/items' do
+      @linkId = create_new_item_object(params)
+      if @linkId
+        response.headers['Location'] = "/api/v1/books/#{@linkId}"
+        status 201
+      else
+        status 422
+      end
+    end
+
+    patch '/items/:id' do
+      @item = select_item(params[:id])
+      halt(404, { message:'Item Not Found'}.to_json) unless @item
+      if @item
+        edit_item(request.params)
+        @item = select_item(params[:id])
+        return @item.to_json
+      else
+        status 422
+      end
+    end
+
+    delete '/items/:id' do
+      @item = select_item(params[:id])
+      delete_item(params[:id]) if @item
+      status 204
+    end
+
   end
 
   helpers do
