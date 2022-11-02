@@ -249,6 +249,9 @@ class MyServer < Sinatra::Base
     get '/items' do
       @name = params[:name] ? params[:name] : ""
       @items = detailed_search(@name)
+      if @items.length == 0
+        @items = [{ message: 'Item Not Found'}]
+      end
       return @items.uniq.to_json
     end
 
@@ -283,6 +286,29 @@ class MyServer < Sinatra::Base
       @item = select_item(params[:id])
       delete_item(params[:id]) if @item
       status 204
+    end
+
+    get '/quick-find' do
+      p "wtf"
+      if params[:phrase] == nil || params[:phrase].gsub(" ","") == ""
+        @phrase = "%"
+      else
+        @phrase = params[:phrase]
+      end
+      if params[:phrase].downcase == "rafe"
+        p '[{"":"<image src=\"images/easters/rafe.png\" alt=\"error\" id=\"easter-egg\"></image>"}]'
+      else
+        @suggestionsArr = find_querys(@phrase)
+        @suggestionsArr.uniq!
+        if !@suggestionsArr.empty?
+          @suggestionsArr.sort_by!(&:values)
+        end
+        if @suggestionsArr.length < 9
+          @suggestionsArr = find_querys(@phrase, false)
+          sort_by_first_char(@suggestionsArr, @phrase)
+        end
+        return @suggestionsArr.uniq[0..9].to_json
+      end
     end
 
   end
