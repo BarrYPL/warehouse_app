@@ -10,6 +10,10 @@ function _(el){
 function updateInput(e){
   let input_data = e.target.innerHTML;
   let input = _('search-input');
+  if (Object.keys(input_data).length === 0)
+  {
+    input_data = e.target.alt;
+  }
   input.value = input_data;
   updateSearchingSuggestions([]);
 }

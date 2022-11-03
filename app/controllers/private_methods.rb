@@ -40,10 +40,6 @@ class String
   end
 end
 
-class Item
-  attr_accessor :name, :type, :quantity, :value, :description, :datasheet, :location, :unit, :localid, :powerdissipation, :maxvoltage
-end
-
 def formati_si(size)
   scale = 1000;
   ndx = 1
@@ -333,19 +329,6 @@ def create_new_item_object(params={})
     @newItemUnit.nil?
     @newItemUnit = nil
   end
-  newItemObj = Item.new()
-  newItemObj.name = @newItemName
-  newItemObj.localid = @newLocalId
-  newItemObj.description = @newItemDescription
-  newItemObj.value = @newItemValue
-  newItemObj.quantity = @newItemQuantity
-  newItemObj.powerdissipation = nil
-  newItemObj.location = @newItemLocation
-  newItemObj.datasheet = @newItemDatasheet
-  newItemObj.unit = @newItemUnit
-  newItemObj.maxvoltage = nil
-  newItemObj.type = @newTypeName.gsub(" ","_")
-  save_new_item(newItemObj)
 
   $elementsDB.insert(localid: @newLocalId,
     name: @newItemName,
@@ -359,10 +342,6 @@ def create_new_item_object(params={})
     maxvoltage: nil,
     elementtype: @newTypeName.gsub(" ","_"))
   return $elementsDB.where(localid: @newLocalId).all[0][:id]
-end
-
-def save_new_item(item)
-
 end
 
 def map_unit_name(type)

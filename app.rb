@@ -20,6 +20,7 @@ class MyServer < Sinatra::Base
     set :views          , 'app/views'
     set :port           , '80'
     set :bind           , '0.0.0.0'
+    set :show_exceptions, 'true' #Those are errors
   end
 
   get '/' do
@@ -196,7 +197,7 @@ class MyServer < Sinatra::Base
       @phrase = params[:phrase]
     end
     if params[:phrase].downcase == "rafe"
-      p '[{"":"<image src=\"images/easters/rafe.png\" alt=\"error\" id=\"easter-egg\"></image>"}]'
+      p '[{"name":"<image src=\"images/easters/rafe.png\" alt=\"Rafe pedalarz xD\" id=\"easter-egg\"></image>"}]'
     else
       @suggestionsArr = find_querys(@phrase)
       @suggestionsArr.uniq!
@@ -230,7 +231,7 @@ class MyServer < Sinatra::Base
 
     helpers do
       def halt_if_not_found!
-        halt 403, {'Content-Type' => 'application/json'}, { message: 'Item Not Found' }.to_json unless item
+        halt 402, {'Content-Type' => 'application/json'}, { message: 'Item Not Found' }.to_json unless item
       end
 
       def item
@@ -263,7 +264,7 @@ class MyServer < Sinatra::Base
     post '/items' do
       @linkId = create_new_item_object(params)
       if @linkId
-        response.headers['Location'] = "/api/v1/books/#{@linkId}"
+        response.headers['Location'] = "/api/v1/items/#{@linkId}"
         status 201
       else
         status 422
@@ -271,6 +272,7 @@ class MyServer < Sinatra::Base
     end
 
     patch '/items/:id' do
+      p params
       @item = select_item(params[:id])
       halt(404, { message:'Item Not Found'}.to_json) unless @item
       if @item
@@ -283,7 +285,7 @@ class MyServer < Sinatra::Base
     end
 
     delete '/items/:id' do
-      @item = select_item(params[:id])
+      halt_if_not_found!
       delete_item(params[:id]) if @item
       status 204
     end
@@ -296,7 +298,7 @@ class MyServer < Sinatra::Base
         @phrase = params[:phrase]
       end
       if params[:phrase].downcase == "rafe"
-        p '[{"":"<image src=\"images/easters/rafe.png\" alt=\"error\" id=\"easter-egg\"></image>"}]'
+        p '[{"name":"<image src=\"images/easters/rafe.png\" alt=\"Rafe pedalarz xD\" id=\"easter-egg\"></image>"}]'
       else
         @suggestionsArr = find_querys(@phrase)
         @suggestionsArr.uniq!
