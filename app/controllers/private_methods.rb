@@ -135,12 +135,16 @@ class String
 end
 
 def select_item(itemName)
-  resultTab = []
-  unless $elementsDB.where(Sequel.like(:localid, "#{itemName}", case_insensitive: true)).all.empty?
+  @first_search = $elementsDB.where(Sequel.like(:localid, "#{itemName}", case_insensitive: true)).all
+  unless @first_serch.empty?
     @record = $elementsDB.where(Sequel.like(:localid, "#{itemName}", case_insensitive: true)).all[0]
   end
-  unless $elementsDB.where(Sequel.like(:id, "#{itemName}", case_insensitive: true)).all.empty?
+  @second_search = $elementsDB.where(Sequel.like(:id, "#{itemName}", case_insensitive: true)).all
+  unless @second_search.empty?
     @record = $elementsDB.where(Sequel.like(:id, "#{itemName}", case_insensitive: true)).all[0]
+  end
+  if @first_serch.empty? && @second_search.empty?
+    record = []
   end
   return @record
 end
@@ -234,9 +238,11 @@ def change_quantity(item_id, added_quantity)
     @newQuantity = @actualQuantity + added_quantity.to_i
     if @newQuantity < 0
       @error = "O kolego, za dużo to i świnia nie przeżre!"
+      return {error: @error}
     else
-      $elementsDB.where(:localid => item_id).update(quantity: @newQuantity)
+      $elementsDB.where(:localid => item_id).update(:quantity => @newQuantity)
     end
+    return select_item(item_id)
   end
 end
 
@@ -244,25 +250,25 @@ def create_new_item_object(params={})
   p params
   @newItemName = params[:"new-item-name"].strip
   @newTypeName = params[:"new-type-name"].strip
-  @newItemQuantity = params[:"new-item-quantity"].to_f.to_i
+  @newItemQuantity = params[:"new-item-quantity"]
   @newItemValue = params[:"new-item-value"].strip
   @newItemDescription = params[:"new-item-description"].strip
   @newItemDatasheet = params[:"new-item-datasheet"].strip
   @newItemLocation = params[:"new-item-location"].strip
   @newItemUnit = params[:"new-item-unit"].strip
   unless params[:"new-item-checkbox"].nil?
-    if @newTypeName == ""
+    if @newTypeName == "" || @newTypeName.nil?
       @error = "Nazwa typu nie może być pusta!"
-      return
+      return {error: @error}
     end
     if @newTypeName.match(/\A[[:alpha:][:blank:]]+\z/).nil?
       @error = "Nazwa typu może składać się tylko z małych znaków a-z i spacji!"
-      return
+      return {error: @error}
     end
   end
   if params[:element].nil? && params[:"new-item-checkbox"].nil?
     @error = "Wybierz rodzaj!"
-    return
+    return {error: @error}
   end
   unless params[:element].nil?
     @newTypeName = params[:element]
@@ -270,24 +276,26 @@ def create_new_item_object(params={})
   if @newItemName == "" ||
     @newItemName.nil?
     @error = "Nazwa elementu nie może być pusta!"
-    return
+    return {error: @error}
+  end
+  if !@newItemName.match?(/[a-zA-Z]/)
+    @error = "Nazwa musi zawierać przynajmniej jedną literę!"
+    return {error: @error}
   end
   if @newItemName.length > 30 ||
     @newTypeName.length > 30
-    @error = "Nazwa nie może być dłuższa niż 30 znaków."
-    return
-  end
-  if @newItemQuantity == ""
-    @error = "Ilość nie może być pusta!"
-    return
+    @error = "Nazwa nie może być dłuższa niż 30 znaków!"
+    return {error: @error}
   end
   if @newItemQuantity.to_s.match?(/[:alpha]/)
-    @error = "W tym polu ilość mogą znajdować się tylko cyfry."
-    return
+    @error = "W tym polu ilość mogą znajdować się tylko cyfry!"
+    return {error: @error}
+  else
+    @newItemQuantity = @newItemQuantity.to_f.to_i
   end
   if @newItemQuantity.to_i < 0
     @error = "Ilość nie może być ujemna!"
-    return
+    return {error: @error}
   end
   if params[:"new-item-localid"].nil? ||
     params[:"new-item-localid"] == ""
@@ -303,7 +311,7 @@ def create_new_item_object(params={})
     @newLocalId = params[:"new-item-localid"]
     if @newLocalId.id_exists?
       @error = "Istnieje już element o podanym ID!"
-      return
+      return {error: @error}
     end
   end
   @newItemValue.gsub!(',','.')
@@ -315,7 +323,7 @@ def create_new_item_object(params={})
   end
   if @newItemValue < 0
     @error = "Wartość nie może być mniejsza od 0!"
-    return
+    return {error: @error}
   end
   if @newItemDescription.empty? then @newItemDescription = nil end
   if @newItemDatasheet.empty? then @newItemDatasheet = nil end
@@ -375,8 +383,10 @@ def edit_item(editHash)
   editHash.keys.each do |key|
     if map_column_name(key) == "quantity" && editHash[key].to_i < 0
       @error = "Ilość nie może być ujemna!"
+      return {error: "Ilość nie może być ujemna!"}
     else
       $elementsDB.where(:localid => @id).update(map_column_name(key) => editHash[key])
+      return $elementsDB.where(:localid => @id).all[0][:id]
     end
   end
 end

@@ -231,7 +231,7 @@ class MyServer < Sinatra::Base
 
     helpers do
       def halt_if_not_found!
-        halt 402, {'Content-Type' => 'application/json'}, { message: 'Item Not Found' }.to_json unless item
+        halt 402, {'Content-Type' => 'application/json'}, { error: 'Item Not Found' }.to_json unless item
       end
 
       def item
@@ -242,7 +242,7 @@ class MyServer < Sinatra::Base
         begin
           JSON.parse(request.body.read)
         rescue
-          halt 400, { message:'Invalid JSON' }.to_json
+          halt 400, { error:'Invalid JSON' }.to_json
         end
       end
     end
@@ -251,7 +251,7 @@ class MyServer < Sinatra::Base
       @name = params[:name] ? params[:name] : ""
       @items = detailed_search(@name)
       if @items.length == 0
-        @items = [{ message: 'Item Not Found'}]
+        @items = [{ error: 'Item Not Found'}]
       end
       return @items.uniq.to_json
     end
@@ -263,25 +263,40 @@ class MyServer < Sinatra::Base
 
     post '/items' do
       @linkId = create_new_item_object(params)
-      if @linkId
+      if @linkId.is_a? Numeric
         response.headers['Location'] = "/api/v1/items/#{@linkId}"
         status 201
+      else
+        halt(422, @linkId.to_json)
+      end
+    end
+
+    patch '/items/:id' do
+      @item = select_item(params[:id])
+      halt(404, { error:'Item Not Found'}.to_json) unless @item
+      if @item
+        itemID = edit_item(request.params)
+        @item = select_item(itemID)
+        @item = @item.nil? ? itemID : @item
+        return @item.to_json
       else
         status 422
       end
     end
 
-    patch '/items/:id' do
-      p params
-      @item = select_item(params[:id])
-      halt(404, { message:'Item Not Found'}.to_json) unless @item
-      if @item
-        edit_item(request.params)
-        @item = select_item(params[:id])
-        return @item.to_json
-      else
-        status 422
+    post '/add_element' do
+      @item = select_item(request[:item_id])
+      if @item.nil?
+        @error = "Błędne ID!"
+        return {error: @error}.to_json
       end
+      if (request[:added_quantity].to_i != 0)
+        @item = change_quantity(request[:item_id], request[:added_quantity])
+      else
+        @error = "Wprowadzono niewłaściwą wartość!"
+        return {error: @error}.to_json
+      end
+      return @item.to_json
     end
 
     delete '/items/:id' do
@@ -291,7 +306,6 @@ class MyServer < Sinatra::Base
     end
 
     get '/quick-find' do
-      p "wtf"
       if params[:phrase] == nil || params[:phrase].gsub(" ","") == ""
         @phrase = "%"
       else
