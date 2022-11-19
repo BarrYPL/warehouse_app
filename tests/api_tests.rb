@@ -238,14 +238,69 @@ class TestWarehouseApi < Test::Unit::TestCase
       $hash = JSON.parse(response.body)
       assert_equal(4000.0, $hash["value"])
 
-      #response = RestClient.patch $url, {"name-input" => "item2"}
-      #$hash = JSON.parse(response.body)
-      #assert_equal("item2", $hash["name"])
+      response = RestClient.patch $url, {"name-input" => "item2"}
+      $hash = JSON.parse(response.body)
+      assert_equal("item2", $hash["name"])
 
       #deleting item
       @id = JSON.parse(response.body)["localid"]
       $url = $url.match(/^(.*?).*items\//).match(0)
       response = RestClient.delete $url + @id
       assert_equal(204, response.code)
+   end
+
+   #checking for proper working of all sufixes
+   def tests_of_all_types_numbers
+     $url = "127.0.0.1/api/v1/items"
+     #Add new item value 4M
+     response = RestClient.post $url, {"element" => "testowy_typ", "new-item-name" => "test1", "new_item_quantity" => "1", "new-item-value" => "4M"}
+     $url = response.headers[:location] #url for the next request
+     assert_equal(201, response.code)
+
+     #Check item value
+     response = RestClient.get $url
+     $hash = JSON.parse(response.body)
+     assert_equal(4000000.0, $hash["value"])
+
+     #deleting item
+     @id = JSON.parse(response.body)["localid"]
+     $url = $url.match(/^(.*?).*items\//).match(0)
+     response = RestClient.delete $url + @id
+     assert_equal(204, response.code)
+
+     $url = "127.0.0.1/api/v1/items"
+     #Add new item value 4G
+     response = RestClient.post $url, {"element" => "testowy_typ", "new-item-name" => "test1", "new_item_quantity" => "1", "new-item-value" => "4G"}
+     $url = response.headers[:location] #url for the next request
+     assert_equal(201, response.code)
+
+     #Check item value
+     response = RestClient.get $url
+     $hash = JSON.parse(response.body)
+     assert_equal(4000000000.0, $hash["value"])
+
+     #deleting item
+     @id = JSON.parse(response.body)["localid"]
+     $url = $url.match(/^(.*?).*items\//).match(0)
+     response = RestClient.delete $url + @id
+     assert_equal(204, response.code)
+
+     $url = "127.0.0.1/api/v1/items"
+     #Add new item value 4G
+     response = RestClient.post $url, {"element" => "testowy_typ", "new-item-name" => "test1", "new_item_quantity" => "1", "new-item-value" => "4T"}
+     $url = response.headers[:location] #url for the next request
+     assert_equal(201, response.code)
+
+     #Here we have failure need fo fix that later!
+     #Check item value
+     response = RestClient.get $url
+     $hash = JSON.parse(response.body)
+     assert_equal(4000000000000.0, $hash["value"])
+
+     #deleting item
+     @id = JSON.parse(response.body)["localid"]
+     $url = $url.match(/^(.*?).*items\//).match(0)
+     response = RestClient.delete $url + @id
+     assert_equal(204, response.code)
    end
 end
