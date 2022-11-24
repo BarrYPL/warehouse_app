@@ -52,6 +52,7 @@
         </div>
         <input type="hidden" name="input-value" value="<%= @inputVal %>" id="input-value-hidden">
         <div class="filter-buttons">
+          <input type="button" class="delete-multiple-items" id="delete-button" value="Usuń">
           <input type="button" class="clear-filters" id="clear-filters" value="wyczyść filtry">
           <input type="submit" class="filter-button" id="find-submit" value="zatwierdź">
         </div>
@@ -65,6 +66,9 @@
           <th>wartość</th>
           <th>Ilość</th>
           <th>Lokalizacja</th>
+          <% if current_user %>
+            <th>Zaznacz</th>
+          <% end %>
         </tr>
         <% results.each_with_index do |item, idx| %>
           <tr>
@@ -74,6 +78,9 @@
             <td><%= item[:value].to_human_redable %><%= item[:unit] %></td>
             <td><%= item[:quantity] %></td>
             <td><%= item[:location] %></td>
+            <% if current_user %>
+              <td><input type="checkbox" value="<%= item[:localid] %>"></td>
+            <% end %>
           </tr>
         <% end %>
       </table>

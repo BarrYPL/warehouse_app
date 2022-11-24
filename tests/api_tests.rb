@@ -5,7 +5,7 @@ require 'test-unit'
 class TestWarehouseApi < Test::Unit::TestCase
 
   def test_api_connection
-    $url = "127.0.0.1/api/v1/items"
+    $url = "127.0.0.1/api/items"
     #Test case for basic searching functions
 
     #show all items it's 315
@@ -35,7 +35,12 @@ class TestWarehouseApi < Test::Unit::TestCase
   end
 
   def test_api_menaging
-    $url = "127.0.0.1/api/v1/items"
+    $url = "127.0.0.1/api/login"
+    response = RestClient.post($url, {:username => 'test', :password => 'test'})
+    $hash = JSON.parse(response.body)
+    assert_equal("Successful login on: test", $hash["error"])
+
+    $url = "127.0.0.1/api/items"
     #Tests case for adding, chaning and deleting item
 
     #adding item named "item1"
@@ -75,7 +80,13 @@ class TestWarehouseApi < Test::Unit::TestCase
   #
 
   def tests_of_incorrest_requests
-    $url = "127.0.0.1/api/v1/items/"
+    $url = "127.0.0.1/api/login"
+    response = RestClient.post($url, {:username => 'test', :password => 'test'})
+    $hash = JSON.parse(response.body)
+    assert_equal("Successful login on: test", $hash["error"])
+
+    $url = "127.0.0.1/api/items/"
+    #Try to find wrong ID
     begin
      response = RestClient.get($url+"0")
     rescue RestClient::ExceptionWithResponse => e
@@ -122,7 +133,7 @@ class TestWarehouseApi < Test::Unit::TestCase
 
      #Try to pass wrong type name
      begin
-       response = RestClient.post $url, {"new-type-name" => "śróby1", "new-item-checkbox" => "create-type" , "new-item-name" => "11"}
+       response = RestClient.post $url, {"new-type-name" => "śruby1", "new-item-checkbox" => "create-type" , "new-item-name" => "11"}
      rescue RestClient::ExceptionWithResponse => e
        $hash = JSON.parse(e.response.body)
        assert_equal("Nazwa typu może składać się tylko z małych znaków a-z i spacji!", $hash["error"])
@@ -200,7 +211,7 @@ class TestWarehouseApi < Test::Unit::TestCase
        assert_equal("Wartość nie może być mniejsza od 0!", $hash["error"])
      end
 
-     $url = "127.0.0.1/api/v1/add_element"
+     $url = "127.0.0.1/api/add_element"
      #Trying add quantity with wrong ID
      response = RestClient.post $url, {"added_quantity" => "1", "item_id" => ""}
      $hash = JSON.parse(response.body)
@@ -218,16 +229,21 @@ class TestWarehouseApi < Test::Unit::TestCase
    end
 
    def test_api_functions
-      $url = "127.0.0.1/api/v1/add_element"
+     $url = "127.0.0.1/api/login"
+     response = RestClient.post($url, {:username => 'test', :password => 'test'})
+     $hash = JSON.parse(response.body)
+     assert_equal("Successful login on: test", $hash["error"])
+
+      $url = "127.0.0.1/api/add_element"
       #Adding +1 quantity through API
-      response = RestClient.get("127.0.0.1/api/v1/items", {params: {'name' => 'aasd'}})
+      response = RestClient.get("127.0.0.1/api/items", {params: {'name' => 'aasd'}})
       $hash = JSON.parse(response.body).first
       quantity = $hash["quantity"]
       response = RestClient.post $url, {"added_quantity" => "1", "item_id" => "aasd"}
       $hash = JSON.parse(response.body)
       assert_equal(quantity.to_i + 1, $hash["quantity"].to_i)
 
-      $url = "127.0.0.1/api/v1/items"
+      $url = "127.0.0.1/api/items"
       #Add new item
       response = RestClient.post $url, {"element" => "testowy_typ", "new-item-name" => "test1", "new_item_quantity" => "1", "new-item-value" => "4k"}
       $url = response.headers[:location] #url for the next request
@@ -251,7 +267,12 @@ class TestWarehouseApi < Test::Unit::TestCase
 
    #checking for proper working of all sufixes
    def tests_of_all_types_numbers
-     $url = "127.0.0.1/api/v1/items"
+     $url = "127.0.0.1/api/login"
+     response = RestClient.post($url, {:username => 'test', :password => 'test'})
+     $hash = JSON.parse(response.body)
+     assert_equal("Successful login on: test", $hash["error"])
+
+     $url = "127.0.0.1/api/items"
      #Add new item value 4M
      response = RestClient.post $url, {"element" => "testowy_typ", "new-item-name" => "test1", "new_item_quantity" => "1", "new-item-value" => "4M"}
      $url = response.headers[:location] #url for the next request
@@ -268,7 +289,7 @@ class TestWarehouseApi < Test::Unit::TestCase
      response = RestClient.delete $url + @id
      assert_equal(204, response.code)
 
-     $url = "127.0.0.1/api/v1/items"
+     $url = "127.0.0.1/api/items"
      #Add new item value 4G
      response = RestClient.post $url, {"element" => "testowy_typ", "new-item-name" => "test1", "new_item_quantity" => "1", "new-item-value" => "4G"}
      $url = response.headers[:location] #url for the next request
@@ -285,8 +306,8 @@ class TestWarehouseApi < Test::Unit::TestCase
      response = RestClient.delete $url + @id
      assert_equal(204, response.code)
 
-     $url = "127.0.0.1/api/v1/items"
-     #Add new item value 4G
+     $url = "127.0.0.1/api/items"
+     #Add new item value 4T
      response = RestClient.post $url, {"element" => "testowy_typ", "new-item-name" => "test1", "new_item_quantity" => "1", "new-item-value" => "4T"}
      $url = response.headers[:location] #url for the next request
      assert_equal(201, response.code)
@@ -296,6 +317,78 @@ class TestWarehouseApi < Test::Unit::TestCase
      response = RestClient.get $url
      $hash = JSON.parse(response.body)
      assert_equal(4000000000000.0, $hash["value"])
+
+     #deleting item
+     @id = JSON.parse(response.body)["localid"]
+     $url = $url.match(/^(.*?).*items\//).match(0)
+     response = RestClient.delete $url + @id
+     assert_equal(204, response.code)
+
+     $url = "127.0.0.1/api/items"
+     #Add new item value 4m
+     response = RestClient.post $url, {"element" => "testowy_typ", "new-item-name" => "test1", "new_item_quantity" => "1", "new-item-value" => "4m"}
+     $url = response.headers[:location] #url for the next request
+     assert_equal(201, response.code)
+
+     #Here we have failure need fo fix that later!
+     #Check item value
+     response = RestClient.get $url
+     $hash = JSON.parse(response.body)
+     assert_equal(0.004, $hash["value"])
+
+     #deleting item
+     @id = JSON.parse(response.body)["localid"]
+     $url = $url.match(/^(.*?).*items\//).match(0)
+     response = RestClient.delete $url + @id
+     assert_equal(204, response.code)
+
+     $url = "127.0.0.1/api/items"
+     #Add new item value 4u
+     response = RestClient.post $url, {"element" => "testowy_typ", "new-item-name" => "test1", "new_item_quantity" => "1", "new-item-value" => "4u"}
+     $url = response.headers[:location] #url for the next request
+     assert_equal(201, response.code)
+
+     #Here we have failure need fo fix that later!
+     #Check item value
+     response = RestClient.get $url
+     $hash = JSON.parse(response.body)
+     assert_equal(0.000004, $hash["value"])
+
+     #deleting item
+     @id = JSON.parse(response.body)["localid"]
+     $url = $url.match(/^(.*?).*items\//).match(0)
+     response = RestClient.delete $url + @id
+     assert_equal(204, response.code)
+
+     $url = "127.0.0.1/api/items"
+     #Add new item value 4n
+     response = RestClient.post $url, {"element" => "testowy_typ", "new-item-name" => "test1", "new_item_quantity" => "1", "new-item-value" => "4n"}
+     $url = response.headers[:location] #url for the next request
+     assert_equal(201, response.code)
+
+     #Here we have failure need fo fix that later!
+     #Check item value
+     response = RestClient.get $url
+     $hash = JSON.parse(response.body)
+     assert_equal(0.000000004, $hash["value"])
+
+     #deleting item
+     @id = JSON.parse(response.body)["localid"]
+     $url = $url.match(/^(.*?).*items\//).match(0)
+     response = RestClient.delete $url + @id
+     assert_equal(204, response.code)
+
+     $url = "127.0.0.1/api/items"
+     #Add new item value 4p
+     response = RestClient.post $url, {"element" => "testowy_typ", "new-item-name" => "test1", "new_item_quantity" => "1", "new-item-value" => "4p"}
+     $url = response.headers[:location] #url for the next request
+     assert_equal(201, response.code)
+
+     #Here we have failure need fo fix that later!
+     #Check item value
+     response = RestClient.get $url
+     $hash = JSON.parse(response.body)
+     assert_equal(0.000000000004, $hash["value"])
 
      #deleting item
      @id = JSON.parse(response.body)["localid"]

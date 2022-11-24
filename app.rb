@@ -48,7 +48,7 @@ class MyServer < Sinatra::Base
     end
     @js = ["searching-js", "filter-js"]
     @css = ["welcome-styles", "search-styles"]
-    p results
+    #p results
     erb :search, locals: { results: results }
   end
 
@@ -224,7 +224,14 @@ class MyServer < Sinatra::Base
     end
   end
 
-  namespace '/api/v1' do
+  post '/multiple_delete' do
+    @js = ["filter-js", "searching-js"]
+    @css = ["welcome-styles", "search-styles"]
+    delete_multiple_items(params)
+    redirect '/find'
+  end
+
+  namespace '/api' do
     before do
       content_type 'application/json'
     end
@@ -264,7 +271,7 @@ class MyServer < Sinatra::Base
     post '/items' do
       @linkId = create_new_item_object(params)
       if @linkId.is_a? Numeric
-        response.headers['Location'] = "/api/v1/items/#{@linkId}"
+        response.headers['Location'] = "/api/items/#{@linkId}"
         status 201
       else
         halt(422, @linkId.to_json)
@@ -325,6 +332,30 @@ class MyServer < Sinatra::Base
         end
         return @suggestionsArr.uniq[0..9].to_json
       end
+    end
+
+    post '/login' do
+      if !params[:username].empty? && !params[:password].empty?
+        $usersDB.map do |user|
+          if params[:username] == user[:username]
+            pass_t = user[:password_hash]
+            if test_password(params[:password], pass_t)
+              session.clear
+              session[:user_id] = user[:id]
+              @error = "Successful login on: #{params[:username]}"
+              #Logowanie jednak musi zwracać API Key
+              return {error: @error}.to_json
+            else
+              @error = "Invalid password."
+            end
+          end
+        end
+        session.clear
+        @error = 'Username or password was incorrect.'
+      else
+        @error = "Complete all fields on the form."
+      end
+      return {error: @error}.to_json
     end
 
   end

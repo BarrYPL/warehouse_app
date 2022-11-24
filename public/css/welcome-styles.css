@@ -93,7 +93,6 @@ section{
 #find-submit:hover{
   background: #f1f1f1;
   color: #fa0200;
-  transform: scale(1.1);
 }
 
 #find-label p{

@@ -110,6 +110,8 @@ def format_num(size, prefix)
     return size*10**6
   when 'G'
     return size*10**9
+  when 'T'
+    return size*10**12
   when 'm'
     return (size*10**-3)
   when 'u'
@@ -393,4 +395,11 @@ end
 
 def location_serch(location)
   return $elementsDB.where(:location => location).all
+end
+
+def delete_multiple_items(itemsHash)
+  @itemsArr = itemsHash["items_to_delete"].split(',')
+  @itemsArr.each do |item|
+    delete_item(item)
+  end
 end
