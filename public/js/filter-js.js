@@ -20,6 +20,22 @@ function deleteItems(){
   }
 }
 
+function exportFunc(){
+  let chBxArray = []
+  let checkBoxes = document.querySelectorAll('td input');
+  checkBoxes.forEach(item => {
+    if(item.checked == true){
+      chBxArray.push(item.value);
+    }
+  })
+  if(window.confirm("Na pewno chcesz usunąć zaznaczone elementy?")){
+    var form = $('<form action="/multiple_export" method="post">' +
+    '<input type="text" name="items_to_export" value="' +chBxArray + '" />' + '</form>');
+    $('body').append(form);
+    form.submit();
+  }
+}
+
 function loadFilters(){
   let filtersDiv = _('filters-div');
   const filtersButton = $('.filter-button');
@@ -82,6 +98,17 @@ function scrollWe(){
   }
 }
 
+function selectAll(){
+  document.querySelectorAll('td input').forEach(item =>{
+    if (_('select-all').checked)
+    {
+      item.checked = true;
+    } else {
+      item.checked = false;
+    }
+  })
+}
+
 window.addEventListener("load", function(evt) {
   document.querySelectorAll('legend input').forEach(item => {
     item.addEventListener('change', listenCheckbox);
@@ -93,6 +120,8 @@ window.addEventListener("load", function(evt) {
   const resultsHeader = _('solid-results-div');
   const deleteBtn = _('delete-button');
   const clearFilterBtn = document.querySelector('#clear-filters');
+  const selectAllBtn = _('select-all');
+  const exportBtn = _('export-button');
   if (upButton){
     upButton.addEventListener('click', scrollUp);
   }
@@ -101,6 +130,12 @@ window.addEventListener("load", function(evt) {
   }
   if (deleteBtn){
     deleteBtn.addEventListener('click', deleteItems);
+  }
+  if (selectAllBtn){
+    selectAllBtn.addEventListener('click', selectAll);
+  }
+  if (exportBtn){
+    exportBtn.addEventListener('click', exportFunc);
   }
   resultsHeader.addEventListener('scroll', scrollWe);
 })

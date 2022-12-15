@@ -164,7 +164,7 @@ def find_querys(phrase, restricted=true)
   return @arr
 end
 
-def detailed_search(phrase, filterElem: "", valueMin: 0, valueMax: 10**12, sort_key: "value", sortDirection: "asc")
+def detailed_search(phrase, filterElem: "", valueMin: 0, valueMax: 10**12, sort_key: "value", sortDirection: "asc", filterLocation: "")
   @phrase = phrase.strip
   if sortDirection == "alfa" || sortDirection == "dalfa"
     @column = "name"
@@ -205,6 +205,9 @@ def detailed_search(phrase, filterElem: "", valueMin: 0, valueMax: 10**12, sort_
     end
   end
   @detailedArr = sort_table(@detailedArr.flatten.uniq, sortDirection, @column)
+  unless filterLocation.empty?
+    @detailedArr = @detailedArr.reject { |elem| elem[:location] != filterLocation }
+  end
   return @detailedArr
 end
 

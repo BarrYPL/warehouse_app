@@ -148,6 +148,7 @@ class MyServer < Sinatra::Base
     @inputVal = params[:"search-input"]||params[:"input-value"]
     @filters = params[:element]||""
     @sortDirection = params[:sort]||""
+    @location = params[:location]||""
     if !params[:valuemin].nil? && params[:valuemin] != ""
       @valueMin = params[:valuemin]
     else
@@ -158,7 +159,7 @@ class MyServer < Sinatra::Base
     else
       @valueMax = 10**12
     end
-    results = detailed_search(@inputVal, filterElem: @filters, valueMin: @valueMin, valueMax: @valueMax, sortDirection: @sortDirection)
+    results = detailed_search(@inputVal, filterElem: @filters, valueMin: @valueMin, valueMax: @valueMax, sortDirection: @sortDirection, filterLocation: @location)
     erb :search, locals: { results: results }
   end
 
@@ -229,6 +230,10 @@ class MyServer < Sinatra::Base
     @css = ["welcome-styles", "search-styles"]
     delete_multiple_items(params)
     redirect '/find'
+  end
+
+  post '/multiple_export' do
+    p params[:items_to_export]
   end
 
   namespace '/api' do

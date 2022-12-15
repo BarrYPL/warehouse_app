@@ -49,10 +49,24 @@
               <label for="others">Alfabetycznie Z-A</label>
             </div>
           </fieldset>
+          <fieldset>
+            <legend><input class="location-filter" type="checkbox" id="location-filter-checkbox" name="location-filter">Lokalizacja</legend>
+            <% $elementsDB.select(:location).uniq.each do |elem| %>
+              <% unless elem[:location].nil? %>
+                <div class="location-filter">
+                  <input type="radio" id="<%= elem[:location] %>" name="location" value="<%= elem[:location] %>" <% if params[:location] == elem[:location] %> checked <% end %> disabled>
+                  <label for="location"><%= elem[:location].gsub("_"," ") %></label>
+                </div>
+              <% end %>
+            <% end %>
+          </fieldset>
         </div>
         <input type="hidden" name="input-value" value="<%= @inputVal %>" id="input-value-hidden">
         <div class="filter-buttons">
-          <input type="button" class="delete-multiple-items" id="delete-button" value="Usuń">
+          <input type="button" class="export-selected-items" id="export-button" value="Export">
+          <% if current_user %>
+            <input type="button" class="delete-multiple-items" id="delete-button" value="Usuń">
+          <% end %>
           <input type="button" class="clear-filters" id="clear-filters" value="wyczyść filtry">
           <input type="submit" class="filter-button" id="find-submit" value="zatwierdź">
         </div>
@@ -66,9 +80,7 @@
           <th>wartość</th>
           <th>Ilość</th>
           <th>Lokalizacja</th>
-          <% if current_user %>
-            <th>Zaznacz</th>
-          <% end %>
+          <th><% unless results.empty? %><input type="checkbox" id="select-all"> <% end %>Zaznacz</th>
         </tr>
         <% results.each_with_index do |item, idx| %>
           <tr>
@@ -78,9 +90,7 @@
             <td><%= item[:value].to_human_redable %><%= item[:unit] %></td>
             <td><%= item[:quantity] %></td>
             <td><%= item[:location] %></td>
-            <% if current_user %>
-              <td><input type="checkbox" value="<%= item[:localid] %>"></td>
-            <% end %>
+            <td><input type="checkbox" value="<%= item[:localid] %>"></td>
           </tr>
         <% end %>
       </table>
@@ -112,6 +122,17 @@
     const tableBox = _('table-filter-checkbox');
     tableBox.checked = true;
     document.querySelectorAll('.radio-type-filter input').forEach(item => {
+      item.disabled = false;
+    })
+  </script>
+<% end %>
+
+<% unless params[:location].nil? %>
+  <script>
+    loadFilters();
+    const tableBox = _('location-filter-checkbox');
+    tableBox.checked = true;
+    document.querySelectorAll('.location-filter input').forEach(item => {
       item.disabled = false;
     })
   </script>

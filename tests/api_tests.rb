@@ -2,16 +2,18 @@ require 'rest-client'
 require 'json'
 require 'test-unit'
 
+$generalItemsNum = 0;
+
 class TestWarehouseApi < Test::Unit::TestCase
 
   def test_api_connection
     $url = "127.0.0.1/api/items"
     #Test case for basic searching functions
 
-    #show all items it's 315
+    #count all items
     response = RestClient.get($url)
     $hash = JSON.parse(response.body)
-    assert_equal(314, $hash.length)
+    $generalItemsNum = $hash.length
 
     #search API for STM phrase should find 4 results
     response = RestClient.get($url, {params: {'name' => 'STM'}})
@@ -23,10 +25,10 @@ class TestWarehouseApi < Test::Unit::TestCase
     $hash = JSON.parse(response.body).first
     assert_equal("Item Not Found", $hash["error"])
 
-    #search API for empty name should find 315 results
+    #search API for empty name should find all of them
     response = RestClient.get($url, {params: {'name' => ''}})
     $hash = JSON.parse(response.body)
-    assert_equal(314, $hash.length)
+    assert_equal($generalItemsNum, $hash.length)
 
     #search API for id should find 1 result with const name
     response = RestClient.get($url+"/1")
@@ -72,7 +74,7 @@ class TestWarehouseApi < Test::Unit::TestCase
     #At the end number of existing items should have been same as at the start of testing
     response = RestClient.get($url[..-2])
     $hash = JSON.parse(response.body)
-    assert_equal(314, $hash.length)
+    assert_equal($generalItemsNum, $hash.length)
   end
 
   #
