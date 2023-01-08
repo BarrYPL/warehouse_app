@@ -233,7 +233,8 @@ class MyServer < Sinatra::Base
   end
 
   post '/multiple_export' do
-    p params[:items_to_export]
+    filename = export_to_csv(params[:items_to_export])
+    send_file "./public/temp/#{filename}.csv", :filename => filename+".csv", :type => 'Application/octet-stream'
   end
 
   namespace '/api' do

@@ -406,3 +406,21 @@ def delete_multiple_items(itemsHash)
     delete_item(item)
   end
 end
+
+def export_to_csv(itemList)
+  @fileName = Time.now.to_i.to_s + "-" + $elementsDB.count.to_s
+  saveData($elementsDB.first.keys.to_s, @fileName)
+  itemList.split(",").each do |elem|
+    saveData($elementsDB.where(:localid => elem).all[0].values.to_s, @fileName)
+  end
+  return @fileName
+end
+
+def saveData(localDataSet, localDocumentName)
+  @documentName = localDocumentName
+  unless localDataSet.nil?
+    @excelLine = localDataSet.tr(':[]\"',"").gsub("nil","")
+    File.write("public/temp/" + @documentName + ".csv", @excelLine, mode: 'a')
+    File.write("public/temp/" + @documentName + ".csv", "\n", mode: 'a')
+  end
+end

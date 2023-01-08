@@ -28,12 +28,10 @@ function exportFunc(){
       chBxArray.push(item.value);
     }
   })
-  if(window.confirm("Na pewno chcesz usunąć zaznaczone elementy?")){
     var form = $('<form action="/multiple_export" method="post">' +
     '<input type="text" name="items_to_export" value="' +chBxArray + '" />' + '</form>');
     $('body').append(form);
     form.submit();
-  }
 }
 
 function loadFilters(){
