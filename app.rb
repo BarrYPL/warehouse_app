@@ -40,6 +40,21 @@ class MyServer < Sinatra::Base
     erb :login
   end
 
+  get '/prezent' do
+    @css = ["prezent-styles"]
+    erb :prezent
+  end
+
+  post '/prezent' do
+    @css = ["prezent-styles"]
+    if params[:answer] == "1"
+      erb :zyczenia
+    else
+      @error = "Źle xD"
+      erb :prezent
+    end
+  end
+
   get '/find' do
     if request[:loc].nil?
       results = detailed_search("")
