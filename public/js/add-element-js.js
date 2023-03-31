@@ -48,11 +48,24 @@ function change_input_unit_status(){
   }
 }
 
+function change_new_input_name(){
+  const nameInput = document.getElementsByName("new-item-name")[0];
+  if (nameInput.value.length > 30) {
+    nameInput.style.background = "#fa0200";
+    nameInput.style.color = "#f1f1f1";
+  } else {
+    nameInput.style.background = "#f1f1f1";
+    nameInput.style.color = "#f20200";
+  }
+//Need to add append error div
+}
+
 window.addEventListener("load", function(evt){
   unlock_type_options();
   document.querySelectorAll('.radio-type-filter').forEach(elem => {
     elem.addEventListener("change", change_input_type_status);
   })
+  document.querySelector('[name="new-item-name"]').addEventListener("input", change_new_input_name);
   document.querySelector('#localid-checkbox').addEventListener("change", change_input_id_status);
   document.querySelector('#unit-checkbox').addEventListener("change", change_input_unit_status);
 })
