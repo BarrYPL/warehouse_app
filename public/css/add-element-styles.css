@@ -67,6 +67,15 @@ legend p{
   overflow: auto;
 }
 
+.js-error-div{
+  text-align: center;
+  color: red;
+  padding-top: 10px;
+  font-weight: bold;
+  font-size: x-large;
+  height: 50px;
+}
+
 textarea {
   resize: none;
   outline: none;
@@ -75,6 +84,8 @@ textarea {
   margin: 5px;
   height: -webkit-fill-available;
   opacity: 0.6;
+  border: solid 2px red;
+  border-radius: 10px;
 }
 
 textarea:focus {

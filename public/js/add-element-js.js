@@ -1,5 +1,7 @@
 "use strict;"
 
+let errorVar = 0;
+
 function _(el){
  return document.getElementById(el);
 }
@@ -50,14 +52,34 @@ function change_input_unit_status(){
 
 function change_new_input_name(){
   const nameInput = document.getElementsByName("new-item-name")[0];
+  const errorDiv = document.getElementsByClassName("js-error-div")[0];
+  let p = document.createElement("p");
+  p.innerHTML = "Nazwa nie może być dłuższa niż 30 znaków!";
+  p.id = "errortext";
   if (nameInput.value.length > 30) {
     nameInput.style.background = "#fa0200";
     nameInput.style.color = "#f1f1f1";
+    if (errorVar < 1)
+    {
+      _('js-error-div').style.backgroundColor = "rgb(12,12,12,0.8)";
+      errorDiv.append(p);
+    }
+    errorVar++;
+    if (errorVar > 20)
+    {
+      _('errortext').innerHTML = "Jebany downie!";
+      _('js-error-div').style.fontSize = "xxx-large";
+      _('js-error-div').style.height = "70px";
+    }
   } else {
+    errorVar = 0;
+    _('js-error-div').textContent = '';
+    _('js-error-div').style.fontSize = "x-large";
+    _('js-error-div').style.height = "50px";
+    _('js-error-div').style.backgroundColor = "transparent";
     nameInput.style.background = "#f1f1f1";
     nameInput.style.color = "#f20200";
   }
-//Need to add append error div
 }
 
 window.addEventListener("load", function(evt){

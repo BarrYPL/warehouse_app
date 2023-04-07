@@ -35,7 +35,7 @@ var inactivityTime = function () {
 
   function showMiche(){
     _('pedoEasterEgg').style.transform = 'rotate(0deg)';
-    //_('micheEasterEgg').style.transform = 'rotate(80deg)';
+    _('micheEasterEgg').style.transform = 'rotate(80deg)';
   }
 
   function hideMiche(){
