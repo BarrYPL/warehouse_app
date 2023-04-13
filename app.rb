@@ -55,6 +55,11 @@ class MyServer < Sinatra::Base
     end
   end
 
+  get '/locations' do
+    @css = ["locations-styles"]
+    erb :locations
+  end
+
   get '/find' do
     if request[:loc].nil?
       results = detailed_search("")

@@ -67,7 +67,7 @@ function change_new_input_name(){
     errorVar++;
     if (errorVar > 20)
     {
-      _('errortext').innerHTML = "Jebany downie!";
+      _('errortext').innerHTML = "Tylko 30 znaków powiedziałem!";
       _('js-error-div').style.fontSize = "xxx-large";
       _('js-error-div').style.height = "70px";
     }

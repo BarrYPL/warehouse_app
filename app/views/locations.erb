@@ -1,0 +1,12 @@
+<div class="container">
+  <h1>Przestrzenie</h1>
+  <% if request[:loc].nil? %>
+    <%= erb :basic_location_partial %>
+  <% else %>
+    <% case request[:loc] when "warsztatel" %>
+      <%= erb :warsztatel_partial %>
+    <% when "warsztatmech" %>
+      <%= erb :warsztatmech_partial %>
+    <% end %>
+  <% end %>
+</div>
