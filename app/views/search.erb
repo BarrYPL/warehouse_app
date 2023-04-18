@@ -2,6 +2,18 @@
   <button type="button" class="red-btn" id="return-btn" onclick="history.back()"><i class="fa-solid fa-people-pulling"></i> Powrót</button>
   <%= erb :searching_input_partial %>
   <div class="solid-results-div" id="solid-results-div">
+    <% if !location.nil? && !location.empty? %>
+    <div class="loc-info">
+      <div class="loc-title">
+        <% unless location.empty? %>
+        <h3>Wniki dla: </h3><h3 class="loc-name"><%= location %></h3><h3>.</h3>
+        <% end %>
+      </div>
+      <div class="loc-buttons">
+        <button type="button" name="<%= location %>" class="red-btn" id="qr-button">Genere QR</button>
+      </div>
+    </div>
+    <% end %>
     <div class="results-header" id="results-header">
       <h3 id="results-count">Znaleziono <%= results.length %>
       <% if results.length == 0 || results.length > 4 %>
@@ -52,11 +64,11 @@
           </fieldset>
           <fieldset>
             <legend><input class="location-filter" type="checkbox" id="location-filter-checkbox" name="location-filter">Lokalizacja</legend>
-            <% $elementsDB.select(:location).uniq.each do |elem| %>
-              <% unless elem[:location].nil? %>
+            <% $locationsDB.select(:name).uniq.each do |elem| %>
+              <% unless elem[:name].nil? %>
                 <div class="location-filter">
-                  <input type="radio" id="<%= elem[:location] %>" name="location" value="<%= elem[:location] %>" <% if params[:location] == elem[:location] %> checked <% end %> disabled>
-                  <label for="location"><%= elem[:location].gsub("_"," ") %></label>
+                  <input type="radio" id="<%= elem[:name] %>" name="location" value="<%= elem[:name] %>" <% if params[:location] == elem[:name] %> checked <% end %> disabled>
+                  <label for="location"><%= elem[:name].gsub("_"," ") %></label>
                 </div>
               <% end %>
             <% end %>

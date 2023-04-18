@@ -40,28 +40,14 @@ class MyServer < Sinatra::Base
     erb :login
   end
 
-  get '/prezent' do
-    @css = ["prezent-styles"]
-    erb :prezent
-  end
-
-  post '/prezent' do
-    @css = ["prezent-styles"]
-    if params[:answer] == "1"
-      erb :zyczenia
-    else
-      @error = "Źle xD"
-      erb :prezent
-    end
-  end
-
   get '/locations' do
     @css = ["locations-styles"]
     erb :locations
   end
 
   get '/find' do
-    if request[:loc].nil?
+    location = request[:loc]
+    if location.nil?
       results = detailed_search("")
     else
       results = location_serch(request[:loc])
@@ -69,7 +55,7 @@ class MyServer < Sinatra::Base
     @js = ["searching-js", "filter-js"]
     @css = ["welcome-styles", "search-styles"]
     #p results
-    erb :search, locals: { results: results }
+    erb :search, locals: { results: results, location: location }
   end
 
   get '/add-element' do
@@ -147,7 +133,7 @@ class MyServer < Sinatra::Base
     end
   end
 
-  post '/add_element' do
+  post '/add-element' do
     @js = ["show-element-js"]
     @css = ["show-element-styles"]
     if (request[:added_quantity].to_i != 0)
@@ -180,7 +166,7 @@ class MyServer < Sinatra::Base
       @valueMax = 10**12
     end
     results = detailed_search(@inputVal, filterElem: @filters, valueMin: @valueMin, valueMax: @valueMax, sortDirection: @sortDirection, filterLocation: @location)
-    erb :search, locals: { results: results }
+    erb :search, locals: { results: results, location: @location }
   end
 
   post '/login' do
@@ -245,16 +231,41 @@ class MyServer < Sinatra::Base
     end
   end
 
-  post '/multiple_delete' do
+  post '/multiple-delete' do
     @js = ["filter-js", "searching-js"]
     @css = ["welcome-styles", "search-styles"]
     delete_multiple_items(params)
     redirect '/find'
   end
 
-  post '/multiple_export' do
+  post '/multiple-export' do
     filename = export_to_csv(params[:items_to_export])
     send_file "./public/temp/#{filename}.csv", :filename => filename+".csv", :type => 'Application/octet-stream'
+  end
+
+  post '/qr' do
+    @fileName = params[:locname].to_s
+    unless File.exists?("./public/QR#{@fileName}.png")
+      qrcode = RQRCode::QRCode.new("barry.multi.ovh/find?loc=#{@fileName}")
+      png = qrcode.as_png(
+        bit_depth: 1,
+        border_modules: 0,
+        color_mode: ChunkyPNG::COLOR_GRAYSCALE,
+        color: "black",
+        file: nil,
+        fill: "white",
+        module_px_size: 6,
+        resize_exactly_to: false,
+        resize_gte_to: false,
+        size: 120
+      )
+      IO.binwrite("./public/QR/#{@fileName}.png", png.to_s)
+    end
+    send_file "./public/QR/#{@fileName}.png", :filename => @fileName+".png", :type => 'Application/octet-stream'
+  end
+
+  get '/new-location' do
+    erb :new_location
   end
 
   namespace '/api' do
@@ -305,8 +316,7 @@ class MyServer < Sinatra::Base
     end
 
     patch '/items/:id' do
-      @item = select_item(params[:id])
-      halt(404, { error:'Item Not Found'}.to_json) unless @item
+      halt_if_not_found!
       if @item
         itemID = edit_item(request.params)
         @item = select_item(itemID)
@@ -317,7 +327,7 @@ class MyServer < Sinatra::Base
       end
     end
 
-    post '/add_element' do
+    post '/add-element' do
       @item = select_item(request[:item_id])
       if @item.nil?
         @error = "Błędne ID!"

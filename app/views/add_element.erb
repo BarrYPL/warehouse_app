@@ -63,7 +63,12 @@
       <div class="field8">
         <fieldset>
           <legend>Lokalizacja</legend>
-          <textarea name="new-item-location" placeholder="Może być puste" rows="2" cols="16"></textarea>
+          <select name="location" id="location-id">
+            <option value="">--brak lokalizacji--</option>
+            <% $locationsDB.all.each do |element| %>
+              <option value="<%= element[:name] %>"><%= element[:name] %></option>
+            <% end %>
+          </select>
         </fieldset>
       </div>
       <div class="field9">

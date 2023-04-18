@@ -13,7 +13,7 @@ function deleteItems(){
     }
   })
   if(window.confirm("Na pewno chcesz usunąć zaznaczone elementy?")){
-    var form = $('<form action="/multiple_delete" method="post">' +
+    var form = $('<form action="/multiple-delete" method="post">' +
     '<input type="text" name="items_to_delete" value="' +chBxArray + '" />' + '</form>');
     $('body').append(form);
     form.submit();
@@ -28,10 +28,18 @@ function exportFunc(){
       chBxArray.push(item.value);
     }
   })
-    var form = $('<form action="/multiple_export" method="post">' +
+    var form = $('<form action="/multiple-export" method="post">' +
     '<input type="text" name="items_to_export" value="' +chBxArray + '" />' + '</form>');
     $('body').append(form);
     form.submit();
+}
+
+function qrFunc(){
+  const qrVal = _('qr-button').getAttribute("name");
+  var form = $('<form action="/qr" method="post">' +
+  '<input type="text" name="locname" value="' + qrVal + '" />' + '</form>');
+  $('body').append(form);
+  form.submit();
 }
 
 function loadFilters(){
@@ -120,6 +128,7 @@ window.addEventListener("load", function(evt) {
   const clearFilterBtn = document.querySelector('#clear-filters');
   const selectAllBtn = _('select-all');
   const exportBtn = _('export-button');
+  const qrBtn = _('qr-button');
   if (upButton){
     upButton.addEventListener('click', scrollUp);
   }
@@ -134,6 +143,9 @@ window.addEventListener("load", function(evt) {
   }
   if (exportBtn){
     exportBtn.addEventListener('click', exportFunc);
+  }
+  if (qrBtn){
+    qrBtn.addEventListener('click', qrFunc);
   }
   resultsHeader.addEventListener('scroll', scrollWe);
 })

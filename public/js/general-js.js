@@ -32,6 +32,7 @@ var inactivityTime = function () {
   window.onload = resetTimer;
   document.onmousemove = resetTimer;
   document.onkeydown = resetTimer;
+  document.onscroll = resetTimer;
 
   function showMiche(){
     _('pedoEasterEgg').style.transform = 'rotate(0deg)';

@@ -1,0 +1,15 @@
+<div class="inner-width">
+  <h1>New location</h1>
+  <form class="add-location-form" action="add-location" method="post">
+    <p>Parent location</p>
+    <select name="location" id="location-id">
+      <% $locationsDB.where(:parentname => "").all.each do |element| %>
+        <option value="<%= element[:name] %>"><%= element[:name] %></option>
+      <% end %>
+    </select>
+    <p>Location Name</p>
+    <input type="text" name="location-name" placeholder="Name">
+    <p>Description</p>
+    <input type="text" name="location-description" placeholder="Description">
+  </form>
+</div>

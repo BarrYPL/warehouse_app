@@ -213,7 +213,7 @@ class TestWarehouseApi < Test::Unit::TestCase
        assert_equal("Wartość nie może być mniejsza od 0!", $hash["error"])
      end
 
-     $url = "127.0.0.1/api/add_element"
+     $url = "127.0.0.1/api/add-element"
      #Trying add quantity with wrong ID
      response = RestClient.post $url, {"added_quantity" => "1", "item_id" => ""}
      $hash = JSON.parse(response.body)
@@ -236,7 +236,7 @@ class TestWarehouseApi < Test::Unit::TestCase
      $hash = JSON.parse(response.body)
      assert_equal("Successful login on: test", $hash["error"])
 
-      $url = "127.0.0.1/api/add_element"
+      $url = "127.0.0.1/api/add-element"
       #Adding +1 quantity through API
       response = RestClient.get("127.0.0.1/api/items", {params: {'name' => 'aasd'}})
       $hash = JSON.parse(response.body).first

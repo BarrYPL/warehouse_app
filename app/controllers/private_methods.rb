@@ -2,6 +2,7 @@ DB = Sequel.sqlite 'db/database.db'
 
 $usersDB = DB[:uzytkownicy]
 $elementsDB = DB[:elementy]
+$locationsDB = DB[:locations]
 
 class Numeric
   def to_human_redable
@@ -206,7 +207,7 @@ def detailed_search(phrase, filterElem: "", valueMin: 0, valueMax: 10**12, sort_
   end
   @detailedArr = sort_table(@detailedArr.flatten.uniq, sortDirection, @column)
   unless filterLocation.empty?
-    @detailedArr = @detailedArr.reject { |elem| elem[:location] != filterLocation }
+    @detailedArr = @detailedArr.reject { |elem| elem[:location] != filterLocation.downcase }
   end
   return @detailedArr
 end
@@ -349,7 +350,7 @@ def create_new_item_object(params={})
     value: @newItemValue,
     quantity: @newItemQuantity,
     powerdissipation: nil,
-    location: @newItemLocation,
+    location: @newItemLocation.downcase,
     datasheet: @newItemDatasheet,
     unit: @newItemUnit,
     maxvoltage: nil,
