@@ -245,27 +245,42 @@ class MyServer < Sinatra::Base
 
   post '/qr' do
     @fileName = params[:locname].to_s
-    unless File.exists?("./public/QR#{@fileName}.png")
-      qrcode = RQRCode::QRCode.new("barry.multi.ovh/find?loc=#{@fileName}")
-      png = qrcode.as_png(
-        bit_depth: 1,
-        border_modules: 0,
-        color_mode: ChunkyPNG::COLOR_GRAYSCALE,
-        color: "black",
-        file: nil,
-        fill: "white",
-        module_px_size: 6,
-        resize_exactly_to: false,
-        resize_gte_to: false,
-        size: 120
-      )
-      IO.binwrite("./public/QR/#{@fileName}.png", png.to_s)
+    unless $locationsDB.where(Sequel.like(:name, "#{@fileName}", case_insensitive: true)).all.empty?
+      p "I am in first unless"
+      unless File.exists?("./public/QR#{@fileName}.png")
+        p "I should genere Qr"
+        genereQR(@fileName)
+      end
+      send_file "./public/QR/#{@fileName}.png", :filename => @fileName+".png", :type => 'Application/octet-stream'
     end
-    send_file "./public/QR/#{@fileName}.png", :filename => @fileName+".png", :type => 'Application/octet-stream'
   end
 
   get '/new-location' do
-    erb :new_location
+    if current_user
+      @css = ["new-location-styles"]
+      erb :new_location
+    else
+      @js = ["searching-js"]
+      @css = ["welcome-styles", "login-partial"]
+      erb :welcome
+    end
+  end
+
+  post '/new-location' do
+    @error = add_location(params)
+    if current_user
+      @js = ["searching-js"]
+      @css = ["welcome-styles"]
+      erb :welcome
+    else
+      @js = ["searching-js"]
+      @css = ["welcome-styles", "login-partial"]
+      erb :welcome
+    end
+  end
+
+  get '/backup' do
+    send_file "./db/database.db", :filename => "database.db", :type => 'Application/octet-stream'
   end
 
   namespace '/api' do

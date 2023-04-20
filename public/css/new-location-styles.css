@@ -1,0 +1,22 @@
+.add-location-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10%;
+}
+
+.add-location-form input,
+.add-location-form select {
+  margin-bottom: 10px;
+}
+
+.add-location-form input[type = "text"] {
+  outline: none;
+  text-align: left;
+  background: #fff;
+  border: none;
+  width: 100%;
+  padding: 5px;
+  color: #fa0200;
+  border-radius: 10px;
+}

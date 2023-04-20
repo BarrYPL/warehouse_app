@@ -425,3 +425,32 @@ def saveData(localDataSet, localDocumentName)
     File.write("public/temp/" + @documentName + ".csv", "\n", mode: 'a')
   end
 end
+
+def genereQR(qrName)
+  qrcode = RQRCode::QRCode.new("barry.multi.ovh/find?loc=#{qrName}")
+  png = qrcode.as_png(
+    bit_depth: 1,
+    border_modules: 0,
+    color_mode: ChunkyPNG::COLOR_GRAYSCALE,
+    color: "black",
+    file: nil,
+    fill: "white",
+    module_px_size: 6,
+    resize_exactly_to: false,
+    resize_gte_to: false,
+    size: 120
+  )
+  IO.binwrite("./public/QR/#{qrName}.png", png.to_s)
+end
+
+def add_location(locationHash)
+  if $locationsDB.where(:name =>locationHash[:"location-name"]).all.empty?
+    $locationsDB.insert(name: locationHash[:"location-name"],
+    parentname: locationHash[:"parent-location"],
+    description: locationHash[:"location-description"])
+    return "Dodano lokalizację: #{locationHash[:"location-name"]}"
+  else
+    @foundLoc = $locationsDB.select(:parentname).where(:name => locationHash[:"location-name"]).all[0][:parentname]
+    return "Wybrana nazwa jest już zajęta. Znajduje się w: #{@foundLoc}"
+  end
+end

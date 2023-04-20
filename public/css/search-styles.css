@@ -39,6 +39,7 @@ td {
 
 .results-header,
 .filter-form {
+    margin-top: 5px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -160,6 +161,7 @@ div.limiting-filters{
 }
 
 .loc-title {
+  height: 30px;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -173,6 +175,17 @@ div.limiting-filters{
   padding-left: 5px;
   text-transform: uppercase;
   color: #fa0200;
+}
+
+.inside-locations {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.td-description {
+  height: 36px;
+  overflow: hidden;
 }
 
 #qr-button {

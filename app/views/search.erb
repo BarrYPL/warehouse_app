@@ -5,13 +5,17 @@
     <% if !location.nil? && !location.empty? %>
     <div class="loc-info">
       <div class="loc-title">
-        <% unless location.empty? %>
-        <h3>Wniki dla: </h3><h3 class="loc-name"><%= location %></h3><h3>.</h3>
+        <% if !location.empty? && !$locationsDB.where(Sequel.like(:name, "#{location}", case_insensitive: true)).all.empty? %>
+          <h3>Wniki dla: </h3><h3 class="loc-name"><%= location %></h3><h3>.</h3>
+        <% else %>
+          <h3>Nie odnaleziono lokalizacji: </h3><h3 class="loc-name"><%= location %></h3><h3>.</h3>
         <% end %>
       </div>
-      <div class="loc-buttons">
-        <button type="button" name="<%= location %>" class="red-btn" id="qr-button">Genere QR</button>
-      </div>
+      <% unless $locationsDB.where(Sequel.like(:name, "#{location}", case_insensitive: true)).all.empty? %>
+        <div class="loc-buttons">
+          <button type="button" name="<%= location %>" class="red-btn" id="qr-button">Genere QR</button>
+        </div>
+      <% end %>
     </div>
     <% end %>
     <div class="results-header" id="results-header">
@@ -64,7 +68,7 @@
           </fieldset>
           <fieldset>
             <legend><input class="location-filter" type="checkbox" id="location-filter-checkbox" name="location-filter">Lokalizacja</legend>
-            <% $locationsDB.select(:name).uniq.each do |elem| %>
+            <% $locationsDB.each do |elem| %>
               <% unless elem[:name].nil? %>
                 <div class="location-filter">
                   <input type="radio" id="<%= elem[:name] %>" name="location" value="<%= elem[:name] %>" <% if params[:location] == elem[:name] %> checked <% end %> disabled>
@@ -110,6 +114,28 @@
       <div class="arrow-up" id="arrow-up">
         <i class="fa-solid fa-angles-up"></i>
       </div>
+    <% end %>
+    <% if !location.empty? && $locationsDB.select(:parentname).where(Sequel.like(:name, "#{location}", case_insensitive: true)).all[0][:parentname].empty? %>
+      <div class="inside-locations">
+        <h2>Lokalizacje wewnątrz:</h2>
+      </div>
+      <table class="result-tab">
+         <col style="width: 10%;" />
+          <col style="width: 40%;" />
+           <col style="width: 50%;" />
+        <tr>
+          <th>Lp.</th>
+          <th>Nazwa</th>
+          <th>Opis</th>
+        </tr>
+        <% $locationsDB.where(Sequel.like(:parentname, "#{location}", case_insensitive: true)).all.each_with_index do |loc, idx| %>
+          <tr>
+            <td><%= idx + 1 %>.</td>
+            <td><a href="/find?loc=<%= loc[:name] %>"><%= loc[:name] %></a></td>
+            <td><div class="td-description"><%= loc[:description] %></div></td>
+          </tr>
+        <% end %>
+      </table>
     <% end %>
   </div>
   <% if results.empty? && current_user %>
