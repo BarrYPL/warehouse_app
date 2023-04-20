@@ -169,6 +169,7 @@ div.limiting-filters{
 
 .loc-info {
   display: flex;
+  flex-direction: column;
 }
 
 .loc-name {
@@ -181,6 +182,10 @@ div.limiting-filters{
   display: flex;
   justify-content: center;
   margin-top: 30px;
+}
+
+.description {
+  margin: 10px 0px;
 }
 
 .td-description {

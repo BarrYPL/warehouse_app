@@ -4,6 +4,11 @@
   <div class="solid-results-div" id="solid-results-div">
     <% if !location.nil? && !location.empty? %>
     <div class="loc-info">
+      <% unless $locationsDB.where(Sequel.like(:name, "#{location}", case_insensitive: true)).all.empty? %>
+        <div class="loc-buttons">
+          <button type="button" name="<%= location %>" class="red-btn" id="qr-button">Genere QR</button>
+        </div>
+      <% end %>
       <div class="loc-title">
         <% if !location.empty? && !$locationsDB.where(Sequel.like(:name, "#{location}", case_insensitive: true)).all.empty? %>
           <h3>Wniki dla: </h3><h3 class="loc-name"><%= location %></h3><h3>.</h3>
@@ -12,8 +17,8 @@
         <% end %>
       </div>
       <% unless $locationsDB.where(Sequel.like(:name, "#{location}", case_insensitive: true)).all.empty? %>
-        <div class="loc-buttons">
-          <button type="button" name="<%= location %>" class="red-btn" id="qr-button">Genere QR</button>
+        <div class="description">
+          <%= $locationsDB.where(Sequel.like(:name, "#{location}", case_insensitive: true)).all[0][:description] %>
         </div>
       <% end %>
     </div>
