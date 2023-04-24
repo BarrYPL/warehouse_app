@@ -63,7 +63,7 @@
       <div class="field8">
         <fieldset>
           <legend>Lokalizacja</legend>
-          <select name="location" id="location-id">
+          <select name="new-item-location" id="location-id">
             <option value="">--brak lokalizacji--</option>
             <% $locationsDB.all.each do |element| %>
               <option value="<%= element[:name] %>"><%= element[:name] %></option>

@@ -108,6 +108,10 @@ th i {
   display: none;
 }
 
+.item-info-div {
+  margin-top: 30px;
+}
+
 @media screen and (max-width: 600px){
   *{
     font-size: 0.97em;
