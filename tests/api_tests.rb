@@ -157,14 +157,6 @@ class TestWarehouseApi < Test::Unit::TestCase
        assert_equal("Nazwa elementu nie może być pusta!", $hash["error"])
      end
 
-     #Try to pass name and type
-     begin
-      response = RestClient.post $url, {"element" => "testowy_typ", "new-item-name" => "11"}
-     rescue RestClient::ExceptionWithResponse => e
-       $hash = JSON.parse(e.response.body)
-       assert_equal("Nazwa musi zawierać przynajmniej jedną literę!", $hash["error"])
-     end
-
      #Try to pass too long element name
      begin
       response = RestClient.post $url, {"new-item-name" => "#{"a"*31}", "element" => "testowy_typ"}

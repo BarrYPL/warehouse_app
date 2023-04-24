@@ -284,10 +284,6 @@ def create_new_item_object(params={})
     @error = "Nazwa elementu nie może być pusta!"
     return {error: @error}
   end
-  if !@newItemName.match?(/[a-zA-Z]/)
-    @error = "Nazwa musi zawierać przynajmniej jedną literę!"
-    return {error: @error}
-  end
   if @newItemName.length > 30 ||
     @newTypeName.length > 30
     @error = "Nazwa nie może być dłuższa niż 30 znaków!"
