@@ -398,7 +398,7 @@ def edit_item(editHash)
 end
 
 def location_serch(location)
-  return $elementsDB.where(:location => location).all
+  return $elementsDB.where(Sequel.like(:location, "%#{location}%", case_insensitive: true)).all
 end
 
 def delete_multiple_items(itemsHash)
