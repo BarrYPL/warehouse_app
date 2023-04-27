@@ -78,6 +78,26 @@ section{
   color: #fff;
 }
 
+.user-panel{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+
+.card{
+  width: 250px;
+  height: 150px;
+  border: solid red 3px;
+  border-radius: 10px;
+  margin: 10px 15px;
+  padding: 5px;
+}
+
+.card h2{
+  text-transform: uppercase;
+}
+
 #find-submit{
   padding: 10px;
   border-radius: 10px;
