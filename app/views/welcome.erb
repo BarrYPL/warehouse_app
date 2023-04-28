@@ -9,28 +9,26 @@
     </div>
   <% else %>
     <div class="user-panel">
-      <div class="card">
-        <h2>Nowy Element</h2>
-        <div class="inner-card">
-          <h1><i class="fa-solid fa-circle-plus"></i></h1>
-          <a href="#"><button class="red-btn">Dodaj</button></a>
+      <a href="/add-element"><div class="card">
+        <div class="big-icon">
+          <h1><i class="fa-solid fa-circle-plus fa-2xl"></i></h1>
         </div>
-      </div>
-      <div class="card">
-
-      </div>
-      <div class="card">
-
-      </div>
-      <div class="card">
-
-      </div>
-      <div class="card">
-
-      </div>
-      <div class="card">
-
-      </div>
+        <h2>Dodaj</h2>
+        <div class="inner-card">
+          <p class="secondary">Nowy element</p>
+          <button class="inverse-btn"><i class="fa-solid fa-circle-plus"></i> Dodaj</button>
+        </div>
+      </div></a>
+      <a href="/locations"><div class="card">
+        <div class="big-icon">
+          <h1><i class="fa-solid fa-location-crosshairs fa-2xl"></i></h1>
+        </div>
+        <h2>Lokalizacje</h2>
+        <div class="inner-card">
+          <p class="secondary">Pokaż wszystkie</p>
+          <button class="inverse-btn"><i class="fa-solid fa-location-crosshairs"></i> Pokaż</button>
+        </div>
+      </div></a>
     </div>
   <% end %>
 </div>

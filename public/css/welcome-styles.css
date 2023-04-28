@@ -82,20 +82,32 @@ section{
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  max-width: 100%;
+  width: 100%;
 }
 
 .card{
   width: 250px;
   height: 150px;
-  border: solid red 3px;
+  background: #fa02006f;
   border-radius: 10px;
   margin: 10px 15px;
-  padding: 5px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .card h2{
   text-transform: uppercase;
+}
+
+.inner-card{
+  display: flex;
+  justify-content: space-between;
+}
+
+.big-icon{
+  display: none;
 }
 
 #find-submit{
@@ -122,4 +134,29 @@ section{
 #easter-egg{
   max-width:100%;
   max-height:100%;
+}
+
+@media screen and (max-width: 600px){
+  .inner-card{
+    display: none;
+  }
+
+  .big-icon{
+    display: flex;
+    justify-content: center;
+  }
+
+  .card{
+    justify-content: space-around;
+    width: 110px;
+    overflow-wrap: anywhere;
+  }
+
+  .card h2{
+    font-size: .8em;
+  }
+
+  footer{
+    display: none;
+  }
 }

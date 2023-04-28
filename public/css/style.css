@@ -157,6 +157,22 @@ footer {
   cursor: pointer;
 }
 
+.inverse-btn {
+  color: #f20200;
+  padding: 5px;
+  border: solid 2px #f1f1f1;
+  border-radius: 10px;
+  background: #f1f1f1;
+  transition: all .3s ease-in-out;
+}
+
+.inverse-btn:hover{
+  color: #f1f1f1;
+  background: #fa0200;
+  border: 2px solid #fa0200;
+  cursor: pointer;
+}
+
 .icon-flip-inner {
   width: 20px;
   position: relative;
