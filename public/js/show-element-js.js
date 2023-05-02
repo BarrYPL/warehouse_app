@@ -46,7 +46,8 @@ function get_id_name(element){
     'ilosc' : 'quantity',
     'lokalizacja' : 'location',
     'opis' : 'description',
-    'nota' : 'datasheet'
+    'nota' : 'datasheet',
+    'wartosc' : 'value'
   };
 
   retId = map[element] ?? 'error';
@@ -57,7 +58,7 @@ function open_editor(){
   if (editIcon){
     let innerText = "";
     let domElem;
-    const editElements = ["nazwa","ilosc","lokalizacja","opis","nota"];
+    const editElements = ["nazwa","ilosc","lokalizacja","opis","nota","wartosc"];
     editElements.forEach(item => {
       domElem = _(item);
       innerText = domElem.innerHTML + " <i class=\"fa-solid fa-pen-to-square\" id=\""+get_id_name(item)+"\"></i>"

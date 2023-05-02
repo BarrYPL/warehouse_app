@@ -3,7 +3,7 @@
     <th>Lp.</th>
     <th>ID</th>
     <th id="nazwa">Nazwa</th>
-    <th>wartość</th>
+    <th id="wartosc">wartość</th>
     <th id="ilosc">Ilość</th>
     <th id="lokalizacja">Lokalizacja</th>
   </tr>
@@ -11,7 +11,7 @@
     <td>1.</td>
     <td><p><%= item[:localid] %></p></td>
     <td><p class="name"><%= item[:name] %></p></td>
-    <td><p><%= item[:value].to_human_redable %> <%= item[:unit] %></p></td>
+    <td><p class="value"><%= item[:value].to_human_redable %> <%= item[:unit] %></p></td>
     <td><p class="quantity"><%= item[:quantity] %></p></td>
     <td><p class="location"><%= item[:location] %></p></td>
   </tr>

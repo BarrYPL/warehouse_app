@@ -268,6 +268,9 @@ class MyServer < Sinatra::Base
 
   post '/new-location' do
     @error = add_location(params)
+    if @error.is_a? Numeric
+      @error = "Poprawnie dodano lokalizację."
+    end
     if current_user
       @js = ["searching-js"]
       @css = ["welcome-styles"]
@@ -296,11 +299,19 @@ class MyServer < Sinatra::Base
 
     helpers do
       def halt_if_not_found!
-        halt 402, {'Content-Type' => 'application/json'}, { error: 'Item Not Found' }.to_json unless item
+        halt 409, {'Content-Type' => 'application/json'}, { error: 'Item Not Found' }.to_json unless item
+      end
+
+      def halt_if_not_loc!
+        halt 409, {'Content-Type' => 'application/json'}, { error: 'Location Not Found' }.to_json unless location
       end
 
       def item
         @item ||= select_item(params[:id])
+      end
+
+      def location
+        @loc ||= select_location(params[:loc])
       end
 
       def json_params
@@ -413,6 +424,40 @@ class MyServer < Sinatra::Base
         @error = "Complete all fields on the form."
       end
       return {error: @error}.to_json
+    end
+
+###########################################
+##################Locations################
+###########################################
+    get '/locations' do
+      @name = params[:location] ? params[:location] : ""
+      @locations = select_location(@name)
+      if @locations.length == 0
+        @locations = [{ error: 'Location Not Found'}]
+      end
+      return @locations.uniq.to_json
+    end
+
+    get '/locations/:loc' do
+      halt_if_not_loc!
+      return @loc.to_json
+    end
+
+    post '/locations' do
+      @locId = add_location(params)
+      p @locId
+      if @locId.is_a? Numeric
+        response.headers['Location'] = "/api/items/#{@locId}"
+        status 201
+      else
+        halt(422, @locId.to_json)
+      end
+    end
+
+    delete '/locations/:id' do
+      halt_if_not_loc!
+      delete_location(params[:id]) if @loc
+      status 204
     end
 
   end

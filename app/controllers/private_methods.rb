@@ -146,9 +146,6 @@ def select_item(itemName)
   unless @second_search.empty?
     @record = $elementsDB.where(Sequel.like(:id, "#{itemName}", case_insensitive: true)).all[0]
   end
-  if @first_serch.empty? && @second_search.empty?
-    record = []
-  end
   return @record
 end
 
@@ -374,7 +371,8 @@ def map_column_name(name)
     "type-input" => "elementtype",
     "voltage-input" => "maxvoltage",
     "power-input" => "powerdissipation",
-    "unit-input" => "unit"
+    "unit-input" => "unit",
+    "value-input" => "value"
   }
   return names[name]
 end
@@ -444,9 +442,28 @@ def add_location(locationHash)
     $locationsDB.insert(name: locationHash[:"location-name"],
     parentname: locationHash[:"parent-location"],
     description: locationHash[:"location-description"])
-    return "Dodano lokalizację: #{locationHash[:"location-name"]}"
+    return $locationsDB.where(:name => locationHash[:"location-name"]).all[0][:id]
   else
     @foundLoc = $locationsDB.select(:parentname).where(:name => locationHash[:"location-name"]).all[0][:parentname]
-    return "Wybrana nazwa jest już zajęta. Znajduje się w: #{@foundLoc}"
+    return {erorr: "Wybrana nazwa jest już zajęta. Znajduje się w: #{@foundLoc}"}
   end
+end
+
+def select_location(name)
+  if name.empty?
+    @loc = $locationsDB.all
+  else
+    @loc = $locationsDB.where(Sequel.like(:name, "%#{name}%", case_insensitive: true)).all
+  end
+  if name.scan(/\D/).empty?
+    @loc = $locationsDB.where(:id => name).all[0]
+  end
+  if @loc.empty?
+    @loc = nil
+  end
+ return @loc
+end
+
+def delete_location(locId)
+  $locationsDB.select(:id).where(:id => locId).delete
 end
