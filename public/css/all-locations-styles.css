@@ -1,0 +1,28 @@
+.location-tab {
+  margin-top: 10px;
+  width: 100%;
+  text-align: center;
+}
+
+table, th, td {
+  border-bottom: 1px solid red;
+  border-collapse: collapse;
+}
+
+th {
+  background: #fa0200;
+  max-width: 200px;
+  overflow: hidden;
+  padding: 10px 0px 10px 0px;
+  position: sticky;
+  top: -10px;
+}
+
+td {
+  padding: 15px 0px;
+}
+
+.td-description{
+  height: 36px;
+  overflow: hidden;
+}

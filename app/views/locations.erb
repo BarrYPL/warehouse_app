@@ -1,5 +1,12 @@
+<h1 id="locations-h1">Przestrzenie</h1>
+<div class="location-menu">
+  <button type="button" class="red-btn" onclick="history.back()"><i class="fa-solid fa-people-pulling"></i> Powrót</button>
+  <% if current_user %>
+    <button type="button" class="red-btn" id="new-loc" onclick="window.location.href='/new-location';"><i class="fa-solid fa-circle-plus"></i> Dodaj nową</button>
+  <% end %>
+  <button type="button"class="red-btn" onclick="window.location.href='/all-locations';"><i class="fa-solid fa-bars"></i> Pokaż wszystkie</button>
+</div>
 <div class="container">
-  <h1>Przestrzenie</h1>
   <% if request[:loc].nil? %>
     <%= erb :basic_location_partial %>
   <% else %>

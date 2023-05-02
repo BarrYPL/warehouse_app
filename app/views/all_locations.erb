@@ -1,0 +1,32 @@
+<div class="inner-width">
+  <button type="button" class="red-btn" id="return-btn" onclick="history.back()"><i class="fa-solid fa-people-pulling"></i> Powrót</button>
+  <div class="section-title">
+    <h1>locations</h1>
+  </div>
+  <div class="locatins-table">
+    <table class="location-tab">
+      <col style="width: 10%;" />
+      <col style="width: 40%;" />
+      <col style="width: 20%;" />
+      <col style="width: 30%;" />
+      <tr>
+        <th>Lp.</th>
+        <th>Nazwa</th>
+        <th>lokalizacja</th>
+        <th>Opis</th>
+        <% if current_user %><th>Opcje</th><% end %>
+      </tr>
+      <% $locationsDB.each_with_index do |item, idx| %>
+        <tr>
+          <td><%= idx + 1 %>.</td>
+          <td><a href="/find?loc=<%= item[:name] %>"><%= item[:name] %></a></td>
+          <td><%= item[:parentname] %></td>
+          <td><div class="td-description">
+            <%= item[:description] %>
+          </div></td>
+          <td></td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+</div>

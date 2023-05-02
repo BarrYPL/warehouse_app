@@ -283,6 +283,12 @@ class MyServer < Sinatra::Base
     send_file "./db/database.db", :filename => "database.db", :type => 'Application/octet-stream'
   end
 
+  get '/all-locations' do
+    p session.inspect
+    @css = ["welcome-styles", "all-locations-styles"]
+    erb :all_locations
+  end
+
   namespace '/api' do
     before do
       content_type 'application/json'
