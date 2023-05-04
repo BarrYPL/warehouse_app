@@ -378,6 +378,7 @@ def map_column_name(name)
 end
 
 def edit_item(editHash)
+  p @item
   @id = @item[:localid]
   editHash.delete("id")
   editHash.keys.each do |key|
@@ -453,7 +454,7 @@ def select_location(name)
   if name.empty?
     @loc = $locationsDB.all
   else
-    @loc = $locationsDB.where(Sequel.like(:name, "%#{name}%", case_insensitive: true)).all
+    @loc = $locationsDB.where(Sequel.like(:name, "%#{name}%", case_insensitive: true)).all[0]
   end
   if name.scan(/\D/).empty?
     @loc = $locationsDB.where(:id => name).all[0]
@@ -470,15 +471,11 @@ end
 
 ##############################################
 def edit_loc(editHash)
-  @id = @item[:localid]
-  editHash.delete("id")
-  editHash.keys.each do |key|
-    if map_column_name(key) == "quantity" && editHash[key].to_i < 0
-      @error = "Ilość nie może być ujemna!"
-      return {error: "Ilość nie może być ujemna!"}
-    else
-      $elementsDB.where(:localid => @id).update(map_column_name(key) => editHash[key])
-      return $elementsDB.where(:localid => @id).all[0][:id]
-    end
-  end
+  p editHash
+  p @loc
+  #parentname, description
+  #editHash.keys.each do |key|
+  #  $elementsDB.where(:localid => @id).update(map_column_name(key) => editHash[key])
+  #  return $elementsDB.where(:localid => @id).all[0][:id]
+  #end
 end
