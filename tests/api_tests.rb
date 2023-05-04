@@ -1,3 +1,4 @@
+
 require 'rest-client'
 require 'json'
 require 'test-unit'
@@ -50,7 +51,7 @@ class TestWarehouseApi < Test::Unit::TestCase
     #element => "testory_typ" //rodzaj elementu
     #new-item-name => "nazwa_elementu"
     #new-item-quantity => "ilość elementów"
-    response = RestClient.post $url, {"element" => "testowy_typ", "new-item-name" => "item1", "new_item_quantity" => "123"}
+    response = RestClient.post $url, {"element" => "testowy_typ", "new-item-name" => "item1", "new-item-quantity" => "123"}
     $url = response.headers[:location] #url for the next request
     assert_equal(201, response.code)
 

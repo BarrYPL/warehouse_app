@@ -460,6 +460,18 @@ class MyServer < Sinatra::Base
       status 204
     end
 
+    patch '/items/:id' do
+      halt_if_not_loc!
+      if @loc
+        locID = edit_loc(request.params)
+        @item = select_item(itemID)
+        @item = @item.nil? ? itemID : @item
+        return @item.to_json
+      else
+        status 422
+      end
+    end
+
   end
 
   helpers do
