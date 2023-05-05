@@ -451,6 +451,7 @@ def add_location(locationHash)
 end
 
 def select_location(name)
+  name = name.to_s
   if name.empty?
     @loc = $locationsDB.all
   else
@@ -469,13 +470,11 @@ def delete_location(locId)
   $locationsDB.select(:id).where(:id => locId).delete
 end
 
-##############################################
 def edit_loc(editHash)
-  p editHash
-  p @loc
-  #parentname, description
-  #editHash.keys.each do |key|
-  #  $elementsDB.where(:localid => @id).update(map_column_name(key) => editHash[key])
-  #  return $elementsDB.where(:localid => @id).all[0][:id]
-  #end
+  #p editHash
+  #parentname, description, name
+  editHash.keys.each do |key|
+    $locationsDB.where(:id => @loc[:id]).update(key => editHash[key])
+  end
+  return @loc[:id]
 end

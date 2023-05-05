@@ -292,6 +292,14 @@ class MyServer < Sinatra::Base
     erb :all_locations
   end
 
+  get '/delete-location/:location' do
+    @loc = select_location(params[:location])
+    p request
+    delete_location(@loc[:id]) if @loc
+    @css = ["welcome-styles", "all-locations-styles"]
+    erb :all_locations
+  end
+
   namespace '/api' do
     before do
       content_type 'application/json'
@@ -460,13 +468,13 @@ class MyServer < Sinatra::Base
       status 204
     end
 
-    patch '/locations/:name' do
+    patch '/locations/:loc' do
       halt_if_not_loc!
       if @loc
         locID = edit_loc(request.params)
-        #@item = select_item(itemID)
-        #@item = @item.nil? ? itemID : @item
-        return @item.to_json
+        @location = select_location(locID)
+        @location = @location.nil? ? itemID : @location
+        return @location.to_json
       else
         status 422
       end
