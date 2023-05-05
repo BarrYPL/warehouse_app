@@ -1,9 +1,33 @@
+<div class="modal-div" id="modal-div">
+  <h1 id="modal-div-title"></h1>
+  <form class="modal-form" id="modal-form" action="/edit-loc" method="post">
+    <div class="modal-inner-div">
+      <p id="modal-div">Nazwa: </p>
+      <input type="text" name="name" value="" id="modal-div-name">
+    </div>
+    <div class="modal-inner-div">
+      <p id="modal-div">lokalizacja: </p>
+      <input type="text" name="parentname" value="" id="modal-div-parentname">
+    </div>
+    <div class="modal-inner-div">
+      <p id="modal-div">Opis: </p>
+      <input type="text" name="description" value="" id="modal-div-description">
+    </div>
+    <input type="hidden" name="id" value="" id="modal-div-id">
+    <input class="red-btn" type="submit" value="Zapisz">
+  </form>
+</div>
 <div class="inner-width">
-  <button type="button" class="red-btn" id="return-btn" onclick="history.back()"><i class="fa-solid fa-people-pulling"></i> Powrót</button>
+  <div class="location-menu">
+    <button type="button" class="red-btn" onclick="history.back();"><i class="fa-solid fa-people-pulling"></i> Powrót</button>
+    <% if current_user %>
+      <button type="button" class="red-btn" id="new-loc" onclick="window.location.href='/new-location';"><i class="fa-solid fa-circle-plus"></i> Dodaj nową</button>
+    <% end %>
+  </div>
   <div class="section-title">
     <h1>locations</h1>
   </div>
-  <div class="locatins-table">
+  <div class="locations-table">
     <table class="location-tab">
       <col style="width: 10%;" />
       <col style="width: 40%;" />
@@ -30,8 +54,8 @@
             <%= item[:description] %>
           </div></td>
           <% if current_user %><td>
-            <i class="fa-solid fa-pen-to-square"></i>
-            <i class="fa-solid fa-trash-can"></i>
+            <i class="fa-solid fa-pen-to-square" onclick='edit_loc("<%= item[:name] %>");'></i>
+            <a href="/delete-location/<%= item[:name] %>" id="del-button"><i class="fa-solid fa-trash-can"></i></a>
           </td><% end %>
         </tr>
       <% end %>

@@ -1,3 +1,9 @@
+.locations-table {
+  width: 100%;
+  padding: 10px 25px;
+  overflow: auto;
+}
+
 .location-tab {
   margin-top: 10px;
   width: 100%;
@@ -22,7 +28,58 @@ td {
   padding: 15px 0px;
 }
 
+td i{
+  cursor: pointer;
+}
+
 .td-description{
   height: 36px;
   overflow: hidden;
+}
+
+.location-menu{
+  position: absolute;
+  top: 2%;
+  left: 1%;
+  z-index: 1;
+}
+
+.location-menu button{
+  margin-right: 10px;
+}
+
+.modal-div{
+  display: none;
+  border: solid 2px red;
+  position: absolute;
+  top: 30%;
+  right: 50%;
+  transform: translate(50%, -50%);
+  z-index: 1;
+  flex-direction: column;
+  align-items: center;
+  color: #f1f1f1;
+  background: rgba(12,12,12,0.6);
+}
+
+.modal-inner-div{
+  text-align: center;
+}
+
+.modal-div h1{
+  margin: 10px 20px;
+}
+
+.modal-form{
+  text-align: center;
+  margin: 0px 40px 20px 40px;
+}
+
+.modal-inner-div input[type = "text"]{
+  margin: 5px 0px;
+  padding: 5px;
+  border: none;
+  outline: none;
+  border-radius: 10px;
+  color: #fa0200;
 }

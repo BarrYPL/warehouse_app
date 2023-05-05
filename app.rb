@@ -233,7 +233,7 @@ class MyServer < Sinatra::Base
 
   post '/multiple-delete' do
     @js = ["filter-js", "searching-js"]
-    @css = ["welcome-styles", "search-styles"]
+    @css = ["search-styles"]
     delete_multiple_items(params)
     redirect '/find'
   end
@@ -261,7 +261,7 @@ class MyServer < Sinatra::Base
       erb :new_location
     else
       @js = ["searching-js"]
-      @css = ["welcome-styles", "login-partial"]
+      @css = ["login-partial"]
       erb :welcome
     end
   end
@@ -272,13 +272,13 @@ class MyServer < Sinatra::Base
       @error = "Poprawnie dodano lokalizację."
     end
     if current_user
-      @js = ["searching-js"]
-      @css = ["welcome-styles"]
-      erb :welcome
+      @js = ["all-locations-js"]
+      @css = ["all-locations-styles"]
+      erb :all_locations
     else
-      @js = ["searching-js"]
-      @css = ["welcome-styles", "login-partial"]
-      erb :welcome
+      @js = ["all-locations-js"]
+      @css = ["all-locations-styles"]
+      erb :all_locations
     end
   end
 
@@ -287,8 +287,8 @@ class MyServer < Sinatra::Base
   end
 
   get '/all-locations' do
-    p session.inspect
-    @css = ["welcome-styles", "all-locations-styles"]
+    @js = ["all-locations-js"]
+    @css = ["all-locations-styles"]
     erb :all_locations
   end
 
@@ -296,7 +296,20 @@ class MyServer < Sinatra::Base
     @loc = select_location(params[:location])
     p request
     delete_location(@loc[:id]) if @loc
-    @css = ["welcome-styles", "all-locations-styles"]
+    redirect '/all-locations'
+  end
+
+  post '/edit-loc' do
+    locID = select_location(params[:id])
+    if locID
+      locID = edit_loc(request.params)
+      @location = select_location(locID)
+      @location = @location.nil? ? itemID : @location
+    else
+      @error = "Nie odnaleziono lokalizacji !"
+    end
+    @js = ["all-locations-js"]
+    @css = ["all-locations-styles"]
     erb :all_locations
   end
 

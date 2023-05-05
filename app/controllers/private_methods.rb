@@ -457,7 +457,7 @@ def select_location(name)
   else
     @loc = $locationsDB.where(Sequel.like(:name, "%#{name}%", case_insensitive: true)).all[0]
   end
-  if name.scan(/\D/).empty?
+  if name.scan(/\D/).empty? &&  !name.to_s.empty?
     @loc = $locationsDB.where(:id => name).all[0]
   end
   if @loc.empty?
@@ -473,6 +473,9 @@ end
 def edit_loc(editHash)
   #p editHash
   #parentname, description, name
+  if editHash.include?("id")
+    editHash.delete("id")
+  end
   editHash.keys.each do |key|
     $locationsDB.where(:id => @loc[:id]).update(key => editHash[key])
   end
