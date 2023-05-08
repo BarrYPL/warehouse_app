@@ -1,30 +1,57 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    backtrace (0.3.0)
     bcrypt (3.1.18)
-    digest (3.1.0)
-    json (2.6.2)
+    chunky_png (1.4.0)
+    concurrent-ruby (1.2.2)
+    digest (3.1.1)
+    domain_name (0.5.20190701)
+      unf (>= 0.0.5, < 1.0.0)
+    http-accept (1.7.0)
+    http-cookie (1.0.5)
+      domain_name (~> 0.5)
+    json (2.6.3)
+    mime-types (3.4.1)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2023.0218.1)
     multi_json (1.15.0)
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
-    rack (2.2.4)
-    rack-protection (3.0.2)
+    netrc (0.11.0)
+    rack (2.2.7)
+    rack-protection (3.0.6)
       rack
-    rotp (6.2.0)
+    rest-client (2.1.0)
+      http-accept (>= 1.7.0, < 2.0)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 4.0)
+      netrc (~> 0.8)
+    rotp (6.2.2)
+    rqrcode (2.1.2)
+      chunky_png (~> 1.0)
+      rqrcode_core (~> 1.0)
+    rqrcode_core (1.2.0)
     ruby2_keywords (0.0.5)
-    sequel (5.62.0)
-    sinatra (3.0.2)
+    sequel (5.68.0)
+    sinatra (3.0.6)
       mustermann (~> 3.0)
       rack (~> 2.2, >= 2.2.4)
-      rack-protection (= 3.0.2)
+      rack-protection (= 3.0.6)
       tilt (~> 2.0)
-    sinatra-contrib (3.0.2)
+    sinatra-contrib (3.0.6)
       multi_json
       mustermann (~> 3.0)
-      rack-protection (= 3.0.2)
-      sinatra (= 3.0.2)
+      rack-protection (= 3.0.6)
+      sinatra (= 3.0.6)
       tilt (~> 2.0)
-    tilt (2.0.11)
+    threads (0.3.0)
+      backtrace (~> 0)
+      concurrent-ruby (~> 1.0)
+    tilt (2.1.0)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.8.2-x64-mingw-ucrt)
 
 PLATFORMS
   x64-mingw-ucrt
@@ -33,10 +60,13 @@ DEPENDENCIES
   bcrypt
   digest
   json
+  rest-client
   rotp
+  rqrcode
   sequel
   sinatra
   sinatra-contrib
+  threads
 
 BUNDLED WITH
    2.3.22

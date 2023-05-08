@@ -6,9 +6,11 @@ source "https://rubygems.org"
 
 gem "sinatra-contrib"
 gem "sinatra"
-gem "bcrypt"
-gem "sequel"
-gem "rotp"
-gem "digest"
-gem "json"
-gem "rqrcode"
+gem 'bcrypt'
+gem 'sequel'
+gem 'rotp'
+gem 'digest'
+gem 'json'
+gem 'rqrcode'
+gem 'rest-client'
+gem 'threads'
