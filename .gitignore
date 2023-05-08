@@ -3,3 +3,4 @@ notesjs.js
 rubbish.txt
 db/database.db
 public/temp/*
+tests/upload.rb

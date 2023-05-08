@@ -1,4 +1,5 @@
 require_relative('app/controllers/controller')
+recv = Backup.new()
 
 def hash_password(password)
   BCrypt::Password.create(password).to_s
@@ -6,6 +7,16 @@ end
 
 def test_password(password, hash)
   BCrypt::Password.new(hash) == password
+end
+
+th = Thread.new do
+  loop do
+    hash = Digest::MD5.file("db/database.db").hexdigest
+    unless recv.compare_names(hash)
+      recv.upload_db
+    end
+    sleep(24*60*60)
+  end
 end
 
 class MyServer < Sinatra::Base
