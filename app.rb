@@ -12,8 +12,12 @@ end
 th = Thread.new do
   loop do
     hash = Digest::MD5.file("db/database.db").hexdigest
-    unless recv.compare_names(hash)
-      recv.upload_db
+    if recv.remote_connection
+      unless recv.compare_names(hash)
+        recv.upload_db
+      end
+    else
+      p "App.rb: Can not connect to: files.multi.ovh"
     end
     sleep(24*60*60)
   end

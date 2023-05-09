@@ -6,11 +6,26 @@ class Backup
     attr_reader :path
     attr_reader :last_hash
     attr_reader :last_date
+    attr_reader :remote_connection
 
     def initialize
-      @response = RestClient.get(@@mainUrl+"?json")
-      check_last_date
-      check_last_hash
+      if check_connection
+        @response = RestClient.get(@@mainUrl+"?json")
+        check_last_date
+        check_last_hash
+      end
+    end
+
+    def check_connection
+      dns_resolver_bk  = Resolv::DNS.new()
+      begin
+        dns_resolver_bk.getaddress("files.multi.ovh")
+        @remote_connection = true
+      rescue
+        p "Backup.rb: Can not connect to: files.multi.ovh"
+        @remote_connection = false
+      end
+      return @remote_connection
     end
 
     def show_paths
@@ -44,7 +59,7 @@ class Backup
       date = Time.now.strftime("%d-%m-%Y")
       hash = Digest::MD5.file("db/database.db").hexdigest
       full_name = "#{hash}_#{date}.db"
-      if File.exists?(@@filePath)
+      if File.exist?(@@filePath)
         private_resource = RestClient.put @@mainUrl+"/#{full_name}", :myfile => File.new(@@filePath, 'rb')
         puts private_resource
       end
