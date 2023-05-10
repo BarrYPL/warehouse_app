@@ -10,7 +10,7 @@ class Backup
 
     def initialize
       if check_connection
-        @response = RestClient.get(@@mainUrl+"?json")
+        @response = RestClient.get(@@mainUrl+"/?order=asc&sort=mtime&json")
         check_last_date
         check_last_hash
       end
@@ -60,8 +60,7 @@ class Backup
       hash = Digest::MD5.file("db/database.db").hexdigest
       full_name = "#{hash}_#{date}.db"
       if File.exist?(@@filePath)
-        private_resource = RestClient.put @@mainUrl+"/#{full_name}", :myfile => File.new(@@filePath, 'rb')
-        puts private_resource
+        private_resource = RestClient.put @@mainUrl+"/#{full_name}", File.open(@@filePath, 'rb')
       end
     end
 end

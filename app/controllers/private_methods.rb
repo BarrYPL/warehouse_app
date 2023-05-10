@@ -3,6 +3,8 @@ DB = Sequel.sqlite 'db/database.db'
 $usersDB = DB[:uzytkownicy]
 $elementsDB = DB[:elementy]
 $locationsDB = DB[:locations]
+$logsDB = DB[:logs]
+$logger = DbLogger.new()
 
 class Numeric
   def to_human_redable
@@ -243,6 +245,8 @@ def change_quantity(item_id, added_quantity)
       @error = "O kolego, za dużo to i świnia nie przeżre!"
       return {error: @error}
     else
+      old = $elementsDB.where(:localid => item_id).all[0][:quantity]
+      $logger.log_action(action:"added", userid:session[:user_id], itemid: item_id, old: old, new: @newQuantity)
       $elementsDB.where(:localid => item_id).update(:quantity => @newQuantity)
     end
     return select_item(item_id)
