@@ -212,6 +212,7 @@ def detailed_search(phrase, filterElem: "", valueMin: 0, valueMax: 10**12, sort_
 end
 
 def delete_item(itemId)
+  $logger.log_action(action:"deleted item", userid:session[:user_id], itemid: itemId, old: itemId)
   $elementsDB.select(:localid).where(:localid => itemId).delete
 end
 
@@ -237,19 +238,19 @@ def sort_by_first_char(arr, phrase)
   return arr
 end
 
-def change_quantity(item_id, added_quantity)
-  unless $elementsDB.where(:localid => item_id).all.empty?
-    @actualQuantity = $elementsDB.where(:localid => item_id).all[0][:quantity]
+def change_quantity(itemId, added_quantity)
+  unless $elementsDB.where(:localid => itemId).all.empty?
+    @actualQuantity = $elementsDB.where(:localid => itemId).all[0][:quantity]
     @newQuantity = @actualQuantity + added_quantity.to_i
     if @newQuantity < 0
       @error = "O kolego, za dużo to i świnia nie przeżre!"
       return {error: @error}
     else
-      old = $elementsDB.where(:localid => item_id).all[0][:quantity]
-      $logger.log_action(action:"added", userid:session[:user_id], itemid: item_id, old: old, new: @newQuantity)
-      $elementsDB.where(:localid => item_id).update(:quantity => @newQuantity)
+      old = $elementsDB.where(:localid => itemId).all[0][:quantity]
+      $logger.log_action(action:"added", userid:session[:user_id], itemid: itemId, old: old, new: @newQuantity)
+      $elementsDB.where(:localid => itemId).update(:quantity => @newQuantity)
     end
-    return select_item(item_id)
+    return select_item(itemId)
   end
 end
 
@@ -332,6 +333,7 @@ def create_new_item_object(params={})
   if @newItemDatasheet.empty? then @newItemDatasheet = nil end
   if @newItemLocation.empty? then @newItemLocation = nil end
   unless params[:"new-item-unit"]
+    p @newTypeName
     @newItemUnit =  map_unit_name(@newTypeName)
   else
     @newItemUnit = params[:"new-item-unit"]
@@ -352,14 +354,16 @@ def create_new_item_object(params={})
     unit: @newItemUnit,
     maxvoltage: nil,
     elementtype: @newTypeName.gsub(" ","_"))
+    $logger.log_action(action:"created", userid:session[:user_id], itemid: @newLocalId, old: "-", new: @newLocalId)
   return $elementsDB.where(localid: @newLocalId).all[0][:id]
 end
 
 def map_unit_name(type)
   units = {
-    "resistor" => "Ω",
-    "capacitor" => "F",
-    "inductor" => "H"
+    "rezystor" => "Ω",
+    "kondensator" => "F",
+    "element_indukcyjny" => "H",
+    "dioda" => "V"
   }
   return units[type]
 end
@@ -382,7 +386,7 @@ def map_column_name(name)
 end
 
 def edit_item(editHash)
-  p @item
+  #p @item
   @id = @item[:localid]
   editHash.delete("id")
   editHash.keys.each do |key|
@@ -394,10 +398,13 @@ def edit_item(editHash)
         unit = editHash[key][-1]
         editHash[key] = editHash[key].to_f.to_database_num(unit)
       end
+      ###############
+      p $elementsDB.where(:localid => @id).all[0][map_column_name(key)]
+      $logger.log_action(action:"created", userid:session[:user_id], itemid: @id, old: old, new: editHash[key], columnName: map_column_name(key))
       $elementsDB.where(:localid => @id).update(map_column_name(key) => editHash[key])
-      return $elementsDB.where(:localid => @id).all[0][:id]
     end
   end
+  return $elementsDB.where(:localid => @id).all[0][:id]
 end
 
 def location_serch(location)
