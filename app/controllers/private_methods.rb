@@ -390,6 +390,10 @@ def edit_item(editHash)
       @error = "Ilość nie może być ujemna!"
       return {error: "Ilość nie może być ujemna!"}
     else
+      if map_column_name(key) == "value"
+        unit = editHash[key][-1]
+        editHash[key] = editHash[key].to_f.to_database_num(unit)
+      end
       $elementsDB.where(:localid => @id).update(map_column_name(key) => editHash[key])
       return $elementsDB.where(:localid => @id).all[0][:id]
     end
