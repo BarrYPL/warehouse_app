@@ -398,8 +398,7 @@ def edit_item(editHash)
         unit = editHash[key][-1]
         editHash[key] = editHash[key].to_f.to_database_num(unit)
       end
-      ###############
-      p $elementsDB.where(:localid => @id).all[0][map_column_name(key)]
+      old = $elementsDB.where(:localid => @id).all[0][map_column_name(key).to_sym]
       $logger.log_action(action:"created", userid:session[:user_id], itemid: @id, old: old, new: editHash[key], columnName: map_column_name(key))
       $elementsDB.where(:localid => @id).update(map_column_name(key) => editHash[key])
     end
@@ -452,7 +451,7 @@ def genereQR(qrName)
   )
   IO.binwrite("./public/QR/#{qrName}.png", png.to_s)
 end
-
+############################################################### Logger
 def add_location(locationHash)
   if $locationsDB.where(:name =>locationHash[:"location-name"]).all.empty?
     $locationsDB.insert(name: locationHash[:"location-name"],
