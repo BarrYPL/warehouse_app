@@ -63,7 +63,11 @@ GEM
     tilt (2.1.0)
     unf (0.1.4)
       unf_ext
+<<<<<<< HEAD
     unf_ext (0.0.8.2)
+=======
+    unf_ext (0.0.8.2-x64-mingw-ucrt)
+>>>>>>> 53fd530fd06a9dad4e675e711502e0d0e48537bd
     webrick (1.8.1)
 
 PLATFORMS
