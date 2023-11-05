@@ -29,24 +29,30 @@ The presented application is designed for tracking data related to the condition
 <!-- Screenshots -->
 ### :camera: Screenshots
 <div align="center"> 
-  <img src="https://github.com/BarrYPL/biketrack/blob/main/app/assets/images/main.png?raw=true" alt="screenshot" />
-  App Main View
+  <img src="https://github.com/BarrYPL/warehouse_app/blob/master/public/images/ss1.png?raw=true" alt="screenshot" />
 </div>
 
 <div align="center"> 
-  <img src="https://github.com/BarrYPL/biketrack/blob/main/app/assets/images/stats.png?raw=true" alt="screenshot" />
-  App Services View
+  <img src="https://github.com/BarrYPL/warehouse_app/blob/master/public/images/ss2.png?raw=true" alt="screenshot" />
 </div>
 
 <div align="center"> 
-  <img src="https://github.com/BarrYPL/biketrack/blob/main/app/assets/images/views.png?raw=true" alt="screenshot" />
-  App Stats View
+  <img src="https://github.com/BarrYPL/warehouse_app/blob/master/public/images/ss3.png?raw=true" alt="screenshot" />
+</div>
+
+<div align="center"> 
+  <img src="https://github.com/BarrYPL/warehouse_app/blob/master/public/images/ss4.png?raw=true" alt="screenshot" />
+</div>
+
+<div align="center"> 
+  <img src="https://github.com/BarrYPL/warehouse_app/blob/master/public/images/ss5.png?raw=true" alt="screenshot" />
 </div>
 
 <!-- TechStack -->
 ### :space_invader: Tech Stack
 
   <summary>Server</summary>
+  <details>
   <ul>
     <li><a href="https://www.ruby-lang.org/">Ruby</a></li>
     <li><a href="https://sinatrarb.com">Sinatra framework</a></li>
