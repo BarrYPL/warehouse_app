@@ -45,7 +45,7 @@ The presented application is designed for tracking data related to the condition
 </div>
 
 <div align="center"> 
-  <img src="https://github.com/BarrYPL/warehouse_app/blob/master/public/images/ss5.png?raw=true" alt="screenshot" />
+  <img src="https://github.com/BarrYPL/warehouse_app/blob/master/public/images/ss5.jpg?raw=true" alt="screenshot" />
 </div>
 
 <!-- TechStack -->
