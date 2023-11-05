@@ -12,19 +12,17 @@
 <!-- About the Project -->
 ## :star2: About the Project
 
-The presented application is designed for tracking data related to the condition of owned bicycles, as well as the dates and details of their maintenance. It operates based on data retrieved from the Strava API. The idea for this application was born out of a simple request from a friend who said, "Write something that keeps track of the kilometers since the last marked date." Since then, it has become clear that he owns more than one bicycle, and each bicycle has more than one chain. It is necessary to associate each "ride" from Strava with a specific chain and bicycle based on the last change date of the chain. Additionally, the application allows users to add notes about other maintenance work along with relevant dates.
+The presented application is a tool I created for my own use in my current role as an electronics technician. It allows me to record and manage inventory states and assign locations to each item.
 
 <!-- Key Features -->
 ### :star: Key Features
-- Bicycle Data Tracking: Easily track the condition of multiple bicycles, including details about each bike's specifications.
+- tracking stock levels.
 
-- Chain Management: Associate each ride recorded on Strava with a specific chain and bicycle, all based on the last change date of the chain.
+- own search engine
 
-- Maintenance Notes: Keep a record of maintenance activities with accompanying dates, ensuring a comprehensive maintenance history.
+- generating QR codes for each location
 
-- Strava Integration: Seamlessly integrate with the Strava API to retrieve and link ride data.
-
-- User-Friendly Interface: The application provides an intuitive user interface for easy navigation and data entry.
+- search by qr codes from boxes
 
 <!-- Screenshots -->
 ### :camera: Screenshots
